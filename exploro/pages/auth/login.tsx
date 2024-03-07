@@ -1,6 +1,7 @@
 // pages/login.tsx
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -17,7 +18,7 @@ const LoginPage = () => {
       
       
       {/* Right Blue Section */}
-        <div className="w-1/2 bg-tertiary flex justify-center items-center">
+        <div className="w-1/2 bg-tertiary-500 flex justify-center items-center">
             {/* Form Container */}
             <Image src="/images/plane.svg" alt="logo" width={200} height={200} className='absolute top-4 left-24'/>
 
@@ -60,13 +61,13 @@ const LoginPage = () => {
                     <div>
                         <button
                         type="submit"
-                        className="shadow-2xl group relative w-full flex justify-center py-2 px-4 text-lg rounded-md text-black bg-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 "
+                        className="shadow-2xl group relative w-full flex justify-center py-2 px-4 text-lg rounded-md text-black bg-secondary-500 hover:bg-secondary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 "
                         >
                         Sign in
                         </button>
                     </div>
                     <div className="poppins-semibold">
-                        Don`t have an account? <a href="#" className="text-secondary hover:underline">Sign Up</a>
+                        Don`t have an account? <Link href="/auth/signup" className="text-secondary-500 hover:underline">Sign Up</Link>
                     </div>
                     <Image src="/images/ticket.svg" alt="logo" width={70} height={70} className='absolute bottom-16 left-96 -rotate-30'/>
             </form>
@@ -82,13 +83,13 @@ const LoginPage = () => {
         </div>
         {/* Text Section */}
         <div className="flex flex-col ml-12">
-          <h1 className='poppins-semibold text-7xl text-secondary'>Exploro.</h1>
-          <p className="text-[46px] italic poppins-medium text-white mt-8">
+          <h1 className='poppins-semibold text-[66px] text-secondary-500'>Exploro.</h1>
+          <p className="text-[42px] italic poppins-medium text-white mt-4">
             Unveiling the World, <br /> One Journey at a Time.
           </p>
         </div>
         <button
-          className="shadow-2xl absolute bottom-16 right-4 font-semibold p-3 rounded-xl text-2xl text-black bg-secondary"
+          className="shadow-2xl absolute bottom-16 right-4 font-semibold p-3 rounded-xl text-2xl text-black bg-secondary-500 hover:bg-secondary-700 "
         >
           Explore our story
         </button>

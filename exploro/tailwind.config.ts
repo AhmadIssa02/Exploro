@@ -26,8 +26,39 @@ const config: Config = {
           800: "#18244f", // Darker shade of primary
           900: "#141d40", // Darkest shade of primary
         },
-        secondary: "#F9AB2F",
-        tertiary: "#99CFFE",
+        secondary: {
+          100: "#fbca7b", // Lighter shade of secondary
+          200: "#fbc268", // Light shade of secondary
+          300: "#faba55", // Light shade of secondary
+          400: "#fab342", // Normal shade of secondary
+          500: "#f9ab2f", // Normal secondary color
+          600: "#f8a31c", // Medium shade of secondary
+          700: "#f89c09", // Dark shade of secondary
+          800: "#e79007", // Darker shade of secondary
+          900: "#d38406", // Darkest shade of secondary
+        },
+        tertiary: {
+          100: "#e7f4ff",
+          200: "#d3eaff",
+          300: "#c0e1fe",
+          400: "#acd8fe",
+          500: "#99CFFE",
+          600: "#86c6fe",
+          700: "#72bdfe",
+          800: "#5fb4fd",
+          900: "#4baafd",
+        },
+        quarternary: {
+          100: "#fafafa",
+          200: "#f0f0f0",
+          300: "#e7e7e7",
+          400: "#dddddd",
+          500: "#EEEBEB",
+          600: "#d3d3d3",
+          700: "#c9c9c9",
+          800: "#bfbfbf",
+          900: "#b6b6b6",
+        },
       },
     },
   },
