@@ -1,25 +1,34 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import Post from '/components/post';
+import Post from '../components/post';
+import Chats from '../components/Chats';
+import { useState } from 'react';
 
 const samplePost = {
   username: 'Traveler123',
   location: 'Mount Everest, Nepal',
   timeAgo: '3 days ago',
   content: 'Just reached the base camp, what a view!',
-  profileImageUrl: '/images/profilePhoto.png', // Replace with actual path to an image
-  mainImageUrl: '/images/postImage.png', // Replace with actual path to an image
+  profileImageUrl: '/images/profilePhoto.png', 
+  mainImageUrl: '/images/postImage.png', 
   onLike: () => console.log('Liked!'),
   onComment: () => console.log('Commented!'),
   onShare: () => console.log('Shared!'),
 };
 
 const DashboardPage = () => {
+  
+const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+const toggleSidebar = () => {
+  setIsSidebarOpen(!isSidebarOpen);
+};
+
   return (
-    <div className="flex h-100% min-h-screen bg-quarternary-500 text-white font-poppins">
+    <div className="flex w-full h-100% min-h-screen bg-quarternary-500 text-white font-poppins">
       {/* Sidebar */}
-      <div className=" bg-primary-500 w-1/5 py-5 px-3 space-y-6">
+      <div className="fixed mt-8 h-full bg-primary-500 w-1/5 py-5 px-3 space-y-6">
         <Link href="/feed" className="flex items-center justify-center mt-4 mb-8">
           <Image src="/images/logo.png" alt="logo" width={70} height={50} />
         </Link>
@@ -69,10 +78,10 @@ const DashboardPage = () => {
 
       {/* Main Content */}
       
-      <div className="flex-1 flex flex-col bg-quarternary-500">
+      <div className="flex-1 flex flex-col bg-quarternary-500 ">
         {/* Header */}
-        <header className="flex items-center justify-between p-6 border-b  bg-primary-500 border-gray-700">
-          <div className="flex w-2/3 justify-center items-center justify-content-center">
+        <header className="flex fixed w-full p-4  bg-primary-500  justify-center items-center justify-content-center">
+          <div className="flex w-1/2 ">
             <input
               type="search"
               placeholder="Search"
@@ -80,9 +89,18 @@ const DashboardPage = () => {
             />
             <Image src="/images/search.svg" alt="search" width={20} height={20} className='ml-4' />
           </div>
-          <button>
-            <Image src="/images/burgermenu.svg" alt="menu" width={25} height={25} className='ml-auto'></Image>
+          <button className='absolute right-6' onClick={toggleSidebar}>
+            <Image src="/images/burgermenu.svg" alt="menu" width={25} height={25} className=' '></Image>
           </button>
+          <div className={`fixed top-0 right-0 w-64 h-full bg-white p-5 transition-transform transform ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+           {/* Sidebar Content */}
+            <button onClick={toggleSidebar} className="text-lg font-semibold w-full text-left">
+              Sign Out
+            </button>
+          </div>
+          {isSidebarOpen && (
+            <div className="fixed inset-0 bg-black opacity-50 z-20" onClick={toggleSidebar}></div>
+          )}
           {/* Profile and Settings
           <div className="flex items-center space-x-4">
             Profile
@@ -101,34 +119,65 @@ const DashboardPage = () => {
 
         {/* Post Input & Feed */}
         {/* HERE */}
-        <div className="flex flex-col  p-5 space-y-6">
-          {/* Post Input */}
-          <div className="bg-white w-7/12 shadow-xl text-black p-6 rounded-3xl ml-16 ">
-            <div className="flex items-center space-x-2">
-              <div className="rounded-full bg-gray-400 p-3">
-                {/* User Placeholder */}
-              </div>
-              <input
-                type="text"
-                placeholder="What would you like to share?"
-                className="w-full text-lg poppins-semibold p-3 rounded-xl border bg-quarternary-500 placeholder-gray-700"
-              />
-            </div>
+        <div className="flex justify-center items-center space-y-6 w-full mt-14 mb-6">
+          <div className='w-1/4 bg-primary-500'>
+            
           </div>
-          <Post
-            username={samplePost.username}
-            location={samplePost.location}
-            timeAgo={samplePost.timeAgo}
-            content={samplePost.content}
-            profileImageUrl={samplePost.profileImageUrl}
-            mainImageUrl={samplePost.mainImageUrl}
-            onLike={samplePost.onLike}
-            onComment={samplePost.onComment}
-            onShare={samplePost.onShare}
-          />
+          {/* Post Input */}
+          <div className="flex flex-col justify-center space-y-6 w-full">
+            <div className="bg-white w-7/12 shadow-xl text-black p-6 rounded-3xl ml-16 ">
+              <div className="flex items-center space-x-2">
+                <div className="rounded-full ">
+                  <Image src="/images/profilePhoto.png" alt="profile" width={50} height={40} />
+                </div>
+                <input
+                  type="text"
+                  placeholder="What would you like to share?"
+                  className="w-full text-lg poppins-semibold p-3 rounded-xl border bg-quarternary-500 placeholder-gray-700"
+                />
+              </div>
+            </div>
+            <Post
+              username={samplePost.username}
+              location={samplePost.location}
+              timeAgo={samplePost.timeAgo}
+              content={samplePost.content}
+              profileImageUrl={samplePost.profileImageUrl}
+              mainImageUrl={samplePost.mainImageUrl}
+              onLike={samplePost.onLike}
+              onComment={samplePost.onComment}
+              onShare={samplePost.onShare}
+            />
+            <Post
+              username={samplePost.username}
+              location={samplePost.location}
+              timeAgo={samplePost.timeAgo}
+              content={samplePost.content}
+              profileImageUrl={samplePost.profileImageUrl}
+              mainImageUrl={samplePost.mainImageUrl}
+              onLike={samplePost.onLike}
+              onComment={samplePost.onComment}
+              onShare={samplePost.onShare}
+            />
+            <Post
+              username={samplePost.username}
+              location={samplePost.location}
+              timeAgo={samplePost.timeAgo}
+              content={samplePost.content}
+              profileImageUrl={samplePost.profileImageUrl}
+              mainImageUrl={samplePost.mainImageUrl}
+              onLike={samplePost.onLike}
+              onComment={samplePost.onComment}
+              onShare={samplePost.onShare}
+            />
 
+          </div>
+          <div className="w-[28%] p-5 right-0 top-10 fixed h-5/6 min-h-screen space-y-5 z-10">
+            <Chats />
+          </div>
         </div>
       </div>
+
 
       {/* Right Sidebar - Followings */}
       {/* <div className="w-1/4 p-5"> */}

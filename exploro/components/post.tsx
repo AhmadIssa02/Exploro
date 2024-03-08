@@ -33,7 +33,7 @@ const Post: React.FC<PostProps> = ({ username, location, timeAgo, content, profi
       </div>
 
       <div className="flex flex-col items-center w-full mt-3">
-        <Image src={mainImageUrl} alt="Main content" width={450} height={450} />
+        <Image src={mainImageUrl} alt="Main content" width={350} height={450} />
       </div>
       <div className="flex items-center mt-2 border-t-2 w-full justify-evenly">
         <button onClick={onLike}>
