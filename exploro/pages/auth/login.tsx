@@ -91,7 +91,9 @@ const LoginPage = () => {
         <button
           className="shadow-2xl absolute bottom-16 right-4 font-semibold p-3 rounded-xl text-2xl text-black bg-secondary-500 hover:bg-secondary-700 "
         >
-          Explore our story
+          <Link href = "/">
+            Explore our story
+          </Link>
         </button>
       </div>
       </div>

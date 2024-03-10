@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 export default function Home() {
   return (
     <div className="bg-primary-500 text-white  poppins-semibold min-h-screen">
@@ -8,7 +9,9 @@ export default function Home() {
           <div> Home </div>
           <div> About </div>
           <div> Community </div>
-          <button className="font-semibold ml-auto mr-16 p-2 rounded-xl text-2xl text-black bg-secondary-500 shadow-xl hover:bg-secondary-700 "> Get Started</button>
+          <button className="font-semibold ml-auto mr-16 p-2 rounded-xl text-2xl text-black bg-secondary-500 shadow-xl hover:bg-secondary-700 "> 
+            <Link href = "/auth/signup">Get Started </Link>
+          </button>
         </div>
       </div>
       <div className="">
@@ -80,7 +83,9 @@ export default function Home() {
         <div className="poppins-bold text-5xl w-1/2 p-12 mt-28 ml-auto mr-20">Join our community and unlock a world of travel opportunities. </div>
       </div>
       <div className="flex justify-center items-center">
-        <button className="font-medium poppins ml-auto mr-36 mb-12 p-3 rounded-xl text-2xl text-black bg-secondary-500 shadow-2xl hover:bg-secondary-700  ">Create an Account </button>
+        <button className="font-medium poppins ml-auto mr-36 mb-12 p-3 rounded-xl text-2xl text-black bg-secondary-500 shadow-2xl hover:bg-secondary-700  ">
+          <Link href = "/auth/signup">   Create an Account </Link>
+        </button>
       </div>
       <div className=" p-4 border-t border-t-gray-300 flex items-center">
         <Image src="/images/logo.png" alt="logo" width={50} height={50} className="ml-12"/>
