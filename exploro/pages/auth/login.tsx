@@ -23,8 +23,8 @@ const LoginPage = () => {
             <Image
               src="/images/plane.svg"
               alt="logo"
-              width={200}
-              height={200}
+              width={170}
+              height={170}
               className='absolute top-4 left-24'
               style={{
                 maxWidth: "100%",
@@ -136,8 +136,8 @@ const LoginPage = () => {
         </div>
         {/* Text Section */}
         <div className="flex flex-col ml-12">
-          <h1 className='poppins-semibold text-[66px] text-secondary-500'>Exploro.</h1>
-          <p className="text-[42px] italic poppins-medium text-white mt-4">
+          <h1 className='poppins-semibold text-6xl text-secondary-500'>Exploro.</h1>
+          <p className="text-4xl italic poppins-medium text-white mt-4">
             Unveiling the World, <br /> One Journey at a Time.
           </p>
         </div>
