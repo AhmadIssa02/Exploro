@@ -1,5 +1,5 @@
 import React from 'react';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import Post from '../components/post';
 import Chats from '../components/Chats';
 import { useState } from 'react';
