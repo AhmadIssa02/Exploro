@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Image from "next/legacy/image";
+import Image from "next/image";
 import Link from 'next/link';
 
 const LoginPage = () => {
@@ -22,7 +22,16 @@ const LoginPage = () => {
       {/* Right Blue Section */}
         <div className="w-1/2 bg-tertiary-500 flex justify-center items-center">
             {/* Form Container */}
-            <Image src="/images/plane.svg" alt="logo" width={150} height={150} className='absolute top-0 left-24'/>
+            <Image
+              src="/images/plane.svg"
+              alt="logo"
+              width={150}
+              height={150}
+              className='absolute top-0 left-24'
+              style={{
+                maxWidth: "100%",
+                height: "auto"
+              }} />
 
             <form className=" flex flex-col justify-center items-center bg-primary-500 rounded-2xl w-7/12 h-3/4 shadow-sm shadow-primary-700" onSubmit={handleSubmit}>
           {/* Email Input */}
@@ -122,17 +131,61 @@ const LoginPage = () => {
                     <div className="poppins-semibold mt-2 text-white">
                         Already have an account? <Link href="/auth/login" className="text-secondary-500  hover:underline">Sign in</Link>
                     </div>
-                    <Image src="/images/ticket.svg" alt="logo" width={70} height={70} className='absolute bottom-6 left-[440px] '/>
+                    <Image
+                      src="/images/ticket.svg"
+                      alt="logo"
+                      width={70}
+                      height={70}
+                      className='absolute bottom-6 left-[440px] '
+                      style={{
+                        maxWidth: "100%",
+                        height: "auto"
+                      }} />
             </form>
         </div>
         <div className="w-1/2 bg-primary-500 flex items-center h-screen ">
       <div className="w-full">
-        <Image src="/images/logo.svg" alt="logo" width={80} height={80} className='absolute top-4 right-8'/>
+        <Image
+          src="/images/logo.svg"
+          alt="logo"
+          width={80}
+          height={80}
+          className='absolute top-4 right-8'
+          style={{
+            maxWidth: "100%",
+            height: "auto"
+          }} />
         {/* Icon Container */}
         <div className="absolute right-[300px] top-16 flex space-x-2">
-          <Image src="/images/Vector.svg" alt="chat icon" width={50} height={50} />
-          <Image src="/images/Heart.svg" alt="heart icon" width={50} height={50} className="mb-4"/>
-          <Image src="/images/Vector-1.svg" alt="thumb icon" width={50} height={50} className="rotate-12"/>
+          <Image
+            src="/images/Vector.svg"
+            alt="chat icon"
+            width={50}
+            height={50}
+            style={{
+              maxWidth: "100%",
+              height: "auto"
+            }} />
+          <Image
+            src="/images/Heart.svg"
+            alt="heart icon"
+            width={50}
+            height={50}
+            className="mb-4"
+            style={{
+              maxWidth: "100%",
+              height: "auto"
+            }} />
+          <Image
+            src="/images/Vector-1.svg"
+            alt="thumb icon"
+            width={50}
+            height={50}
+            className="rotate-12"
+            style={{
+              maxWidth: "100%",
+              height: "auto"
+            }} />
         </div>
         {/* Text Section */}
         <div className="flex flex-col ml-12">
