@@ -24,7 +24,7 @@ const LoginPage = () => {
             {/* Form Container */}
             <Image src="/images/plane.svg" alt="logo" width={150} height={150} className='absolute top-0 left-24'/>
 
-            <form className=" flex flex-col justify-center items-center bg-primary-500 rounded-2xl w-7/12 h-3/4" onSubmit={handleSubmit}>
+            <form className=" flex flex-col justify-center items-center bg-primary-500 rounded-2xl w-7/12 h-3/4 shadow-sm shadow-primary-700" onSubmit={handleSubmit}>
           {/* Email Input */}
             <div className="flex relative w-3/4 mt-16 space-x-2 mb-[28px]">
                 <div className="relative w-1/2">
@@ -114,18 +114,18 @@ const LoginPage = () => {
                     <div>
                         <button
                         type="submit"
-                        className="shadow-md shadow-slate-600 group relative w-full flex justify-center py-2 px-4 text-lg rounded-md text-black bg-secondary-500 hover:bg-secondary-700  focus:outline-none focus:ring-2 focus:ring-offset-2 "
+                        className="shadow-sm shadow-secondary-600 group relative w-full flex justify-center py-2 px-4 text-lg rounded-md text-black bg-secondary-500 hover:bg-secondary-700  focus:outline-none focus:ring-2 focus:ring-offset-2 "
                         >
                         Sign up
                         </button>
                     </div>
-                    <div className="poppins-semibold mt-2">
+                    <div className="poppins-semibold mt-2 text-white">
                         Already have an account? <Link href="/auth/login" className="text-secondary-500  hover:underline">Sign in</Link>
                     </div>
-                    <Image src="/images/ticket.svg" alt="logo" width={70} height={70} className='absolute bottom-6 left-[440px] -rotate-30'/>
+                    <Image src="/images/ticket.svg" alt="logo" width={70} height={70} className='absolute bottom-6 left-[440px] '/>
             </form>
         </div>
-        <div className="w-1/2 bg-primary-500 flex items-center h-screen">
+        <div className="w-1/2 bg-primary-500 flex items-center h-screen ">
       <div className="w-full">
         <Image src="/images/logo.svg" alt="logo" width={80} height={80} className='absolute top-4 right-8'/>
         {/* Icon Container */}
@@ -142,7 +142,7 @@ const LoginPage = () => {
           </p>
         </div>
         <button
-          className="shadow-2xl absolute bottom-16 right-4 font-semibold p-3 rounded-xl text-2xl text-black bg-secondary-500 hover:bg-secondary-700 "
+          className="shadow-sm shadow-secondary-700 absolute bottom-16 right-4 font-semibold p-3 rounded-xl text-2xl text-black bg-secondary-500 hover:bg-secondary-700 "
         >
           <Link href = "/">
             Explore our story
