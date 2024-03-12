@@ -1,5 +1,5 @@
 import React from 'react';
-import Image from 'next/image';
+import Image from "next/image";
 import Post from '../components/post';
 import Chats from '../components/Chats';
 import { useState } from 'react';
@@ -42,7 +42,16 @@ const toggleSidebar = () => {
           <Header></Header>
           
           <button className='absolute right-6' onClick={toggleSidebar}>
-            <Image src="/images/burgermenu.svg" alt="menu" width={25} height={25} className=' '></Image>
+            <Image
+              src="/images/burgermenu.svg"
+              alt="menu"
+              width={25}
+              height={25}
+              className=' '
+              style={{
+                maxWidth: "100%",
+                height: "auto"
+              }}></Image>
           </button>
         </header>
         

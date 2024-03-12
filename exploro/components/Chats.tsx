@@ -1,5 +1,5 @@
 import React from 'react';
-import Image from 'next/image';
+import Image from "next/image";
 
 type ChatProps = {
   username: string;
@@ -12,7 +12,15 @@ const Chat: React.FC<ChatProps> = ({ username, lastMessage, image}) => {
   return (
     <div className="flex items-center space-x-3 mt-1 p-2 hover:bg-gray-100 rounded-md cursor-pointer border-2">
       <div className="w-10 h-10 rounded-full flex justify-center items-center overflow-hidden">
-        <Image src={image || defaultImage} alt="Profile" width={50} height={50} />
+        <Image
+          src={image || defaultImage}
+          alt="Profile"
+          width={50}
+          height={50}
+          style={{
+            maxWidth: "100%",
+            height: "auto"
+          }} />
       </div>
       <div className = "flex-1 min-w-0">
         <p className="font-semibold truncate">{username}</p>
@@ -44,7 +52,16 @@ const Chats: React.FC = () => {
         <div className="flex  justify-center"> 
           <input type="text" placeholder="Search" className="w-full rounded-full border-2 text-center mb-1" />
           <button className='bg-white'>
-            <Image src="/images/search2.png" alt="search" width={20} height={20} className='mb-1 ml-1' />
+            <Image
+              src="/images/search2.png"
+              alt="search"
+              width={20}
+              height={20}
+              className='mb-1 ml-1'
+              style={{
+                maxWidth: "100%",
+                height: "auto"
+              }} />
           </button>
         </div> 
         {chats.map((chat, index) => (

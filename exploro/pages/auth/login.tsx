@@ -1,6 +1,6 @@
 // pages/login.tsx
 import React, { useState } from 'react';
-import Image from 'next/image';
+import Image from "next/image";
 import Link from 'next/link';
 
 const LoginPage = () => {
@@ -20,7 +20,16 @@ const LoginPage = () => {
       {/* Right Blue Section */}
         <div className="w-1/2 bg-tertiary-500 flex justify-center items-center">
             {/* Form Container */}
-            <Image src="/images/plane.svg" alt="logo" width={200} height={200} className='absolute top-4 left-24'/>
+            <Image
+              src="/images/plane.svg"
+              alt="logo"
+              width={170}
+              height={170}
+              className='absolute top-4 left-24'
+              style={{
+                maxWidth: "100%",
+                height: "auto"
+              }} />
 
             <form className=" flex flex-col justify-center items-center space-y-4 bg-primary-500 rounded-2xl w-1/2 h-2/3 shadow-sm shadow-primary-700" onSubmit={handleSubmit}>
           {/* Email Input */}
@@ -69,22 +78,66 @@ const LoginPage = () => {
                     <div className="poppins-semibold text-white">
                         Don`t have an account? <Link href="/auth/signup" className="text-secondary-500 hover:underline">Sign Up</Link>
                     </div>
-                    <Image src="/images/ticket.svg" alt="logo" width={70} height={70} className='absolute bottom-16 left-96'/>
+                    <Image
+                      src="/images/ticket.svg"
+                      alt="logo"
+                      width={70}
+                      height={70}
+                      className='absolute bottom-16 left-96'
+                      style={{
+                        maxWidth: "100%",
+                        height: "auto"
+                      }} />
             </form>
         </div>
         <div className="w-1/2 bg-primary-500 flex items-center h-screen">
       <div className="w-full">
-        <Image src="/images/logo.svg" alt="logo" width={80} height={80} className='absolute top-4 right-8'/>
+        <Image
+          src="/images/logo.svg"
+          alt="logo"
+          width={80}
+          height={80}
+          className='absolute top-4 right-8'
+          style={{
+            maxWidth: "100%",
+            height: "auto"
+          }} />
         {/* Icon Container */}
         <div className="absolute right-[300px] top-16 flex space-x-2">
-          <Image src="/images/Vector.svg" alt="chat icon" width={50} height={50} />
-          <Image src="/images/Heart.svg" alt="heart icon" width={50} height={50} className="mb-4"/>
-          <Image src="/images/Vector-1.svg" alt="thumb icon" width={50} height={50} className="rotate-12"/>
+          <Image
+            src="/images/Vector.svg"
+            alt="chat icon"
+            width={50}
+            height={50}
+            style={{
+              maxWidth: "100%",
+              height: "auto"
+            }} />
+          <Image
+            src="/images/Heart.svg"
+            alt="heart icon"
+            width={50}
+            height={50}
+            className="mb-4"
+            style={{
+              maxWidth: "100%",
+              height: "auto"
+            }} />
+          <Image
+            src="/images/Vector-1.svg"
+            alt="thumb icon"
+            width={50}
+            height={50}
+            className="rotate-12"
+            style={{
+              maxWidth: "100%",
+              height: "auto"
+            }} />
         </div>
         {/* Text Section */}
         <div className="flex flex-col ml-12">
-          <h1 className='poppins-semibold text-[66px] text-secondary-500'>Exploro.</h1>
-          <p className="text-[42px] italic poppins-medium text-white mt-4">
+          <h1 className='poppins-semibold text-6xl text-secondary-500'>Exploro.</h1>
+          <p className="text-4xl italic poppins-medium text-white mt-4">
             Unveiling the World, <br /> One Journey at a Time.
           </p>
         </div>
