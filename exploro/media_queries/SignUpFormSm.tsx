@@ -15,29 +15,26 @@ const SignUpFormSm = () => {
 
   return (
     <div className="h-full w-full flex flex-col justify-center items-center bg-primary-500 text-white poppins-semibold ">
-        <Image src="/images/logo.svg" alt="logo" width={150} height={150} className='mt-16' style={{ maxWidth: "100%", height: "auto" }} />
-        <div className="text-6xl text-secondary-500 mt-4">
-            Exploro.
-            <div className="text-2xl mt-4">
-                Discover the world.
-            </div>
+        <Image src="/images/logo.svg" alt="logo" width={120} height={120} className='mt-16' style={{ maxWidth: "100%", height: "auto" }} />
+        <div className="text-4xl text-white my-6">
+            Sign Up
         </div>
-        <div className="h-full w-full flex justify-start items-center p-4 bg-primary-500 font-poppins">
-        <form onSubmit={handleSubmit} className="w-full flex flex-col items-center text-xl">
-            <div className="mb-4">
-            <input type="text" required placeholder="First Name" className="w-full p-4 rounded-xl text-gray-700 text-xl" value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
+        <div className="h-full w-full flex justify-start items-center py-2 bg-primary-500 font-poppins">
+        <form onSubmit={handleSubmit} className="w-full flex flex-col items-center text-lg text-black">
+            <div className="mb-4 ">
+            <input type="text" required placeholder="First Name" className=" shadow-sm shadow-white w-full p-3 rounded-xl text-gray-700 text-lg" value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
+            </div>
+            <div className="mb-4 ">
+            <input type="text" required placeholder="Last Name" className="shadow-sm shadow-white w-full p-3 rounded-xl  text-gray-700 text-lg" value={lastName} onChange={(e) => setLastName(e.target.value)}/>
             </div>
             <div className="mb-4">
-            <input type="text" required placeholder="Last Name" className="w-full p-4 rounded-xl  text-gray-700 text-xl" value={lastName} onChange={(e) => setLastName(e.target.value)}/>
+            <input type="email" required  placeholder="Email" className="shadow-sm shadow-white w-full p-3 rounded-xl  text-gray-700 text-lg" value={email} onChange={(e) => setEmail(e.target.value)}/>
             </div>
             <div className="mb-4">
-            <input type="email" required  placeholder="Email" className="w-full p-4 rounded-xl  text-gray-700 text-xl" value={email} onChange={(e) => setEmail(e.target.value)}/>
+            <input type="password" required  placeholder="Password" className="shadow-sm shadow-white w-full p-3 rounded-xl  text-gray-700 text-lg" value={password} onChange={(e) => setPassword(e.target.value)}/>
             </div>
             <div className="mb-4">
-            <input type="password" required  placeholder="Password" className="w-full p-4 rounded-xl  text-gray-700 text-xl" value={password} onChange={(e) => setPassword(e.target.value)}/>
-            </div>
-            <div className="mb-4">
-            <input type="text" required placeholder="Confirm Password" className="w-full p-4 rounded-xl  text-gray-700 text-xl" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
+            <input type="text" required placeholder="Confirm Password" className="shadow-sm shadow-white w-full p-3 rounded-xl  text-gray-700 text-lg" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
             </div>
             <button
             type="submit"
@@ -45,6 +42,7 @@ const SignUpFormSm = () => {
             >
             Sign Up
             </button>
+            
         </form>
         </div>
     </div>
