@@ -38,7 +38,7 @@ const toggleSidebar = () => {
       
       <div className="flex-1 flex flex-col bg-quarternary-500 ">
         {/* Header */}
-        <header className="flex fixed w-full p-4  bg-primary-500  justify-center items-center justify-content-center">
+        <header className="flex fixed w-full p-4 bg-primary-500  justify-center items-center justify-content-center">
           <Header></Header>
           
           <button className='absolute right-6' onClick={toggleSidebar}>
