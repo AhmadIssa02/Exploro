@@ -1,5 +1,5 @@
-import LandingPageMd from "@/components/LandingPageMd";
-import LandingPageSm from "@/components/LandingPageSm";
+import LandingPageMd from "@/components/media queries/LandingPageMd";
+import LandingPageSm from "@/components/media queries/LandingPageSm";
 
 
 export default function Home() {
