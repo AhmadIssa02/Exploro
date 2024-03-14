@@ -2,7 +2,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const SignUpFormLg = () => {
+const SignUpPageLg = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -199,4 +199,4 @@ const SignUpFormLg = () => {
         </>
     );
 }   
-export default SignUpFormLg;
+export default SignUpPageLg;

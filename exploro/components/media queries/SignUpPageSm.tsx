@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Image from "next/image";
 
-const SignUpFormSm = () => {
+const SignUpPageSm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -22,7 +22,7 @@ const SignUpFormSm = () => {
             Sign Up
         </div>
         <div className=" w-full flex justify-center items-center py-2 mt-2  font-poppins">
-          <form onSubmit={handleSubmit} className="w-3/4 flex flex-col items-center text-2xl md:text-3xl text-black p-4 bg-primary-500 rounded-3xl gap-y-8">
+          <form onSubmit={handleSubmit} className="w-3/4 flex flex-col items-center text-2xl md:text-3xl text-black p-4 bg-primary-500 rounded-3xl gap-y-4 md:gap-y-8">
               <div className="mb-4 w-full">
               <input type="text" required placeholder="First Name" className="  bg-transparent border-0 border-b-2 border-white w-full text-white placeholder-white/80" value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
               </div>
@@ -47,8 +47,12 @@ const SignUpFormSm = () => {
               
           </form>
         </div>
+        <div className="text-white mt-4 text-xl md:text-3xl mb-16">
+            <span> Already have an account?</span>
+            <a href="/auth/login" className="text-secondary-500"> Login </a>
+        </div>
     </div>
   );
 };
 
-export default SignUpFormSm;
+export default SignUpPageSm;
