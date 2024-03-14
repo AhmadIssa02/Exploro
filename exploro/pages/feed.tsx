@@ -35,7 +35,6 @@ const toggleSidebar = () => {
       <Sidebar></Sidebar>
 
       {/* Main Content */}
-      
       <div className="flex-1 flex flex-col bg-quarternary-500 ">
         {/* Header */}
         <header className="flex fixed w-full p-4 bg-primary-500  justify-center items-center justify-content-center">
@@ -70,11 +69,10 @@ const toggleSidebar = () => {
 
         {/* Post Input & Feed */}
         <div className="flex justify-center items-center space-y-6 w-full mt-14 mb-6">
-          <div className='w-1/4 bg-primary-500'>
-          </div>
+          <div className='w-1/4 bg-primary-500'/>
 
           {/* Post Input */}
-          <div className="flex flex-col justify-center space-y-6 w-full">
+          <div className="flex flex-col justify-center space-y-6 w-full mr-8">
             <PostInput/>
             <Post
               username={samplePost.username}

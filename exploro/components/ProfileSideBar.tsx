@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from "next/image";
+import Link from 'next/link';
 
 type SideBarProps = {
     username: string;
@@ -51,20 +52,22 @@ const ProfileSideBar: React.FC<SideBarProps> = ({ username, bio, profileImageUrl
             }} />  
           <span>Activity</span>
         </button>
-        <button className="flex items-center space-x-2 p-2 border-b-[1.5px] ">
-          <Image
-            src="/images/settings4.png"
-            alt="home"
-            width={30}
-            height={35}
-            className='mt-1'
-            style={{
-              maxWidth: "100%",
-              height: "auto"
-            }} />  
-          <span>Settings</span>
-        </button>
-        <span className='bg-primary-500 h-1'></span>
+        <Link href="/settings">
+          <button className="flex items-center space-x-2 p-2 border-b-[1.5px] ">
+            <Image
+              src="/images/settings4.png"
+              alt="home"
+              width={30}
+              height={35}
+              className='mt-1'
+              style={{
+                maxWidth: "100%",
+                height: "auto"
+              }} />  
+            <span>Settings</span>
+          </button>
+          <span className='bg-primary-500 h-1'></span>
+          </Link>
         <button className="text-lg font-semibold p-2 text-center text-black bg-red-500 rounded-md shadow-sm shadow-red-600">
           Sign Out
         </button>

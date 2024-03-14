@@ -1,0 +1,107 @@
+import Chats from "@/components/Chats";
+import Header from "@/components/Header";
+import Sidebar from "@/components/SideBar";
+import { useState } from "react";
+
+
+const SettingsPage = ()=>{
+    const [email, setEmail] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+  
+
+    const handleSubmit = (e: { preventDefault: () => void; }) => {
+        e.preventDefault();
+        // Handle the form submission to update the email and password
+        if (!email && (!newPassword || newPassword !== confirmPassword)) {
+            alert('Please provide an email or a matching password and confirmation.');
+            // You can also set an error state and display a message to the user here.
+            return;
+          }
+      
+          // If email is provided, we handle email change
+          if (email) {
+            alert('Email will be changed to:' + email);
+            // API call to change email
+          }
+      
+          // If passwords are provided and match, we handle password change
+          if (newPassword && newPassword === confirmPassword) {
+            alert('Password will be changed.');
+            // API call to change password
+          }
+      
+          // Reset form
+          setEmail('');
+          setNewPassword('');
+          setConfirmPassword('');
+    };
+
+    return (
+        <div>
+            <div className="flex w-full h-100% min-h-screen bg-quarternary-500 text-white font-poppins">
+                
+                <Sidebar/>
+                
+                <header className="fixed p-4 w-full bg-primary-500 flex justify-center">
+                    <Header></Header>
+                </header>
+
+                <div className="flex-1 flex flex-col bg-quarternary-500">
+                    <div className="flex justify-start items-start  pace-y-6 w-full mb-6 h-full mt-16">
+                        <div className="w-1/5 bg-primary-500"/>
+                        <div className=" w-1/2  flex items-center justify-center p-4 ml-6 rounded-md  ">
+                            <div className="w-full space-y-8 bg-white p-6 rounded-xl shadow-md">
+                                <div className="text-center text-2xl font-semibold text-black">Settings</div>
+                                <form className="space-y-6" onSubmit={handleSubmit}>
+                                <div>
+                                    <label htmlFor="email" className="text-sm font-medium text-gray-700">
+                                    Change Email
+                                    </label>
+                                    <input id="email" name="email" type="email" 
+                                    className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
+                                    placeholder="Enter your new email" value={email} onChange={(e) => setEmail(e.target.value)}
+                                    />
+                                </div>
+                                {/* Password Field */}
+                                <div>
+                                    <label htmlFor="password" className="text-sm font-medium text-gray-700">
+                                    Change Password
+                                    </label>
+                                    <input id="password" name="password" type="password"  
+                                    className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
+                                    placeholder="Enter your new password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)}
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="password" className="text-sm font-medium text-gray-700">
+                                    Confirm Password
+                                    </label>
+                                    <input id="password" name="password" type="password"  
+                                    className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
+                                    placeholder="Confirm your new password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
+                                    />
+                                </div>
+                                {/* Submit Button */}
+                                <div>
+                                    <button
+                                    type="submit"
+                                    className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                                    >
+                                    Update Settings
+                                    </button>
+                                </div>
+                                </form>
+                            </div>
+                            </div>
+                        <div className="w-[28%] p-5 right-0 top-10 fixed h-5/6 min-h-screen z-0 mt-6">
+                            <Chats />
+                        </div>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+    );
+};
+export default SettingsPage;
