@@ -45,7 +45,7 @@ const Sidebar: React.FC = ({  }) => {
                   maxWidth: "100%",
                   height: "auto"
                 }} />  
-              <span>Saved Locations</span>
+              <span>Saved </span>
             </button>
           </Link>
           <span className='bg-white p-[1px] w-5/6 shadow-2xl rounded-3xl'></span>
