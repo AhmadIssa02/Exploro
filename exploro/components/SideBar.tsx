@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const Sidebar: React.FC = ({  }) => {
     return <>
-      <div className="fixed min-h-dvh h-svh bg-primary-500 w-1/5 pt-16 px-3 space-y-6">
+      <div className="fixed min-h-dvh h-svh bg-primary-500 w-full lg:w-1/5 pt-16 px-3 space-y-6">
       <Link href="/feed" className="flex items-center justify-center mt-4 mb-8">
         <Image
           src="/images/logo.png"

@@ -66,7 +66,7 @@ const toggleSidebar = () => {
                             <LocationCard />
                         </div>
 
-                        <div className="w-[28%] p-5 right-0 top-10 fixed h-5/6 min-h-screen z-0">
+                        <div className="w-[28%] p-5 right-0 top-10 fixed h-5/6 min-h-screen z-0 mt-4">
                             <Chats />
                         </div>
                     </div>
