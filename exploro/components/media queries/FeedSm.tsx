@@ -80,9 +80,9 @@ const FeedSm: React.FC = () => {
                     style={{
                     maxWidth: "100%",
                     height: "auto"
-                    }}></Image>
-                </button>
-                <Header></Header>
+                }}></Image>
+            </button>
+            <Header></Header>
             
             <button className='absolute right-2' onClick={toggleProfileSidebar}>
               <Image
