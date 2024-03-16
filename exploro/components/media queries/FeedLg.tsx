@@ -57,7 +57,7 @@ const FeedLg: React.FC = () => {
     
     return (
         <>
-          <div className="flex w-full h-100% min-h-screen bg-quarternary-500 text-white font-poppins">
+        <div className="flex w-full h-100% min-h-screen bg-quarternary-500 text-white font-poppins">
         {/* Sidebar */}
         <Sidebar></Sidebar>
 
