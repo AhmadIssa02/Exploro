@@ -15,7 +15,7 @@ type PostProps = {
 
 const Post: React.FC<PostProps> = ({ username, location, timeAgo, content, profileImageUrl, mainImageUrl, onLike, onComment, onShare }) => {
   return (
-    <div className="bg-white p-4 rounded-3xl shadow-xl w-7/12 flex flex-col items-center text-black ml-16">
+    <div className="bg-white p-2 lg:p-4 rounded-3xl shadow-xl w-11/12 lg:w-7/12 flex flex-col items-center text-black lg:ml-16">
       <div className="self-start mt-1">
         <div className="flex items-center">
           <div className="rounded-full ml-2">
@@ -31,7 +31,7 @@ const Post: React.FC<PostProps> = ({ username, location, timeAgo, content, profi
               }} />
           </div>
           <div className="ml-4 text-black/50 text-[10px]">
-            <div className='text-xl text-black poppins-semibold'>{username}</div>
+            <div className='text-base lg:text-xl text-black poppins-semibold'>{username}</div>
             <div className='ml-1'>{location}</div>
             <div className='ml-1'>{timeAgo}</div>
           </div>
@@ -41,8 +41,8 @@ const Post: React.FC<PostProps> = ({ username, location, timeAgo, content, profi
         </div>
       </div>
 
-      <div className="flex flex-col items-center w-full mt-3">
-        <div className='w-2/3'>
+      <div className="flex flex-col items-center w-full mt-3 border-b-2">
+        <div className='w-2/3 mb-4 '>
           <Image
             src={mainImageUrl}
             alt="Main content"
@@ -55,7 +55,7 @@ const Post: React.FC<PostProps> = ({ username, location, timeAgo, content, profi
             }} />
         </div>
       </div>
-      <div className="flex items-center mt-2 border-t-2 w-full justify-evenly">
+      <div className="flex items-center my-2 w-full justify-evenly">
         <button onClick={onLike}>
           <Image
             src="/images/like2.svg"

@@ -43,15 +43,16 @@ const Chats: React.FC = () => {
       { username: 'Ahmad Issa', lastMessage: 'I have a new idea for the project  ' },
       { username: 'Ahmad Issa', lastMessage: 'I have a new idea for the project  ' },
       { username: 'Ahmad Issa', lastMessage: 'I have a new idea for the project  ' },
-      { username: 'Sara Johnson', lastMessage: 'I am waiting for your call' }
+      { username: 'Sara Johnson', lastMessage: 'I am waiting for your call' },
+      { username: 'Sara Johnson', lastMessage: 'I am waiting for your call' },
     ];
   
     return (
-      <div className="bg-white h-5/6 overflow-y-auto rounded-lg shadow-md p-4 text-black font-poppins z-0 ">
+      <div className="bg-white h-full lg:h-5/6 overflow-y-auto rounded-lg shadow-md p-4 text-black font-poppins z-0 ">
         <h3 className="font-bold text-lg mb-2">Latest Chats</h3>
         <div className="flex  justify-center"> 
           <input type="text" placeholder="Search" className="w-full rounded-full border-2 text-center mb-1" />
-          <button className='bg-white'>
+          <button className=''>
             <Image
               src="/images/search2.png"
               alt="search"
