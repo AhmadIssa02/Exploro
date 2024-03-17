@@ -18,7 +18,7 @@ const Sidebar: React.FC = ({  }) => {
       </Link>
         <div className="pt-2 flex flex-col font-semibold text-lg items-center space-x-2 space-y-2 hover:text-gray-200 justify-center align-middle">
           <Link href="/feed">
-            <button className="flex items-center space-x-2">
+            <button className="flex items-center space-x-2 hover:scale-105">
               <Image
                 src="/images/feed.svg"
                 alt="home"
@@ -35,7 +35,7 @@ const Sidebar: React.FC = ({  }) => {
         </div>
         <div className="flex flex-col font-semibold text-lg items-center space-x-2 space-y-2 hover:text-gray-200 justify-center align-middle">
           <Link href="/locations">
-            <button className="flex items-center space-x-2">
+            <button className="flex items-center space-x-2 hover:scale-105">
               <Image
                 src="/images/saved.svg"
                 alt="home"
@@ -52,7 +52,7 @@ const Sidebar: React.FC = ({  }) => {
         </div>
 
         <div className="flex flex-col font-semibold text-lg items-center space-x-2 space-y-2 hover:text-gray-200 justify-center align-middle">
-          <button className="flex items-center space-x-2">
+          <button className="flex items-center space-x-2 hover:scale-105">
             <Image
               src="/images/flight.svg"
               alt="home"
@@ -67,7 +67,7 @@ const Sidebar: React.FC = ({  }) => {
             <span className='bg-white p-[1px] w-5/6 shadow-2xl rounded-3xl'></span>
         </div>
         <div className="flex flex-col font-semibold text-lg items-center space-x-2 space-y-2 hover:text-gray-200 justify-center align-middle">
-          <button className="flex items-center space-x-2">
+          <button className="flex items-center space-x-2 hover:scale-105">
             <Image
               src="/images/hotel.svg"
               alt="home"
@@ -82,7 +82,7 @@ const Sidebar: React.FC = ({  }) => {
             <span className='bg-white p-[1px] w-5/6 shadow-2xl rounded-3xl'></span>
         </div>
         <div className="flex flex-col font-semibold text-lg items-center space-x-2 space-y-2 hover:text-gray-200 justify-center align-middle">
-          <button className="flex items-center space-x-2">
+          <button className="flex items-center space-x-2 hover:scale-105">
             <Image
               src="/images/AI.svg"
               alt="home"

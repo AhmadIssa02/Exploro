@@ -27,7 +27,7 @@ const ProfileSideBar: React.FC<SideBarProps> = ({ username, bio, profileImageUrl
           <span className='text-lg poppins-normal'>{bio}</span>
         </div>
         <Link href="/userProfile">
-          <button className="flex items-center space-x-2 p-2 border-b-[1.5px]">
+          <button className="flex items-center space-x-2 p-2 border-b-[1.5px] hover:scale-105">
             <Image
               src="/images/feed.svg"
               alt="home"
@@ -42,7 +42,7 @@ const ProfileSideBar: React.FC<SideBarProps> = ({ username, bio, profileImageUrl
           </button>
         </Link>
         <Link href="/activity">
-          <button className="flex items-center space-x-2 p-2 border-b-[1.5px]">
+          <button className="flex items-center space-x-2 p-2 border-b-[1.5px] hover:scale-105">
             <Image
               src="/images/activity2.svg"
               alt="home"
@@ -57,7 +57,7 @@ const ProfileSideBar: React.FC<SideBarProps> = ({ username, bio, profileImageUrl
           </button>
         </Link>
         <Link href="/settings">
-          <button className="flex items-center space-x-2 p-2 border-b-[1.5px] ">
+          <button className="flex items-center space-x-2 p-2 border-b-[1.5px] hover:scale-105 ">
             <Image
               src="/images/settings4.png"
               alt="home"
@@ -70,11 +70,12 @@ const ProfileSideBar: React.FC<SideBarProps> = ({ username, bio, profileImageUrl
               }} />  
             <span>Settings</span>
           </button>
-          <span className='bg-primary-500 h-1'></span>
-          </Link>
-        <button className="text-lg font-semibold p-2 text-center text-black bg-red-500 rounded-md shadow-sm shadow-red-600">
-          Sign Out
-        </button>
+        </Link>
+        <div className='pt-'>
+          <button className="text-lg font-semibold p-2 text-center text-black bg-red-500 hover:bg-red-600 rounded-md shadow-sm shadow-red-600 ">
+            Sign Out
+          </button>
+        </div>
     </>;
 }
 

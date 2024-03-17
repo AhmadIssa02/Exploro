@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from "next/image";
-
+import Link from 'next/link';
 const Header: React.FC = () => {
     return <>
       <div className="flex w-4/5 lg:w-1/2 ml-10 lg:ml-0 ">
@@ -20,16 +20,20 @@ const Header: React.FC = () => {
               maxWidth: "100%",
               height: "auto"
             }} />
-            <Image
-            src="/images/chats.svg"
-            alt="search"
-            width={25}
-            height={20}
-            className='ml-4 md:hidden'
-            style={{
-              maxWidth: "100%",
-              height: "auto"
-            }} />
+            <Link href="/Inbox">
+              <button className=" lg:hidden">
+                <Image
+                src="/images/chats.svg"
+                alt="search"
+                width={25}
+                height={20}
+                className='ml-4 lg:hidden'
+                style={{
+                  maxWidth: "100%",
+                  height: "auto"
+                }} />
+              </button>
+            </Link>
       </div>
     </>;
   };
