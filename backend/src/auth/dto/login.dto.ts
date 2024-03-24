@@ -1,16 +1,15 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from "class-validator";
-
+import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator'
+import { Transform } from 'class-transformer'
 
 export class LoginDto {
-    
-    @IsEmail({}, {message: 'Invalid email'})
-    @IsNotEmpty()
-    readonly email: string;
-    
-    @IsString()
-    @IsNotEmpty()
-    @MinLength(6)
-    readonly password: string;
+  @IsString()
+  @IsNotEmpty()
+  @IsEmail()
+  @Transform(({ value }) => value?.toLowerCase().trim()) // Transform email to lowercase and trim
+  email: string
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(8)
+  password: string
 }
-
-

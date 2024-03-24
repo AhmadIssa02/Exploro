@@ -3,7 +3,7 @@ import { IsString, IsNumber, IsEnum } from 'class-validator';
 import { Category } from '../schemas/book.schema';
 
 
-export class CreateBookDto {
+export class UpdateBookDto {
   @IsString()
   title: string;
 
