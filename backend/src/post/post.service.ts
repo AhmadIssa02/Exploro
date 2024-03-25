@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Post } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { FeedPost } from './schema/post.schema';
 import { CreatePostDto } from './dto/createPost.dto';
+import { User } from 'src/auth/schemas/user.schema';
 
 @Injectable()
 export class PostService {
@@ -16,10 +17,12 @@ export class PostService {
         return await this.postModel.find();
     }
 
-    async create(createPostDto:CreatePostDto): Promise<FeedPost> {
-        const newPost = await this.postModel.create(createPostDto);
-        return newPost;
-      }
+    async create(createPostDto: CreatePostDto, user: User): Promise<FeedPost> {
+      const data = { ...createPostDto, user: user._id }; 
+      const newPost = new this.postModel(data);
+      return await newPost.save(); 
+    }
+  
 
     async findById(id: string): Promise<FeedPost> {
         const post = await this.postModel.findById(id);

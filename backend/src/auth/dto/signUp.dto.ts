@@ -1,5 +1,5 @@
 import { Transform } from "class-transformer";
-import { IS_STRONG_PASSWORD, IsEmail, IsNotEmpty, IsString, IsStrongPassword, MinLength, isStrongPassword } from "class-validator";
+import { IsEmail, IsNotEmpty, IsString, IsStrongPassword, MinLength, isStrongPassword } from "class-validator";
 
 
 export class SignUpDto {

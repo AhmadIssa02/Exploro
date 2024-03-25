@@ -1,5 +1,6 @@
 // create-book.dto.ts
-import { IsString } from 'class-validator';
+import { IsEmpty, IsString } from 'class-validator';
+import { User } from 'src/auth/schemas/user.schema';
 
 
 export class UpdatePostDto {
@@ -17,4 +18,7 @@ export class UpdatePostDto {
   
   @IsString()   
   mainImageUrl: string;
+  
+  @IsEmpty({message: "You cannot pass user id"})
+  readonly user: User;
 }
