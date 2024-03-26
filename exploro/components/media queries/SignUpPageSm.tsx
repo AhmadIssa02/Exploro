@@ -69,7 +69,7 @@ const SignUpPageSm = () => {
 
         </form>
       </div>
-      <div className="text-white mt-4 text-xl md:text-3xl mb-16">
+      <div className="text-white p-4 mt-4 text-xl md:text-3xl mb-16">
         <span> Already have an account?</span>
         <a href="/auth/login" className="text-secondary-500"> Login </a>
       </div>

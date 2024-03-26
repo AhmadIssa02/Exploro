@@ -24,7 +24,7 @@ const LoginPageSm = () => {
             <Image src="/images/logo.svg" alt="logo" width={100} height={120}
                 className="mt-16 md:mt-24 w-28 h-28 sm:w-32 sm:h-40 md:w-40 "
                 style={{ maxWidth: "100%", height: "auto" }} />
-            <div className="text-4xl md:text-5xl text-white mt-12 mb-4">
+            <div className="text-4xl md:text-5xl text-white mt-16 mb-8">
                 Login
             </div>
             <div className=" w-full flex justify-center items-center py-2 mt-2  font-poppins">
@@ -45,13 +45,13 @@ const LoginPageSm = () => {
                             </button>
                         </div>
                     </div>
-                    <button type="submit" className=" p-4 rounded-md bg-secondary-500 text-white font-bold  hover:bg-secondary-600 transition duration-300 ease-in-out">
+                    <button type="submit" className=" p-4 mt-8 rounded-md bg-secondary-500 text-white font-bold  hover:bg-secondary-600 transition duration-300 ease-in-out">
                         Login
                     </button>
                 </form>
 
             </div>
-            <div className="text-white mt-4 text-xl md:text-3xl">
+            <div className="text-white my-4 p-4 text-xl md:text-3xl">
                 <span>Don`t have an account?</span>
                 <a href="/auth/signup" className="text-secondary-500"> Sign Up</a>
             </div>
