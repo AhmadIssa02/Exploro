@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import axios from 'axios';
+import Link from "next/link";
 
 const LoginPageSm = () => {
     const [email, setEmail] = useState('');
@@ -13,7 +14,6 @@ const LoginPageSm = () => {
         try {
             const response = await axios.post('http://localhost:3000/auth/login', { email, password });
             console.log(response.data);
-            // You can store the received token in local storage or context for further requests
         } catch (error) {
             console.error('Login failed:', error);
         }
@@ -44,6 +44,9 @@ const LoginPageSm = () => {
                                 {showPassword ? (<Image src="/images/hide2.png" alt="eye icon" width={20} height={20} />) : (<Image src="/images/show2.png" alt="eye icon" width={20} height={20} />)}
                             </button>
                         </div>
+                        <Link href="/auth/forget-password">
+                            <div className="text-white hover:underline text-sm mt-2">Forget Password?</div>
+                        </Link>
                     </div>
                     <button type="submit" className=" p-4 mt-8 rounded-md bg-secondary-500 text-white font-bold  hover:bg-secondary-600 transition duration-300 ease-in-out">
                         Login

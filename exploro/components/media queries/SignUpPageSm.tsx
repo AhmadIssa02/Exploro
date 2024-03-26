@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Image from "next/image";
+import axios from 'axios';
 
 const SignUpPageSm = () => {
   const [email, setEmail] = useState('');
@@ -14,7 +15,16 @@ const SignUpPageSm = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('Submitted', { firstName, lastName, email, password, confirmPassword });
+    if (password !== confirmPassword) {
+      alert('Password and Confirm Password do not match');
+      return;
+    }
+    try {
+      const response = await axios.post('http://localhost:3000/auth/signup', { email, password });
+      console.log(response.data);
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
   };
 
   return (

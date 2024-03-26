@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import axios from 'axios';
 
 const SignUpPageLg = () => {
     const [email, setEmail] = useState('');
@@ -14,7 +15,16 @@ const SignUpPageLg = () => {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log('Submitted', { firstName, lastName, email, password, confirmPassword });
+        if (password !== confirmPassword) {
+            alert('Password and Confirm Password do not match');
+            return;
+        }
+        try {
+            const response = await axios.post('http://localhost:3000/auth/signup', { email, password });
+            console.log(response.data);
+        } catch (error) {
+            console.error('Login failed:', error);
+        }
     };
     return (
         <>
@@ -137,7 +147,7 @@ const SignUpPageLg = () => {
                     <div>
                         <button
                             type="submit"
-                            className="shadow-sm shadow-secondary-600 group relative w-full flex justify-center py-2 px-4 text-lg rounded-md text-black bg-secondary-500 hover:bg-secondary-700  focus:outline-none focus:ring-2 focus:ring-offset-2 "
+                            className="shadow-sm shadow-secondary-600 group relative w-full flex justify-center py-2 px-4 text-lg rounded-md text-black bg-secondary-500 hover:bg-secondary-700   "
                         >
                             Sign up
                         </button>

@@ -39,11 +39,11 @@ const LoginPageLg = () => {
                 />
 
                 <form
-                    className="flex flex-col justify-center items-center space-y-4 bg-primary-500 rounded-2xl w-1/2 h-2/3 shadow-sm shadow-primary-700"
+                    className="flex flex-col justify-center items-center space-y-3 bg-primary-500 rounded-2xl w-1/2 h-2/3 shadow-sm shadow-primary-700"
                     onSubmit={handleSubmit}
                 >
                     {/* Email Input */}
-                    <div className="relative w-5/6 mt-16 mb-4">
+                    <div className="relative w-5/6 mt-12 mb-4">
                         <label htmlFor="email-address" className="text-sm font-medium text-white absolute -top-6 left-0">
                             Email address
                         </label>
@@ -84,12 +84,20 @@ const LoginPageLg = () => {
                                 {showPassword ? (<Image src="/images/hide.png" alt="eye icon" width={20} height={20} />) : (<Image src="/images/show.png" alt="eye icon" width={20} height={20} />)}
                             </button>
                         </div>
+                        <button
+                            type="button"
+                            className="text-white poppins-semibold ml-2 text-[10px] hover:underline "
+                        >
+                            <Link href="/auth/forget-password">
+                                Forgot Password?
+                            </Link>
+                        </button>
                     </div>
                     {/* Submit Button */}
                     <div>
                         <button
                             type="submit"
-                            className="group relative w-full flex justify-center py-2 px-4 text-lg rounded-md text-black bg-secondary-500 hover:bg-secondary-700 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                            className="group relative w-full flex justify-center py-2 px-4 text-lg rounded-md text-black bg-secondary-500 hover:bg-secondary-700 "
                         >
                             Sign in
                         </button>

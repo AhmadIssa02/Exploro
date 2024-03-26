@@ -17,10 +17,9 @@ const SettingsPage = () => {
 
     const handleSubmit = (e: { preventDefault: () => void; }) => {
         e.preventDefault();
-        // Handle the form submission to update the email and password
         if (!email && (!newPassword || newPassword !== confirmPassword)) {
             alert('Please provide an email or a matching password and confirmation.');
-            // You can also set an error state and display a message to the user here.
+            //  set an error state and display a message to the user here.
             return;
         }
 
