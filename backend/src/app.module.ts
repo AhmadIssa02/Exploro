@@ -7,9 +7,16 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config'
 import { AuthModule } from './auth/auth.module';
 import { PostModule } from './post/post.module';
+// import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+
 
 @Module({
   imports: [
+    // ThrottlerModule.forRoot({
+    //   ttl: 60,
+    //   limit: 0,
+    // }),
     ConfigModule.forRoot({
       envFilePath: '.env',
       cache: true,
@@ -28,6 +35,12 @@ import { PostModule } from './post/post.module';
     PostModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: ThrottlerGuard,
+    // }
+  ],
 })
 export class AppModule {}
