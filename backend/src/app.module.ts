@@ -7,16 +7,16 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config'
 import { AuthModule } from './auth/auth.module';
 import { PostModule } from './post/post.module';
-// import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 
 
 @Module({
   imports: [
-    // ThrottlerModule.forRoot({
-    //   ttl: 60,
-    //   limit: 0,
-    // }),
+    ThrottlerModule.forRoot([{
+      ttl: 1*1000*60, // 1ms*1000*60 seconds
+      limit: 20, // limit each request to 1 per 10 seconds
+    }]),
     ConfigModule.forRoot({
       envFilePath: '.env',
       cache: true,
@@ -37,10 +37,10 @@ import { APP_GUARD } from '@nestjs/core';
   controllers: [AppController],
   providers: [
     AppService,
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: ThrottlerGuard,
-    // }
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    }
   ],
 })
 export class AppModule {}
