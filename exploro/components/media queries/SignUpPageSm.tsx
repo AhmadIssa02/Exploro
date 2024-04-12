@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import axios from 'axios';
+import Router from "next/router";
 
 const SignUpPageSm = () => {
   const [email, setEmail] = useState('');
@@ -21,9 +22,18 @@ const SignUpPageSm = () => {
     }
     try {
       const response = await axios.post('http://localhost:3000/auth/signup', { email, password });
+      Router.push('/auth/login');
       console.log(response.data);
-    } catch (error) {
-      console.error('Login failed:', error);
+    } catch (error: any) {
+      if (axios.isAxiosError(error) && error.response) {
+        if (error.response.status === 409) {
+          alert('This email is already in use. Please use another email.');
+        } else {
+          alert('Signup failed: ' + error.response.data.message);
+        }
+      } else {
+        alert('An unexpected error occurred.');
+      }
     }
   };
 

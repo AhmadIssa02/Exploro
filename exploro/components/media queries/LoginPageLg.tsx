@@ -2,6 +2,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import axios from 'axios';
+import Router from "next/router";
 
 
 const LoginPageLg = () => {
@@ -15,6 +16,7 @@ const LoginPageLg = () => {
         event.preventDefault();
         try {
             const response = await axios.post('http://localhost:3000/auth/login', { email, password });
+            Router.push('/feed');
             console.log(response.data);
             // You can store the received token in local storage or context for further requests
         } catch (error) {

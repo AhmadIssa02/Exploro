@@ -2,6 +2,7 @@ import { useState } from "react";
 import Image from "next/image";
 import axios from 'axios';
 import Link from "next/link";
+import Router from "next/router";
 
 const LoginPageSm = () => {
     const [email, setEmail] = useState('');
@@ -13,6 +14,7 @@ const LoginPageSm = () => {
         event.preventDefault();
         try {
             const response = await axios.post('http://localhost:3000/auth/login', { email, password });
+            Router.push('/feed');
             console.log(response.data);
         } catch (error) {
             console.error('Login failed:', error);

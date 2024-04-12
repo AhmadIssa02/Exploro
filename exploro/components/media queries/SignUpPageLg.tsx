@@ -2,6 +2,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import axios from 'axios';
+import Router from "next/router";
 
 const SignUpPageLg = () => {
     const [email, setEmail] = useState('');
@@ -15,15 +16,30 @@ const SignUpPageLg = () => {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*,.])[A-Za-z\d!@#$%^&*,.]{8,}$/;
+        // Check if password meets complexity requirements
+        if (!passwordRegex.test(password)) {
+            alert('Password must be at least 8 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 special character.');
+            return;
+        }
         if (password !== confirmPassword) {
             alert('Password and Confirm Password do not match');
             return;
         }
         try {
             const response = await axios.post('http://localhost:3000/auth/signup', { email, password });
+            Router.push('/auth/login');
             console.log(response.data);
-        } catch (error) {
-            console.error('Login failed:', error);
+        } catch (error: any) {
+            if (axios.isAxiosError(error) && error.response) {
+                if (error.response.status === 409) {
+                    alert('This email is already in use. Please use another email.');
+                } else {
+                    alert('Signup failed: ' + error.response.data.message);
+                }
+            } else {
+                alert('An unexpected error occurred.');
+            }
         }
     };
     return (
