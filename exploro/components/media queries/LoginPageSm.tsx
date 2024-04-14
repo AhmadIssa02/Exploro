@@ -16,8 +16,14 @@ const LoginPageSm = () => {
             const response = await axios.post('http://localhost:3000/auth/login', { email, password });
             Router.push('/feed');
             console.log(response.data);
-        } catch (error) {
+            // You can store the received token in local storage or context for further requests
+        } catch (error: any) {
             console.error('Login failed:', error);
+            if (error.response && error.response.status === 401) {
+                alert('Invalid email or password. Please try again.');
+            } else {
+                alert('An error occurred. Please try again later.');
+            }
         }
     };
 
