@@ -1,19 +1,29 @@
 import { useState } from "react";
 import Image from "next/image";
 import axios from 'axios';
+import Link from "next/link";
+import Router from "next/router";
 
 const LoginPageSm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(true);
+
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
             const response = await axios.post('http://localhost:3000/auth/login', { email, password });
+            Router.push('/feed');
             console.log(response.data);
             // You can store the received token in local storage or context for further requests
-        } catch (error) {
+        } catch (error: any) {
             console.error('Login failed:', error);
+            if (error.response && error.response.status === 401) {
+                alert('Invalid email or password. Please try again.');
+            } else {
+                alert('An error occurred. Please try again later.');
+            }
         }
     };
 
@@ -22,7 +32,7 @@ const LoginPageSm = () => {
             <Image src="/images/logo.svg" alt="logo" width={100} height={120}
                 className="mt-16 md:mt-24 w-28 h-28 sm:w-32 sm:h-40 md:w-40 "
                 style={{ maxWidth: "100%", height: "auto" }} />
-            <div className="text-4xl md:text-5xl text-white mt-12 mb-4">
+            <div className="text-4xl md:text-5xl text-white mt-16 mb-8">
                 Login
             </div>
             <div className=" w-full flex justify-center items-center py-2 mt-2  font-poppins">
@@ -32,15 +42,27 @@ const LoginPageSm = () => {
                         <input type="email" required placeholder="Email" className="bg-transparent border-0 border-b-2 border-white w-full text-white placeholder-white/80  " value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     <div className="mb-4 w-full">
-                        <input type="password" required placeholder="Password" className="bg-transparent border-0 border-b-2 border-white w-full text-white placeholder-white/80" value={password} onChange={(e) => setPassword(e.target.value)} />
+                        <div className="flex items-center relative">
+                            <input type={showPassword ? "password" : "text"} required placeholder="Password" className="bg-transparent border-0 border-b-2 border-white w-full text-white placeholder-white/80" value={password} onChange={(e) => setPassword(e.target.value)} />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="h-1/2 text-white poppins-semibold text-[10px] hover:underline absolute right-2 z-10 "
+                            >
+                                {showPassword ? (<Image src="/images/hide2.png" alt="eye icon" width={20} height={20} />) : (<Image src="/images/show2.png" alt="eye icon" width={20} height={20} />)}
+                            </button>
+                        </div>
+                        <Link href="/auth/forget-password">
+                            <div className="text-white hover:underline text-sm mt-2">Forget Password?</div>
+                        </Link>
                     </div>
-                    <button type="submit" className=" p-4 rounded-md bg-secondary-500 text-white font-bold  hover:bg-secondary-600 transition duration-300 ease-in-out">
+                    <button type="submit" className=" p-4 mt-8 rounded-md bg-secondary-500 text-white font-bold  hover:bg-secondary-600 transition duration-300 ease-in-out">
                         Login
                     </button>
                 </form>
 
             </div>
-            <div className="text-white mt-4 text-xl md:text-3xl">
+            <div className="text-white my-4 p-4 text-xl md:text-3xl">
                 <span>Don`t have an account?</span>
                 <a href="/auth/signup" className="text-secondary-500"> Sign Up</a>
             </div>

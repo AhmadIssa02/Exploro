@@ -2,20 +2,30 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import axios from 'axios';
+import Router from "next/router";
+
 
 const LoginPageLg = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const [showPassword, setShowPassword] = useState(false);
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
             const response = await axios.post('http://localhost:3000/auth/login', { email, password });
+            Router.push('/feed');
             console.log(response.data);
             // You can store the received token in local storage or context for further requests
-        } catch (error) {
+        } catch (error: any) {
             console.error('Login failed:', error);
+            if (error.response && error.response.status === 401) {
+                alert('Invalid email or password. Please try again.');
+            } else {
+                alert('An error occurred. Please try again later.');
+            }
         }
     };
 
@@ -36,11 +46,11 @@ const LoginPageLg = () => {
                 />
 
                 <form
-                    className="flex flex-col justify-center items-center space-y-4 bg-primary-500 rounded-2xl w-1/2 h-2/3 shadow-sm shadow-primary-700"
+                    className="flex flex-col justify-center items-center space-y-3 bg-primary-500 rounded-2xl w-1/2 h-2/3 shadow-sm shadow-primary-700"
                     onSubmit={handleSubmit}
                 >
                     {/* Email Input */}
-                    <div className="relative w-5/6 mt-16 mb-4">
+                    <div className="relative w-5/6 mt-12 mb-4">
                         <label htmlFor="email-address" className="text-sm font-medium text-white absolute -top-6 left-0">
                             Email address
                         </label>
@@ -57,27 +67,44 @@ const LoginPageLg = () => {
                         />
                     </div>
                     {/* Password Input */}
-                    <div className="relative w-5/6">
+                    <div className="relative w-5/6 items-center">
                         <label htmlFor="password" className="text-sm font-medium text-white absolute -top-6 left-0">
                             Password
                         </label>
-                        <input
-                            id="password"
-                            name="password"
-                            type="password"
-                            autoComplete="current-password"
-                            required
-                            className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder text-gray-900 focus:outline-none focus:z-10 sm:text-sm"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
+                        <div className="flex items-center relative">
+                            <input
+                                id="password"
+                                name="password"
+                                type={showPassword ? "text" : "password"}
+                                autoComplete="current-password"
+                                required
+                                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder text-gray-900 focus:outline-none focus:z-10 sm:text-sm"
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="h-1/2 opacity-50 text-white poppins-semibold text-[10px] hover:underline absolute right-2 z-10 "
+                            >
+                                {showPassword ? (<Image src="/images/hide.png" alt="eye icon" width={20} height={20} />) : (<Image src="/images/show.png" alt="eye icon" width={20} height={20} />)}
+                            </button>
+                        </div>
+                        <button
+                            type="button"
+                            className="text-white poppins-semibold ml-2 text-[10px] hover:underline "
+                        >
+                            <Link href="/auth/forget-password">
+                                Forgot Password?
+                            </Link>
+                        </button>
                     </div>
                     {/* Submit Button */}
                     <div>
                         <button
                             type="submit"
-                            className="group relative w-full flex justify-center py-2 px-4 text-lg rounded-md text-black bg-secondary-500 hover:bg-secondary-700 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                            className="group relative w-full flex justify-center py-2 px-4 text-lg rounded-md text-black bg-secondary-500 hover:bg-secondary-700 "
                         >
                             Sign in
                         </button>

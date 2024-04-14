@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import axios from 'axios';
+import Router from "next/router";
 
 const SignUpPageLg = () => {
     const [email, setEmail] = useState('');
@@ -9,9 +11,36 @@ const SignUpPageLg = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
 
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log('Submitted', { firstName, lastName, email, password, confirmPassword });
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*,.])[A-Za-z\d!@#$%^&*,.]{8,}$/;
+        // Check if password meets complexity requirements
+        if (!passwordRegex.test(password)) {
+            alert('Password must be at least 8 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 special character.');
+            return;
+        }
+        if (password !== confirmPassword) {
+            alert('Password and Confirm Password do not match');
+            return;
+        }
+        try {
+            const response = await axios.post('http://localhost:3000/auth/signup', { email, password });
+            Router.push('/auth/login');
+            console.log(response.data);
+        } catch (error: any) {
+            if (axios.isAxiosError(error) && error.response) {
+                if (error.response.status === 409) {
+                    alert('This email is already in use. Please use another email.');
+                } else {
+                    alert('Signup failed: ' + error.response.data.message);
+                }
+            } else {
+                alert('An unexpected error occurred.');
+            }
+        }
     };
     return (
         <>
@@ -83,40 +112,58 @@ const SignUpPageLg = () => {
                         <label htmlFor="password" className="text-sm font-medium text-white absolute -top-6 left-0">
                             Password
                         </label>
-                        <input
-                            id="password"
-                            name="password"
-                            type="password"
-                            autoComplete="current-password"
-                            required
-                            className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder text-gray-900 focus:outline-none focus:z-10 sm:text-sm"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
+                        <div className="flex items-center relative">
+                            <input
+                                id="password"
+                                name="password"
+                                type={showPassword ? "text" : "password"}
+                                autoComplete="current-password"
+                                required
+                                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder text-gray-900 focus:outline-none focus:z-10 sm:text-sm"
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="h-1/2 opacity-50 text-white poppins-semibold text-[10px] hover:underline absolute right-2 z-10 "
+                            >
+                                {showPassword ? (<Image src="/images/hide.png" alt="eye icon" width={20} height={20} />) : (<Image src="/images/show.png" alt="eye icon" width={20} height={20} />)}
+                            </button>
+                        </div>
                     </div>
                     {/* Confirm Password Input */}
                     <div className="relative w-3/4 mb-4">
                         <label htmlFor="confirm-password" className="text-sm font-medium text-white absolute -top-6 left-0">
                             Confirm Password
                         </label>
-                        <input
-                            id="confirm-password"
-                            name="confirm-password"
-                            type="password"
-                            autoComplete="new-password"
-                            required
-                            className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 text-gray-900 focus:outline-none focus:z-10 sm:text-sm"
-                            placeholder="Confirm Password"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                        />
+                        <div className="flex items-center relative">
+                            <input
+                                id="confirm-password"
+                                name="confirm-password"
+                                type={showConfirmPassword ? "text" : "password"}
+                                autoComplete="new-password"
+                                required
+                                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 text-gray-900 focus:outline-none focus:z-10 sm:text-sm"
+                                placeholder="Confirm Password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                className="h-1/2 opacity-50 text-white poppins-semibold text-[10px] hover:underline absolute right-2 z-10 "
+                            >
+                                {showConfirmPassword ? (<Image src="/images/hide.png" alt="eye icon" width={20} height={20} />) : (<Image src="/images/show.png" alt="eye icon" width={20} height={20} />)}
+                            </button>
+                        </div>
                     </div>
                     {/* Submit Button */}
                     <div>
                         <button
                             type="submit"
-                            className="shadow-sm shadow-secondary-600 group relative w-full flex justify-center py-2 px-4 text-lg rounded-md text-black bg-secondary-500 hover:bg-secondary-700  focus:outline-none focus:ring-2 focus:ring-offset-2 "
+                            className="shadow-sm shadow-secondary-600 group relative w-full flex justify-center py-2 px-4 text-lg rounded-md text-black bg-secondary-500 hover:bg-secondary-700   "
                         >
                             Sign up
                         </button>
@@ -134,8 +181,8 @@ const SignUpPageLg = () => {
                             maxWidth: "100%",
                             height: "auto"
                         }} />
-                </form>
-            </div>
+                </form >
+            </div >
             <div className="w-1/2 bg-primary-500 flex items-center h-screen ">
                 <div className="w-full">
                     <Image
