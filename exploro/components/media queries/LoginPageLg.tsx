@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import axios from 'axios';
 import Router from "next/router";
+import { setTokenCookie } from "@/utils/cookieUtils";
 
 
 const LoginPageLg = () => {
@@ -16,9 +17,9 @@ const LoginPageLg = () => {
         event.preventDefault();
         try {
             const response = await axios.post('http://localhost:3000/auth/login', { email, password });
+            const token = response.data.token;
+            setTokenCookie(token);
             Router.push('/feed');
-            console.log(response.data);
-            // You can store the received token in local storage or context for further requests
         } catch (error: any) {
             console.error('Login failed:', error);
             if (error.response && error.response.status === 401) {
