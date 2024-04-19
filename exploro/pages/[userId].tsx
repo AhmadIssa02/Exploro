@@ -23,7 +23,8 @@ const UserProfile = () => {
   const [isProfileSidebarOpen, setIsProfileSidebarOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-
+  const [editBio, setEditBio] = useState(false);
+  const [bio, setBio] = useState("");
 
 
   const toggleProfileSidebar = () => {
@@ -81,27 +82,33 @@ const UserProfile = () => {
     return <div>Loading...</div>;
   }
 
-  const calculateTimeAgo = (date: Date) => {
+  const handleBioSubmit = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    try {
+      const token = getTokenCookie();
+      if (token) {
+        const decoded = jwt.decode(token) as { id: string; }; // Ensure this matches the actual token structure
+        const userId = decoded.id;
+        const response = await axios.put(
+          `http://localhost:3000/users/${userId}`, // Your API endpoint for updating the bio
+          { bio: bio },
+        );
+        if (response.status === 200) {
+          // Handle success
+          console.log('Bio updated:', response.data);
+          setUser({ ...user, bio: bio }); // Update the user state with the new bio
+          setEditBio(false); // Exit edit mode
+        } else {
+          // Handle failure
+          console.error('Failed to update bio:', response);
+        }
+      }
 
-    const currentDate = new Date();
-    const postDate = new Date(date);
-
-    const diff = currentDate.getTime() - postDate.getTime();
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor(diff / (1000 * 60));
-    const seconds = Math.floor(diff / 1000);
-
-    if (days > 0) {
-      return `${days}d ago`;
-    } else if (hours > 0) {
-      return `${hours}h ago`;
-    } else if (minutes > 0) {
-      return `${minutes}m ago`;
-    } else {
-      return `${seconds}s ago`;
+    } catch (error) {
+      console.error('Error updating bio:', error);
     }
-  }
+  };
+
 
   return (
     <div>
@@ -143,12 +150,35 @@ const UserProfile = () => {
             <div className="w-full lg:w-5/6 flex flex-col items-center justify-center  space-y-4 mt-2 lg:p-4 lg:ml-6 rounded-md lg:mr-32">
 
 
-              <div className="bg-white w-11/12 lg:w-7/12 shadow-xl text-black p-4 rounded-3xl lg:ml-16 ">
+              <div className="bg-white w-11/12 lg:w-7/12 shadow-xl text-black p-4 rounded-3xl lg:ml-16  ">
                 <div className="flex items-center space-x-2">
                   <div className="rounded-full min-w-max self-start ">
                     <Image src="/images/profilePhoto.png" alt="profile" width={50} height={40} style={{ maxWidth: "100%", height: "auto" }} />
                   </div>
-                  <div className='font-semibold text-xl pl-1 '>{user.bio}</div>
+                  {!editBio ? (
+                    <>
+                      <div className="flex p-4 justify-between bg-quarternary-500 w-full rounded-xl">
+                        <div className='font-semibold text-sm lg:text-lg poppins-semibold '>{user.bio} </div>
+                        <button className=" text-center text-xs bg-primary-500 p-2 rounded-md text-white" onClick={() => setEditBio(true)}>Change </button>
+                      </div>
+
+                    </>
+                  ) : (
+                    <form onSubmit={handleBioSubmit} className="flex py-4 bg-quarternary-500 w-full rounded-xl">
+                      <div className="font-semibold text-sm lg:text-lg poppins-semibold flex bg-quarternary-500 w-full rounded-xl ml-4">
+                        <input
+                          type="text"
+                          value={bio}
+                          onChange={(e) => setBio(e.target.value)}
+                          className="w-full outline-none bg-transparent"
+                        />
+                      </div>
+                      <div className="flex items-center justify-center relative text-xs p-2 rounded-xl text-white">
+                        <button type="submit" className="p-2 bg-primary-600 hover:bg-primary-700 text-white rounded-md mr-2">Save</button>
+                        <button onClick={() => setEditBio(false)} className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-md">Cancel</button>
+                      </div>
+                    </form>
+                  )}
                 </div>
               </div>
 
@@ -180,3 +210,28 @@ const UserProfile = () => {
   );
 };
 export default UserProfile;
+
+
+
+
+const calculateTimeAgo = (date: Date) => {
+
+  const currentDate = new Date();
+  const postDate = new Date(date);
+
+  const diff = currentDate.getTime() - postDate.getTime();
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  const minutes = Math.floor(diff / (1000 * 60));
+  const seconds = Math.floor(diff / 1000);
+
+  if (days > 0) {
+    return `${days}d ago`;
+  } else if (hours > 0) {
+    return `${hours}h ago`;
+  } else if (minutes > 0) {
+    return `${minutes}m ago`;
+  } else {
+    return `${seconds}s ago`;
+  }
+}
