@@ -61,7 +61,7 @@ const ProfileSideBar: React.FC = () => {
       <div className="flex flex-col items-center space-y-2">
         <span className='text-lg poppins-normal'>{user.bio}</span>
       </div>
-      <Link href="/userProfile">
+      <Link href={`/{userId}`}>
         <button className="flex items-center space-x-2 p-2 border-b-[1.5px] hover:scale-105">
           <Image
             src="/images/feed.svg"
@@ -72,7 +72,7 @@ const ProfileSideBar: React.FC = () => {
             style={{ maxWidth: "100%", height: "auto" }} />
           <span>Your Profile</span>
         </button>
-      </Link>
+      </Link >
       <Link href="/activity">
         <button className="flex items-center space-x-2 p-2 border-b-[1.5px] hover:scale-105">
           <Image

@@ -7,13 +7,9 @@ import Sidebar from '@/components/SideBar';
 import Header from '@/components/Header'
 import PostInput from '@/components/PostInput';
 import ProfileSideBar from '@/components/ProfileSideBar';
-import Router from 'next/router';
 import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { FeedPostApi } from '@/utils/api/feedPost/feedPost.api';
 import { feedPost } from '@/models/crud';
-
-
-
 
 
 const FeedLg: React.FC = () => {
