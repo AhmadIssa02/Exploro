@@ -148,7 +148,7 @@ const UserProfile = () => {
 
           <div className="flex justify-center items-start w-full mb-6 h-full mt-16 ">
             {/* <div className="w-1/5 bg-primary-500 hidden lg:block"/> */}
-            <div className="w-full lg:w-5/6 flex flex-col items-center justify-center  space-y-4 mt-2 lg:p-4 lg:ml-6 rounded-md lg:mr-32">
+            <div className="w-full lg:w-11/12 flex flex-col items-center justify-center space-y-4 mt-2 lg:p-4 lg:pr-8 rounded-md lg:mr-32">
 
 
               <div className="bg-white w-11/12 lg:w-7/12 shadow-xl text-black p-4 rounded-3xl lg:ml-16  ">
@@ -158,9 +158,9 @@ const UserProfile = () => {
                   </div>
                   {!editBio ? (
                     <>
-                      <div className="flex p-4 justify-between bg-quarternary-500 w-full rounded-xl">
+                      <div className="flex p-3 justify-between bg-quarternary-500 w-5/6 md:w-11/12 rounded-xl">
                         <div className='font-semibold text-sm lg:text-lg poppins-semibold '>{user.bio} </div>
-                        <button className=" text-center text-xs bg-primary-500 p-2 rounded-md text-white" onClick={() => setEditBio(true)}>Change </button>
+                        <button className=" text-center text-xs bg-primary-500 p-2 h-max rounded-md text-white" onClick={() => setEditBio(true)}>Change </button>
                       </div>
 
                     </>

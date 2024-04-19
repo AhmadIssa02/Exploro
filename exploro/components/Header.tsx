@@ -1,41 +1,88 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Image from "next/image";
 import Link from 'next/link';
-const Header: React.FC = () => {
-    return <>
-      <div className="flex w-4/5 lg:w-1/2 ml-10 lg:ml-0 ">
-          <input
-            type="search"
-            placeholder="Search"
-            className="w-3/4 px-2 rounded-full text-black text-center poppins-semibold "
+import axios from 'axios';
 
-          />
-          <Image
-            src="/images/search.svg"
-            alt="search"
-            width={20}
-            height={20}
-            className='ml-4 hidden md:block'
-            style={{
-              maxWidth: "100%",
-              height: "auto"
-            }} />
-            <Link href="/Inbox">
-              <button className=" lg:hidden">
-                <Image
-                src="/images/chats.svg"
-                alt="search"
-                width={25}
-                height={20}
-                className='ml-4 lg:hidden'
-                style={{
-                  maxWidth: "100%",
-                  height: "auto"
-                }} />
-              </button>
-            </Link>
-      </div>
-    </>;
+const Header: React.FC = () => {
+  const [name, setName] = useState("");
+  const [usernames, setUsernames] = useState<string[]>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLUListElement>(null);
+
+  const handleSearch = () => {
+    axios.get(`http://localhost:3000/users/?name=${name}`)
+      .then((response) => {
+        const userData = response.data;
+        const extractedUsernames = userData.map((user: any) => user.name || user.username);
+        setUsernames(extractedUsernames);
+        setShowDropdown(true); // Show the dropdown when there are results
+      })
+      .catch(error => {
+        console.error("Error fetching usernames:", error);
+        setUsernames([]); // Reset usernames if there's an error
+      });
   };
-  
-  export default Header;
+
+
+  // This will handle clicks outside the dropdown to close it
+  useEffect(() => {
+    const handleClickOutside = (event: { target: any; }) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false); // Hide the dropdown
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
+
+  return (
+    <div className="flex w-4/5 lg:w-1/2 ml-10 lg:ml-0">
+      <input
+        type="search"
+        placeholder="Search"
+        className="w-3/5 md:w-3/4 px-2 rounded-full text-black text-center poppins-semibold"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        onKeyPress={(e) => {
+          if (e.key === "Enter") {
+            handleSearch();
+          }
+        }}
+      />
+      <Image
+        src="/images/search.svg"
+        alt="search"
+        width={20}
+        height={20}
+        className="ml-4 cursor-pointer"
+        onClick={handleSearch}
+        style={{
+          maxWidth: "100%",
+          height: "auto"
+        }}
+      />
+      {showDropdown && (
+        <ul className="absolute w-2/3 lg:w-[40%] h-max bg-white mt-8 p-2 rounded-lg shadow-lg" ref={dropdownRef}>
+          {usernames.map((username, index) => (
+            <li key={index} className="p-2 text-black hover:bg-gray-100 cursor-pointer border-b-4">{username}  </li>
+          ))}
+        </ul>
+      )}
+      <Link href="/Inbox">
+        <div className="lg:hidden">
+          <Image
+            src="/images/chats.svg"
+            alt="inbox"
+            width={25}
+            height={20}
+            className="ml-4 lg:hidden"
+          />
+        </div>
+      </Link>
+    </div>
+  );
+};
+
+export default Header;

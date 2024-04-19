@@ -47,22 +47,30 @@ const ProfileSideBar: React.FC = () => {
   }
 
   return (
-    <>
+    <div className='flex flex-col items-center overflow-y-auto h-full '>
       <Image
         src={user.profileImageUrl}
         alt='profilepic'
-        width={150}
-        height={150}
-        className='mt-10 rounded-full shadow-sm shadow-white'
+        width={120}
+        height={120}
+        className='mt-6 rounded-full shadow-sm shadow-white'
         style={{ maxWidth: "100%", height: "auto" }} />
       <div className="flex flex-col items-center space-y-2">
-        <span className='text-2xl poppins-bold'>{user.username}</span>
+        <span className='text-xl poppins-bold mt-4'>{user.username}</span>
+        <div className="px-4 py-2 w-full text-center rounded-lg ">
+          <span className='text-base lg:text-[9px] poppins-normal'>
+            {user.bio.length > 150 ? `${user.bio.substring(0, 150)}...` : user.bio} {/* Truncate long bios */}
+          </span>
+          {user.bio.length > 150 && (
+            <Link href={`/{userId}`}>
+              <button className="mt-2 text-blue-600 text-xs">Read more</button>
+            </Link>
+          )}
+        </div>
       </div>
-      <div className="flex flex-col items-center space-y-2">
-        <span className='text-lg poppins-normal'>{user.bio}</span>
-      </div>
+
       <Link href={`/{userId}`}>
-        <button className="flex items-center space-x-2 p-2 border-b-[1.5px] hover:scale-105">
+        <button className="flex items-center space-x-2 p-2 border-b-[1.5px] hover:scale-105 my-2 lg:text-base">
           <Image
             src="/images/feed.svg"
             alt="home"
@@ -74,7 +82,7 @@ const ProfileSideBar: React.FC = () => {
         </button>
       </Link >
       <Link href="/activity">
-        <button className="flex items-center space-x-2 p-2 border-b-[1.5px] hover:scale-105">
+        <button className="flex items-center space-x-2 p-2 border-b-[1.5px] hover:scale-105 my-2 lg:text-base">
           <Image
             src="/images/activity2.svg"
             alt="home"
@@ -89,7 +97,7 @@ const ProfileSideBar: React.FC = () => {
         </button>
       </Link>
       <Link href="/settings">
-        <button className="flex items-center space-x-2 p-2 border-b-[1.5px] hover:scale-105 ">
+        <button className="flex items-center space-x-2 p-2 mb-8 border-b-[1.5px] hover:scale-105 my-2 lg:text-base">
           <Image
             src="/images/settings4.png"
             alt="home"
@@ -104,11 +112,11 @@ const ProfileSideBar: React.FC = () => {
         </button>
       </Link>
       <div className='pt-'>
-        <button className="text-lg font-semibold p-2 text-center text-black bg-red-500 hover:bg-red-600 rounded-md shadow-sm shadow-red-600 " onClick={handleSignOut}>
+        <button className="mb-4 text-lg font-semibold p-2 text-center text-black bg-red-500 hover:bg-red-600 rounded-md shadow-sm shadow-red-600 " onClick={handleSignOut}>
           <Link href="/auth/login"> Sign Out </Link>
         </button>
       </div>
-    </>
+    </div>
   );
 }
 
