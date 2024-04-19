@@ -13,6 +13,11 @@ const nextConfig = {
         hostname: 'i.imgur.com',
         port: '',
       },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '9000',
+      }
     ],
   },
 };
