@@ -1,0 +1,29 @@
+services:
+  minio:
+    image: minio/minio
+    ports:
+      - ${MINIO_CONSOLE_PORT}:${MINIO_CONSOLE_PORT}
+      - ${MINIO_API_PORT}:${MINIO_API_PORT}
+    environment:
+      MINIO_ROOT_USER: ${STACKHERO_MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${STACKHERO_MINIO_SECRET_KEY}
+    command: minio server --console-address ":${MINIO_CONSOLE_PORT}" /data
+    volumes:
+      - miniodata:/data
+    networks:
+      - exploro_network
+
+  maildev:
+    container_name: maildev
+    image: maildev/maildev
+    ports:
+      - 1080:1080
+      - 1025:1025
+    networks:
+      - exploro_network
+      
+volumes:
+  miniodata:
+
+networks:
+  exploro_network:

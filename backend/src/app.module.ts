@@ -9,8 +9,11 @@ import { AuthModule } from './auth/auth.module';
 import { PostModule } from './post/post.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
-// import { MailModule } from './mail/mail.module';
+import { MailModule } from './mail/mail.module';
 import { UsersModule } from './users/users.module';
+import { validateConfig } from './config';
+import { MinioClientModule } from './minio/minio-client.module';
+import { FileUploadModule } from './files/file-upload.module';
 
 @Module({
   imports: [
@@ -21,9 +24,11 @@ import { UsersModule } from './users/users.module';
       },
     ]),
     ConfigModule.forRoot({
-      envFilePath: '.env',
-      cache: true,
       isGlobal: true,
+      cache: true,
+      validate: (config: Record<string, any>) => {
+        return validateConfig(config)
+      },
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
@@ -36,8 +41,10 @@ import { UsersModule } from './users/users.module';
     BookModule,
     AuthModule,
     PostModule,
-    // MailModule,
+    MailModule,
     UsersModule,
+    MinioClientModule,
+    FileUploadModule
   ],
   controllers: [AppController],
   providers: [
