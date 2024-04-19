@@ -18,8 +18,6 @@ const LoginPageSm = () => {
             const token = response.data.token;
             setTokenCookie(token);
             Router.push('/feed');
-            // console.log(response.data);
-            // You can store the received token in local storage or context for further requests
         } catch (error: any) {
             console.error('Login failed:', error);
             if (error.response && error.response.status === 401) {

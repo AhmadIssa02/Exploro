@@ -24,7 +24,6 @@ const SignUpPageSm = () => {
       const name = firstName + ' ' + lastName;
       const response = await axios.post('http://localhost:3000/auth/signup', { name, email, password });
       Router.push('/auth/login');
-      // console.log(response.data);
     } catch (error: any) {
       if (axios.isAxiosError(error) && error.response) {
         if (error.response.status === 409) {
