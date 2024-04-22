@@ -11,7 +11,8 @@ const SignUpPageLg = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const profilePicture = "http://localhost:9000/exploro/07ac74c0c91c329610b51adcc40c56ef.jpg";
+    const profilePicture = process.env.NEXT_PUBLIC_DEFAULT_PROFILE_IMAGE_URL;
+
 
 
     const [showPassword, setShowPassword] = useState(false);

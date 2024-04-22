@@ -46,8 +46,7 @@ const PostInput: React.FC = () => {
         });
         const url = uploadResponse.data.image_url; // Update the imageUrl with the uploaded image's URL
         setImageUrl(url);
-        console.log('Image uploaded successfully:', url); // Use `url` directly here
-        console.log({ "image Url inside UseState": imageUrl });
+        console.log('Image uploaded successfully:', url);
       } catch (error) {
         console.error('Error uploading image:', error);
       }
@@ -58,7 +57,6 @@ const PostInput: React.FC = () => {
   useEffect(() => {
     uploadImage();
   }, [selectedImage]);
-  console.log({ "image url outside useEffect": imageUrl });
 
   useEffect(() => {
     const fetchUserData = async () => {

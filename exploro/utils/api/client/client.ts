@@ -6,11 +6,12 @@ AxiosLogger.setGlobalConfig({
   data: false,
 })
 
+
+
 export function createClient(session?: Session): AxiosInstance {
 
-  console.log("url: "+ process.env.API_URL)
   let config: AxiosRequestConfig = {
-    baseURL: <string>process.env.API_URL ?? "http://localhost:3000",
+    baseURL: <string>process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000",
   }
   if (session) {
     config = {
