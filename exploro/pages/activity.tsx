@@ -4,9 +4,11 @@ import ProfileSideBar from "@/components/ProfileSideBar";
 import Sidebar from "@/components/SideBar";
 import { useState } from "react";
 import Image from "next/image";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 
 
 const ActivityPage = () => {
+    useAuthGuard();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isProfileSidebarOpen, setIsProfileSidebarOpen] = useState(false);
 

@@ -5,8 +5,10 @@ import Sidebar from "@/components/SideBar";
 import LocationCard from "@/components/LocationCard";
 import Image from "next/image";
 import { useState } from "react";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 
 const LocationsPage = () => {
+    useAuthGuard();
 
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);

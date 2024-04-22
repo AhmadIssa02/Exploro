@@ -4,9 +4,11 @@ import ProfileSideBar from "@/components/ProfileSideBar";
 import Sidebar from "@/components/SideBar";
 import { useState } from "react";
 import Image from "next/image";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 
 
 const SettingsPage = () => {
+    useAuthGuard();
     const [email, setEmail] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');

@@ -8,9 +8,12 @@ import Sidebar from '@/components/SideBar';
 import Header from '@/components/Header'
 import PostInput from '@/components/PostInput';
 import ProfileSideBar from '@/components/ProfileSideBar';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 
 
 const InboxPage = () => {
+  useAuthGuard();
+
 
   const [isProfileSidebarOpen, setIsProfileSidebarOpen] = useState(false);
   const [isSiderbarOpen, setIsSidebarOpen] = useState(false);

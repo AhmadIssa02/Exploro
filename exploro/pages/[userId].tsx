@@ -11,6 +11,7 @@ import axios from "axios";
 import { getTokenCookie } from "@/utils/cookieUtils";
 import jwt from 'jsonwebtoken';
 import { calculateTimeAgo } from "@/utils/timeUtils";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 
 
 type User = {
@@ -21,6 +22,7 @@ type User = {
 
 
 const UserProfile = () => {
+  useAuthGuard();
   const [isProfileSidebarOpen, setIsProfileSidebarOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
