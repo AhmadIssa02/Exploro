@@ -42,6 +42,19 @@ const FeedSm: React.FC = () => {
     fetchPosts();
   }, [])
 
+  const sortedPosts = [...posts].sort((a, b) => {
+    if (a.createdAt && b.createdAt) {
+      const timeA = new Date(a.createdAt);
+      const timeB = new Date(b.createdAt);
+
+      // Compare the Date objects
+      return timeB.getTime() - timeA.getTime();
+    } else {
+      return 0;
+    }
+  });
+
+
   return (
     <>
       <div className="flex w-full h-100% min-h-screen bg-quarternary-500 text-white font-poppins">
@@ -103,7 +116,7 @@ const FeedSm: React.FC = () => {
 
             <div className="flex flex-col justify-center items-center align-middle space-y-6 w-full">
               <PostInput />
-              {posts.map((post, index) => {
+              {sortedPosts.map((post, index) => {
                 return <Post
                   key={index}
                   username={post.username}
@@ -113,9 +126,9 @@ const FeedSm: React.FC = () => {
                   profileImageUrl={post.profileImageUrl}
                   mainImageUrl={post.mainImageUrl}
                   onLike={() => console.log('Liked!')}
-                  onComment={() => console.log('Commnet!')}
+                  onComment={() => console.log('Comment!')}
                   onShare={() => console.log('Shared!')}
-                />
+                />;
               })}
             </div>
 
