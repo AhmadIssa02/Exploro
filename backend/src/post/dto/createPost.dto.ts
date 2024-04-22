@@ -3,6 +3,9 @@ import { User } from 'src/users/schemas/user.schema';
 
 export class CreatePostDto {
   @IsString()
+  userId: string;
+
+  @IsString()
   username: string;
 
   @IsString()
@@ -17,6 +20,6 @@ export class CreatePostDto {
   @IsString()
   mainImageUrl: string;
 
-  @IsEmpty({ message: 'You cannot pass user id' })
-  readonly user: User;
+  // @IsEmpty({ message: 'You cannot pass user id' })
+  // readonly user: User;
 }

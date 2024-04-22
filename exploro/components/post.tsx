@@ -15,7 +15,7 @@ type PostProps = {
 
 const Post: React.FC<PostProps> = ({ username, location, timeAgo, content, profileImageUrl, mainImageUrl, onLike, onComment, onShare }) => {
   return (
-    <div className="bg-white p-2 lg:p-4 rounded-3xl shadow-xl w-11/12 lg:w-7/12 flex flex-col items-center text-black lg:ml-16">
+    <div className="bg-white p-2 lg:p-4 rounded-xl lg:rounded-2xl shadow-xl w-11/12 lg:w-7/12 flex flex-col items-center text-black lg:ml-16">
       <div className="self-start mt-1">
         <div className="flex items-center">
           <div className="rounded-full ml-2">

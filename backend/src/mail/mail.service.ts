@@ -7,7 +7,6 @@ export class MailService {
   constructor(private mailerService: MailerService) {}
 
   async sendEmail(user: User, content: string): Promise<boolean> {
-    console.log('Sending email to:', user.email);
     try {
       await this.mailerService.sendMail({
         to: user.email,

@@ -59,9 +59,9 @@ const ProfileSideBar: React.FC = () => {
         <span className='text-xl poppins-bold mt-4'>{user.username}</span>
         <div className="px-4 py-2 w-full text-center rounded-lg ">
           <span className='text-base lg:text-xs poppins-normal'>
-            {user.bio.length > 150 ? `${user.bio.substring(0, 150)}...` : user.bio} {/* Truncate long bios */}
+            {user.bio?.length > 150 ? `${user.bio.substring(0, 150)}...` : user.bio} {/* Truncate long bios */}
           </span>
-          {user.bio.length > 150 && (
+          {user.bio?.length > 150 && (
             <Link href={`/{userId}`}>
               <button className="mt-2 text-blue-600 text-xs">Read more</button>
             </Link>
