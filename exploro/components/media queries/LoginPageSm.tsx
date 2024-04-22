@@ -4,6 +4,7 @@ import axios from 'axios';
 import Link from "next/link";
 import Router from "next/router";
 import { setTokenCookie } from "@/utils/cookieUtils";
+import jwt from 'jsonwebtoken';
 
 const LoginPageSm = () => {
     const [email, setEmail] = useState('');
@@ -17,7 +18,21 @@ const LoginPageSm = () => {
             const response = await axios.post('http://localhost:3000/auth/login', { email, password });
             const token = response.data.token;
             setTokenCookie(token);
-            Router.push('/feed');
+            const decoded = jwt.decode(token) as { id: string; }; // Ensure this matches the actual token structure
+            const userId = decoded.id;
+            const user = await axios.get(`http://localhost:3000/users/${userId}`);
+            if (user.data.verifyEmailToken === null) {
+                Router.push('/feed');
+            }
+            else {
+                const errorAlert = document.createElement('div');
+                errorAlert.classList.add('bg-red-500', 'w-1/2', 'text-white', 'px-4', 'py-2', 'rounded-md', 'font-semibold', 'absolute', 'top-20', 'left-1/2', 'transform', '-translate-x-1/2', 'z-50');
+                errorAlert.textContent = 'Unauthorized access! Please check your verification code.';
+                document.body.appendChild(errorAlert);
+                setTimeout(() => {
+                    errorAlert.remove();
+                }, 3000);
+            }
         } catch (error: any) {
             console.error('Login failed:', error);
             if (error.response && error.response.status === 401) {
