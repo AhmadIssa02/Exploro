@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsBoolean, IsString } from 'class-validator';
 
 export class UpdateUserDto {
   @IsString()
@@ -15,4 +15,10 @@ export class UpdateUserDto {
 
   @IsString()
   profilePicture?: string;
+  
+  @IsBoolean()
+  isVerified?: boolean;
+
+  @IsString()
+  verifyEmailToken?: string;
 }

@@ -6,15 +6,19 @@ import { Document } from 'mongoose';
 })
 export class User extends Document {
   @Prop({ required: false })
-  name?: string;
+  name: string;
   @Prop({ unique: true, required: false })
-  email?: string;
+  email: string;
   @Prop({ required: false })
   password: string;
   @Prop({ required: false })
   bio?: string;
   @Prop({ required: false })
   profilePicture?: string;
+  @Prop()
+  verifyEmailToken: string
+  @Prop()
+  isVerfied: boolean
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
