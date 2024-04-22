@@ -10,6 +10,10 @@ import { SignUpDto } from './dto/signUp.dto';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
+import { verifyEmailDto } from './dto/verify.dto';
+import { UsersService } from '../users/users.service';
+import { MailService } from 'src/mail/mail.service';
+import jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +21,8 @@ export class AuthService {
     @InjectModel(User.name)
     private userModel: Model<User>,
     private jwtService: JwtService,
+    private readonly usersService: UsersService,
+    private maileService: MailService,
   ) {}
 
   async signUp(signUpDto: SignUpDto): Promise<{ token: string }> {
@@ -35,6 +41,28 @@ export class AuthService {
     });
 
     const token = this.jwtService.sign({ id: user._id });
+    console.log('token in signup is' + token);
+    //create a verification token
+    // Generate a verification token
+    const verificationToken = await this.jwtService.signAsync(
+      { sub: user._id.toString() },
+      {
+        secret: process.env.JWT_SECRET,
+        expiresIn: '24h',
+      },
+    );
+    console.log('verification token in signup is' + verificationToken);
+
+    // Hash the verification token
+    const hashedToken = await bcrypt.hash(verificationToken, 10);
+
+    // Save the hashed token in the database
+    await this.usersService.update(user._id.toString(), {
+      verifyEmailToken: hashedToken,
+    });
+
+    //send verification email
+    await this.maileService.sendEmail(user, verificationToken);
     return { token };
   }
 
@@ -55,4 +83,32 @@ export class AuthService {
     const token = this.jwtService.sign({ id: user._id });
     return { token };
   }
+
+  async verifyEmail(verifyEmailDto: verifyEmailDto): Promise<boolean> {
+    const decoded = jwt.decode(verifyEmailDto.token) as { id: string }; // Ensure this matches the actual token structure
+    const userId = decoded.id;
+
+    const user = await this.usersService.findOne(userId);
+    if (!user) throw new UnauthorizedException(UnauthorizedException);
+    //compare the token with the one in the database
+    const tokenMatches = await isHashMatched(
+      verifyEmailDto.verifyEmailToken,
+      user.verifyEmailToken,
+    );
+    if (!tokenMatches) throw new UnauthorizedException(UnauthorizedException);
+
+    // Update the user to be verified
+    await this.usersService.update(user._id.toString(), {
+      isVerified: true,
+      verifyEmailToken: null,
+    });
+    return true;
+  }
 }
+
+export const isHashMatched = async (
+  data: string,
+  hash: string,
+): Promise<boolean> => {
+  return await bcrypt.compare(data, hash);
+};

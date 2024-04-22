@@ -1,23 +1,27 @@
-import { ConfigService } from '@nestjs/config'
-import { Injectable } from '@nestjs/common'
-import { MailerService } from '@nestjs-modules/mailer'
+import { Injectable } from '@nestjs/common';
+import { MailerService } from '@nestjs-modules/mailer';
+import { User } from 'src/users/schemas/user.schema';
 
 @Injectable()
 export class MailService {
-  constructor(private mailerService: MailerService, private configService: ConfigService) {
-  }
+  constructor(private mailerService: MailerService) {}
 
-  async sendEmail() {
+  async sendEmail(user: User, content: string): Promise<boolean> {
+    console.log('Sending email to:', user.email);
     try {
-        await this.mailerService.sendMail({
-          to: 'charbelfayad@gmail.com',
-          subject: 'Testing please work',
-          template: './helloworld',
-        })
-        return true
+      await this.mailerService.sendMail({
+        to: user.email,
+        subject: 'Hello ✔',
+        template: './helloworld', // Make sure this path is correct
+        context: {
+          userName: user.name,
+          verificationCode: content,
+        },
+      });
+      return true;
     } catch (error) {
-        console.log(error)
-        return false
+      console.error('Error sending email:', error);
+      return false;
     }
   }
 }
