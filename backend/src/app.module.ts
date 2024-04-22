@@ -20,7 +20,7 @@ import { FileUploadModule } from './files/file-upload.module';
     ThrottlerModule.forRoot([
       {
         ttl: 1 * 1000 * 60, // 1ms*1000*60 seconds
-        limit: 20, // limit each request to 1 per 10 seconds
+        limit: 100, // limit each request to 100 per 60 seconds
       },
     ]),
     ConfigModule.forRoot({
