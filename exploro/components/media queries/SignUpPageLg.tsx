@@ -11,6 +11,8 @@ const SignUpPageLg = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const profilePicture = "http://localhost:9000/exploro/07ac74c0c91c329610b51adcc40c56ef.jpg";
+
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -29,11 +31,15 @@ const SignUpPageLg = () => {
             return;
         }
         try {
-            const name = firstName + ' ' + lastName;
-            const response = await axios.post('http://localhost:3000/auth/signup', { name, email, password });
-            Router.push('/auth/verify');
+
+            const name = `${firstName} ${lastName}`;
+            const user = { name, email, password, profilePicture };
+            const response = await axios.post('http://localhost:3000/auth/signup', user);
             const token = response.data.token;
             setTokenCookie(token);
+            if (response) {
+                Router.push('/auth/verify');
+            }
         } catch (error: any) {
             if (axios.isAxiosError(error) && error.response) {
                 if (error.response.status === 409) {
@@ -53,16 +59,16 @@ const SignUpPageLg = () => {
                 <Image
                     src="/images/plane.svg"
                     alt="logo"
-                    width={150}
-                    height={150}
-                    className='absolute top-0 left-24'
+                    width={120}
+                    height={120}
+                    className='absolute top-0 left-20'
                     style={{
                         maxWidth: "100%",
                         height: "auto"
                     }} />
                 <form className=" flex flex-col justify-center items-center bg-primary-500 rounded-2xl w-7/12 h-3/4 shadow-sm shadow-primary-700" onSubmit={handleSubmit}>
                     {/* Email Input */}
-                    <div className="flex relative w-3/4 mt-16 space-x-2 mb-[28px]">
+                    <div className="flex relative w-3/4 mt-10 space-x-2 mb-[28px]">
                         <div className="relative w-1/2">
                             <label htmlFor="first-name" className="text-sm font-medium text-white absolute -top-6 left-0">
                                 First Name
@@ -167,7 +173,7 @@ const SignUpPageLg = () => {
                     <div>
                         <button
                             type="submit"
-                            className="shadow-sm shadow-secondary-600 group relative w-full flex justify-center py-2 px-4 text-lg rounded-md text-black bg-secondary-500 hover:bg-secondary-700   "
+                            className="shadow-sm shadow-secondary-600 group relative w-full flex justify-center py-[6px] px-4 text-base rounded-md text-black bg-secondary-500 hover:bg-secondary-700   "
                         >
                             Sign up
                         </button>
@@ -180,7 +186,7 @@ const SignUpPageLg = () => {
                         alt="logo"
                         width={70}
                         height={70}
-                        className='absolute bottom-6 left-[440px] '
+                        className='absolute bottom-4 left-[420px] '
                         style={{
                             maxWidth: "100%",
                             height: "auto"

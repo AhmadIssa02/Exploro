@@ -10,6 +10,8 @@ const SignUpPageSm = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const profilePicture = "http://localhost:9000/exploro/07ac74c0c91c329610b51adcc40c56ef.jpg";
+
 
 
   const [showPassword, setShowPassword] = useState(true);
@@ -29,11 +31,14 @@ const SignUpPageSm = () => {
       return;
     }
     try {
-      const name = firstName + ' ' + lastName;
-      const response = await axios.post('http://localhost:3000/auth/signup', { name, email, password });
-      Router.push('/auth/verify');
+      const name = `${firstName} ${lastName}`;
+      const user = { name, email, password, profilePicture };
+      const response = await axios.post('http://localhost:3000/auth/signup', user);
       const token = response.data.token;
       setTokenCookie(token);
+      if (response) {
+        Router.push('/auth/verify');
+      }
     } catch (error: any) {
       if (axios.isAxiosError(error) && error.response) {
         if (error.response.status === 409) {

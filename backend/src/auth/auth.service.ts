@@ -26,7 +26,7 @@ export class AuthService {
   ) {}
 
   async signUp(signUpDto: SignUpDto): Promise<{ token: string }> {
-    const { name, email, password } = signUpDto;
+    const { name, email, password, profilePicture } = signUpDto;
 
     const existingUser = await this.userModel.findOne({ email });
     if (existingUser) {
@@ -38,10 +38,10 @@ export class AuthService {
       name,
       email,
       password: hashedPassword,
+      profilePicture,
     });
 
     const token = this.jwtService.sign({ id: user._id });
-    console.log('token in signup is' + token);
     //create a verification token
     // Generate a verification token
     const verificationToken = await this.jwtService.signAsync(
@@ -51,7 +51,6 @@ export class AuthService {
         expiresIn: '24h',
       },
     );
-    console.log('verification token in signup is' + verificationToken);
 
     // Hash the verification token
     const hashedToken = await bcrypt.hash(verificationToken, 10);
