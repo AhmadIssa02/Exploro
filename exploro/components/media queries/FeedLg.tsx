@@ -36,6 +36,17 @@ const FeedLg: React.FC = () => {
   useEffect(() => {
     fetchPosts();
   }, [])
+  const sortedPosts = [...posts].sort((a, b) => {
+    if (a.createdAt && b.createdAt) {
+      const timeA = new Date(a.createdAt);
+      const timeB = new Date(b.createdAt);
+
+      // Compare the Date objects
+      return timeB.getTime() - timeA.getTime();
+    } else {
+      return 0;
+    }
+  });
 
 
   return (
@@ -81,7 +92,7 @@ const FeedLg: React.FC = () => {
             <div className="flex flex-col justify-center space-y-6 w-full mr-8">
               <PostInput />
 
-              {posts.map((post, index) => {
+              {/* {posts.map((post, index) => {
                 return <Post
                   key={index}
                   username={post.username}
@@ -94,6 +105,20 @@ const FeedLg: React.FC = () => {
                   onComment={() => console.log('Commnet!')}
                   onShare={() => console.log('Shared!')}
                 />
+              })} */}
+              {sortedPosts.map((post, index) => {
+                return <Post
+                  key={index}
+                  username={post.username}
+                  location={post.location}
+                  timeAgo={calculateTimeAgo(post.createdAt)}
+                  content={post.content}
+                  profileImageUrl={post.profileImageUrl}
+                  mainImageUrl={post.mainImageUrl}
+                  onLike={() => console.log('Liked!')}
+                  onComment={() => console.log('Comment!')}
+                  onShare={() => console.log('Shared!')}
+                />;
               })}
             </div>
 
