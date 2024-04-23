@@ -4,6 +4,7 @@ import { SignUpDto } from './dto/signUp.dto';
 import { LoginDto } from './dto/login.dto';
 import { Throttle } from '@nestjs/throttler';
 import { verifyEmailDto } from './dto/verify.dto';
+import { ResendCodeDto } from './dto/resend-code.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -23,5 +24,10 @@ export class AuthController {
   @Post('verify-email')
   async verifyEmail(@Body() body: verifyEmailDto): Promise<boolean> {
     return this.authService.verifyEmail(body);
+  }
+
+  @Post('resend-verification-code')
+  async resendVerificationCode(@Body() resendCodeDto: ResendCodeDto): Promise<boolean> {
+    return this.authService.resendVerificationCode(resendCodeDto);
   }
 }

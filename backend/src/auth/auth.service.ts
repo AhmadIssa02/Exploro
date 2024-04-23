@@ -14,6 +14,7 @@ import { verifyEmailDto } from './dto/verify.dto';
 import { UsersService } from '../users/users.service';
 import { MailService } from 'src/mail/mail.service';
 import jwt from 'jsonwebtoken';
+import { ResendCodeDto } from './dto/resend-code.dto';
 
 @Injectable()
 export class AuthService {
@@ -103,7 +104,34 @@ export class AuthService {
     });
     return true;
   }
+  async resendVerificationCode(resendCodeDto:ResendCodeDto): Promise<boolean> {
+    const { userId } = resendCodeDto;
+    // Generate a verification token
+    const verificationToken = await this.jwtService.signAsync(
+      { sub: userId},
+      {
+        secret: process.env.JWT_SECRET,
+        expiresIn: '24h',
+      },
+    );
+
+    // Hash the verification token
+    const hashedToken = await bcrypt.hash(verificationToken, 10);
+
+    // Save the hashed token in the database
+    await this.usersService.update(userId, {
+      verifyEmailToken: hashedToken,
+    });
+
+    const user = await this.usersService.findOne(userId);
+
+    //send verification email
+    await this.maileService.sendEmail(user, verificationToken);
+    return true;
+  }
 }
+
+
 
 export const isHashMatched = async (
   data: string,

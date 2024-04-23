@@ -53,6 +53,33 @@ const VerifyEmailPage: React.FC = () => {
         }
     };
 
+    const handleResendCode = async (event: React.FormEvent) => {
+        event.preventDefault();
+        try {
+            const token = getTokenCookie();
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+            if (!token) {
+                console.error('Token not found.');
+                return;
+            }
+            console.log('Resending verification code...');
+            const decoded = jwt.decode(token) as { id: string };
+            const userId = decoded.id;
+            console.log("userId " + userId);
+            const response = await axios.post(`http://localhost:3000/auth/resend-verification-code/`, { userId: userId }, config);
+            console.log(response);
+        }
+        catch (error: any) {
+            if (error) {
+                console.error('Error occurred:', error);
+            }
+        }
+    }
+
 
     return (
         <div className="h-dvh flex items-center justify-center bg-primary-500 py-12 px-4 sm:px-6 lg:px-8 font-poppins">
@@ -72,7 +99,7 @@ const VerifyEmailPage: React.FC = () => {
                                 placeholder="Verification Code"
                             />
                         </div>
-                        <button className="text-sm text-primary-500 hover:text-primary-700 self-start ml-2">Resend Code</button>
+                        <button className="text-sm text-primary-500 hover:text-primary-700 self-start ml-2" onClick={handleResendCode}>Resend Code</button>
                     </div>
 
                     <div>
