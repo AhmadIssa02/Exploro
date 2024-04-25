@@ -2,7 +2,7 @@ import Chats from "@/components/Chats";
 import Header from "@/components/Header";
 import ProfileSideBar from "@/components/ProfileSideBar";
 import Sidebar from "@/components/SideBar";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Image from "next/image";
 import Post from "@/components/post";
 import { feedPost } from "@/models/crud";
@@ -15,20 +15,16 @@ import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useRouter } from "next/router";
 
 
-type User = {
-  username: string;
-  bio: string;
-  profileImageUrl: string;
-};
-
 
 const UserProfile = () => {
   useAuthGuard();
   const [isProfileSidebarOpen, setIsProfileSidebarOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
   const [editBio, setEditBio] = useState(false);
   const [bio, setBio] = useState("");
+  const [personalProfile, isPersonalProfile] = useState(false);
+  const [profileBio, setProfileBio] = useState("");
+
   const router = useRouter();
   const { userId } = router.query;
 
@@ -44,7 +40,6 @@ const UserProfile = () => {
   const [posts, setPosts] = useState<feedPost[]>([]);
   const fetchPosts = async () => {
     try {
-
       const postApi = new FeedPostApi()
       const posts = await postApi.find();
       const userPosts = posts.filter((post) => post.user === userId);
@@ -56,7 +51,9 @@ const UserProfile = () => {
   }
 
   useEffect(() => {
-    fetchPosts();
+    if (userId) {
+      fetchPosts();
+    }
   }, [])
 
   const sortedPosts = [...posts].sort((a, b) => {
@@ -72,35 +69,22 @@ const UserProfile = () => {
   });
 
 
-
-
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchUserBio = async () => {
       try {
-        const token = getTokenCookie();
-        if (token) {
-          const decoded = jwt.decode(token) as { id: string; }; // Ensure this matches the actual token structure
-          const userId = decoded.id;
-          const response = await axios.get(`http://localhost:3000/users/${userId}`);
-          const userData: User = {
-            username: response.data.name,
-            bio: response.data.bio,
-            profileImageUrl: response.data.profilePicture
-          };
-          setUser(userData);
-        } else {
-          console.error('Token not found.');
-        }
+        const response = await axios.get(`http://localhost:3000/users/${userId}`);
+        const userBio = response.data.bio;
+        setBio(userBio);
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
     };
-    fetchUserData();
-  }, []);
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
+    if (userId) {
+      fetchUserBio();
+    }
+  }, [userId]);
+
 
   const handleBioSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -110,13 +94,13 @@ const UserProfile = () => {
         const decoded = jwt.decode(token) as { id: string; }; // Ensure this matches the actual token structure
         const userId = decoded.id;
         const response = await axios.put(
-          `http://localhost:3000/users/${userId}`, // Your API endpoint for updating the bio
+          `http://localhost:3000/users/${userId}`,
           { bio: bio },
         );
         if (response.status === 200) {
           // Handle success
           console.log('Bio updated:', response.data);
-          setUser({ ...user, bio: bio }); // Update the user state with the new bio
+          // setUser({ ...user, bio: bio }); // Update the user state with the new bio
           setEditBio(false); // Exit edit mode
         } else {
           // Handle failure
@@ -128,6 +112,38 @@ const UserProfile = () => {
       console.error('Error updating bio:', error);
     }
   };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = getTokenCookie();
+        if (token) {
+          const decoded = jwt.decode(token) as { id: string; };
+          const userIdFromToken = decoded.id;
+          if (userIdFromToken === userId) {
+            console.log('Personal profile');
+            const response = await axios.get(`http://localhost:3000/users/${userId}`);
+            const userBio = response.data.bio;
+            setBio(userBio);
+            isPersonalProfile(true);
+          } else {
+            console.log('Other user profile');
+            const response = await axios.get(`http://localhost:3000/users/${userId}`);
+            const userProfileBio = response.data.bio;
+            setProfileBio(userProfileBio);
+            isPersonalProfile(false);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    if (userId) {
+      fetchUserData();
+    }
+  }, [userId]);
+
 
 
   return (
@@ -170,7 +186,7 @@ const UserProfile = () => {
             <div className="w-full lg:w-9/12 flex flex-col items-center justify-center space-y-4 mt-2 lg:p-4 lg:pr-8 rounded-md lg:mr-32">
 
 
-              <div className="bg-white w-11/12 lg:w-7/12 shadow-xl text-black p-4 rounded-3xl lg:ml-16  ">
+              {personalProfile && <div className="bg-white w-11/12 lg:w-7/12 shadow-xl text-black p-4 rounded-3xl lg:ml-16  ">
                 <div className="flex items-center space-x-2">
                   <div className="rounded-full min-w-max self-start ">
                     <Image src="/images/profilePhoto.png" alt="profile" width={50} height={40} style={{ maxWidth: "100%", height: "auto" }} />
@@ -178,7 +194,7 @@ const UserProfile = () => {
                   {!editBio ? (
                     <>
                       <div className="flex p-3 justify-between bg-quarternary-500 w-5/6 md:w-11/12 rounded-xl">
-                        <div className='font-semibold text-sm lg:text-lg poppins-semibold '>{user.bio} </div>
+                        <div className='font-semibold text-sm lg:text-lg poppins-semibold '>{bio} </div>
                         <button className=" text-center text-xs bg-primary-500 p-2 h-max rounded-md text-white" onClick={() => setEditBio(true)}>Change </button>
                       </div>
 
@@ -200,7 +216,17 @@ const UserProfile = () => {
                     </form>
                   )}
                 </div>
-              </div>
+              </div>}
+              {!personalProfile && profileBio && <div className="bg-white w-11/12 lg:w-7/12 shadow-xl text-black p-4 rounded-3xl lg:ml-16  ">
+                <div className="flex items-center space-x-2">
+                  <div className="rounded-full min-w-max self-start ">
+                    <Image src="/images/profilePhoto.png" alt="profile" width={50} height={40} style={{ maxWidth: "100%", height: "auto" }} />
+                  </div>
+                  <div className="flex p-3 justify-between bg-quarternary-500 w-5/6 md:w-11/12 rounded-xl">
+                    <div className='font-semibold text-sm lg:text-lg poppins-semibold '>{profileBio} </div>
+                  </div>
+                </div>
+              </div>}
 
               {sortedPosts.map((post, index) => {
                 return <Post
@@ -231,5 +257,6 @@ const UserProfile = () => {
   );
 };
 export default UserProfile;
+
 
 
