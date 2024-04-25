@@ -12,6 +12,7 @@ import { getTokenCookie } from "@/utils/cookieUtils";
 import jwt from 'jsonwebtoken';
 import { calculateTimeAgo } from "@/utils/timeUtils";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
+import { useRouter } from "next/router";
 
 
 type User = {
@@ -28,7 +29,8 @@ const UserProfile = () => {
   const [user, setUser] = useState<User | null>(null);
   const [editBio, setEditBio] = useState(false);
   const [bio, setBio] = useState("");
-
+  const router = useRouter();
+  const { userId } = router.query;
 
   const toggleProfileSidebar = () => {
     setIsProfileSidebarOpen(!isProfileSidebarOpen);
@@ -45,7 +47,8 @@ const UserProfile = () => {
 
       const postApi = new FeedPostApi()
       const posts = await postApi.find();
-      setPosts(posts);
+      const userPosts = posts.filter((post) => post.user === userId);
+      setPosts(userPosts);
     }
     catch (e) {
       console.log(e);
@@ -55,6 +58,20 @@ const UserProfile = () => {
   useEffect(() => {
     fetchPosts();
   }, [])
+
+  const sortedPosts = [...posts].sort((a, b) => {
+    if (a.createdAt && b.createdAt) {
+      const timeA = new Date(a.createdAt);
+      const timeB = new Date(b.createdAt);
+
+      // Compare the Date objects
+      return timeB.getTime() - timeA.getTime();
+    } else {
+      return 0;
+    }
+  });
+
+
 
 
   useEffect(() => {
@@ -150,7 +167,7 @@ const UserProfile = () => {
 
           <div className="flex justify-center items-start w-full mb-6 h-full mt-16 ">
             {/* <div className="w-1/5 bg-primary-500 hidden lg:block"/> */}
-            <div className="w-full lg:w-11/12 flex flex-col items-center justify-center space-y-4 mt-2 lg:p-4 lg:pr-8 rounded-md lg:mr-32">
+            <div className="w-full lg:w-9/12 flex flex-col items-center justify-center space-y-4 mt-2 lg:p-4 lg:pr-8 rounded-md lg:mr-32">
 
 
               <div className="bg-white w-11/12 lg:w-7/12 shadow-xl text-black p-4 rounded-3xl lg:ml-16  ">
@@ -185,9 +202,10 @@ const UserProfile = () => {
                 </div>
               </div>
 
-              {posts.map((post, index) => {
+              {sortedPosts.map((post, index) => {
                 return <Post
                   key={index}
+                  userId={post.user}
                   username={post.username}
                   location={post.location}
                   timeAgo={calculateTimeAgo(post.createdAt)}

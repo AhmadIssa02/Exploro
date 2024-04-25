@@ -95,6 +95,7 @@ const FeedLg: React.FC = () => {
               {sortedPosts.map((post, index) => {
                 return <Post
                   key={index}
+                  userId={post.user}
                   username={post.username}
                   location={post.location}
                   timeAgo={calculateTimeAgo(post.createdAt)}

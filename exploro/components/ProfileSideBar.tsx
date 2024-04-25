@@ -13,6 +13,7 @@ type User = {
 
 const ProfileSideBar: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
   const handleSignOut = () => {
     removeTokenCookie();
@@ -25,6 +26,7 @@ const ProfileSideBar: React.FC = () => {
         if (token) {
           const decoded = jwt.decode(token) as { id: string; }; // Ensure this matches the actual token structure
           const userId = decoded.id;
+          setUserId(userId);
           const response = await axios.get(`http://localhost:3000/users/${userId}`);
           const userData: User = {
             username: response.data.name,
@@ -62,14 +64,14 @@ const ProfileSideBar: React.FC = () => {
             {user.bio?.length > 150 ? `${user.bio.substring(0, 150)}...` : user.bio} {/* Truncate long bios */}
           </span>
           {user.bio?.length > 150 && (
-            <Link href={`/{userId}`}>
+            <Link href={`/${userId}`}>
               <button className="mt-2 text-blue-600 text-xs">Read more</button>
             </Link>
           )}
         </div>
       </div>
 
-      <Link href={`/{userId}`}>
+      <Link href={`/${userId}`}>
         <button className="flex items-center space-x-2 p-2 border-b-[1.5px] hover:scale-105 my-2 lg:text-base">
           <Image
             src="/images/feed.svg"
