@@ -38,7 +38,13 @@ const LoginPageLg = () => {
         } catch (error: any) {
             console.error('Login failed:', error);
             if (error.response && error.response.status === 401) {
-                alert('Invalid email or password. Please try again.');
+                const errorAlert = document.createElement('div');
+                errorAlert.classList.add('bg-red-500', 'w-1/2', 'text-white', 'px-4', 'py-2', 'rounded-md', 'font-semibold', 'absolute', 'top-20', 'left-1/2', 'transform', '-translate-x-1/2', 'z-50');
+                errorAlert.textContent = 'Invalid email or password.Please try again..';
+                document.body.appendChild(errorAlert);
+                setTimeout(() => {
+                    errorAlert.remove();
+                }, 3000);
             } else {
                 alert('An error occurred. Please try again later.');
             }

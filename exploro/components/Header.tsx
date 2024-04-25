@@ -69,14 +69,14 @@ const Header: React.FC = () => {
       {showDropdown && (
         <ul className="absolute w-2/3 lg:w-[40%] min-h-0 max-h-80 bg-white mt-8 p-2 rounded-lg shadow-lg overflow-auto" ref={dropdownRef}>
           {users.map((user, index) => (
-            <li key={index} className="p-2 text-black hover:bg-gray-100 cursor-pointer border-b-4 flex items-center">
-              <Link href={`/{userId}`}>
+            <Link href={`/${user._id}`}>
+              <li key={index} className="p-2 text-black hover:bg-gray-100 cursor-pointer border-b-4 flex items-center">
                 <button className="flex items-center w-full">
                   <Image src={user.profilePicture} alt="User Image" width={40} height={40} className="rounded-full mr-2" />
                   <div>{user.name}</div>
                 </button>
-              </Link>
-            </li>
+              </li>
+            </Link>
           ))}
           {users.length === 0 && (
             <li className="p-2 text-black">No results found</li>

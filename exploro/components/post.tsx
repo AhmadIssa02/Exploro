@@ -45,7 +45,6 @@ const Post: React.FC<PostProps> = ({ userId, username, location, timeAgo, conten
               <button onClick={() => handleProfile()}>
                 <div className='text-base lg:text-xl text-black poppins-semibold'>{username}</div>
               </button>
-              <button className='text-primary-500/90 font-medium text-sm ml-2 '>Follow</button>
             </div>
             <div className='ml-1'>{location}</div>
             <div className='ml-1'>{timeAgo}</div>

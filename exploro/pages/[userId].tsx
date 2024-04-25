@@ -15,6 +15,11 @@ import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useRouter } from "next/router";
 
 
+type User = {
+  username: string;
+  bio: string;
+  profileImageUrl: string;
+};
 
 const UserProfile = () => {
   useAuthGuard();
@@ -22,8 +27,8 @@ const UserProfile = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [editBio, setEditBio] = useState(false);
   const [bio, setBio] = useState("");
+  const [user, setUser] = useState<User | null>(null);
   const [personalProfile, isPersonalProfile] = useState(false);
-  const [profileBio, setProfileBio] = useState("");
 
   const router = useRouter();
   const { userId } = router.query;
@@ -129,8 +134,12 @@ const UserProfile = () => {
           } else {
             console.log('Other user profile');
             const response = await axios.get(`http://localhost:3000/users/${userId}`);
-            const userProfileBio = response.data.bio;
-            setProfileBio(userProfileBio);
+            console.log('User data:', response.data);
+            setUser({
+              username: response.data.name,
+              bio: response.data.bio,
+              profileImageUrl: response.data.profilePicture
+            });
             isPersonalProfile(false);
           }
         }
@@ -217,13 +226,18 @@ const UserProfile = () => {
                   )}
                 </div>
               </div>}
-              {!personalProfile && profileBio && <div className="bg-white w-11/12 lg:w-7/12 shadow-xl text-black p-4 rounded-3xl lg:ml-16  ">
+              {!personalProfile && user && <div className="bg-white w-11/12 lg:w-7/12 shadow-xl text-black p-4 rounded-3xl lg:ml-16  ">
                 <div className="flex items-center space-x-2">
                   <div className="rounded-full min-w-max self-start ">
-                    <Image src="/images/profilePhoto.png" alt="profile" width={50} height={40} style={{ maxWidth: "100%", height: "auto" }} />
+                    <Image src={user.profileImageUrl} alt="profile" width={50} height={40} style={{ maxWidth: "100%", height: "auto" }} />
                   </div>
-                  <div className="flex p-3 justify-between bg-quarternary-500 w-5/6 md:w-11/12 rounded-xl">
-                    <div className='font-semibold text-sm lg:text-lg poppins-semibold '>{profileBio} </div>
+                  <div>
+                    <div className="flex p-2 my-1 justify-between w-full rounded-xl">
+                      <div className='font-semibold text-sm lg:text-lg poppins-semibold '>{user.username} </div>
+                    </div>
+                    {user.bio && <div className="flex p-3 justify-between bg-tertiary-800 w-5/6 md:w-11/12 rounded-xl">
+                      <div className='font-semibold text-sm lg:text-lg poppins-semibold '>{user.bio} </div>
+                    </div>}
                   </div>
                 </div>
               </div>}

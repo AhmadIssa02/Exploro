@@ -20,14 +20,14 @@ import { FileUploadModule } from './files/file-upload.module';
     ThrottlerModule.forRoot([
       {
         ttl: 1 * 1000 * 60, // 1ms*1000*60 seconds
-        limit: 100, // limit each request to 100 per 60 seconds
+        limit: 200, // limit each request to 200 per 60 seconds
       },
     ]),
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
       validate: (config: Record<string, any>) => {
-        return validateConfig(config)
+        return validateConfig(config);
       },
     }),
     MongooseModule.forRootAsync({
@@ -44,7 +44,7 @@ import { FileUploadModule } from './files/file-upload.module';
     MailModule,
     UsersModule,
     MinioClientModule,
-    FileUploadModule
+    FileUploadModule,
   ],
   controllers: [AppController],
   providers: [
