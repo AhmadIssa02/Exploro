@@ -15,10 +15,13 @@ export class UpdateUserDto {
 
   @IsString()
   profilePicture?: string;
-  
+
   @IsBoolean()
   isVerified?: boolean;
 
   @IsString()
   verifyEmailToken?: string;
+
+  @IsString()
+  resetPasswordToken?: string;
 }

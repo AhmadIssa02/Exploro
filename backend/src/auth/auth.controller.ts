@@ -27,7 +27,30 @@ export class AuthController {
   }
 
   @Post('resend-verification-code')
-  async resendVerificationCode(@Body() resendCodeDto: ResendCodeDto): Promise<boolean> {
+  async resendVerificationCode(
+    @Body() resendCodeDto: ResendCodeDto,
+  ): Promise<boolean> {
     return this.authService.resendVerificationCode(resendCodeDto);
+  }
+
+  @Post('forgot-password')
+  async forgotPassword(@Body('email') email: string): Promise<boolean> {
+    return this.authService.forgotPassword(email);
+  }
+
+  @Post('verify-password-token')
+  async verifyPasswordToken(
+    @Body('email') email: string,
+    @Body('passwordToken') passwordToken: string,
+  ): Promise<boolean> {
+    return this.authService.verifyPasswordToken(email, passwordToken);
+  }
+
+  @Post('reset-password')
+  async resetPassword(
+    @Body('email') email: string,
+    @Body('password') password: string,
+  ): Promise<boolean> {
+    return this.authService.resetPassword(email, password);
   }
 }

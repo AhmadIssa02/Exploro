@@ -104,11 +104,11 @@ export class AuthService {
     });
     return true;
   }
-  async resendVerificationCode(resendCodeDto:ResendCodeDto): Promise<boolean> {
+  async resendVerificationCode(resendCodeDto: ResendCodeDto): Promise<boolean> {
     const { userId } = resendCodeDto;
     // Generate a verification token
     const verificationToken = await this.jwtService.signAsync(
-      { sub: userId},
+      { sub: userId },
       {
         secret: process.env.JWT_SECRET,
         expiresIn: '24h',
@@ -129,9 +129,66 @@ export class AuthService {
     await this.maileService.sendEmail(user, verificationToken);
     return true;
   }
+
+  async forgotPassword(email: string): Promise<boolean> {
+    const user = await this.userModel.findOne({
+      email,
+    });
+    if (!user) throw new UnauthorizedException('User not found');
+    // Generate a verification token
+    const passwordToken = await this.jwtService.signAsync(
+      { sub: user._id.toString() },
+      {
+        secret: process.env.JWT_SECRET,
+        expiresIn: '24h',
+      },
+    );
+
+    // Hash the verification token
+    const hashedToken = await bcrypt.hash(passwordToken, 10);
+
+    // Save the hashed token in the database
+    await this.usersService.update(user._id.toString(), {
+      resetPasswordToken: hashedToken,
+    });
+
+    //send verification email
+    await this.maileService.sendEmail(user, passwordToken);
+    return true;
+  }
+
+  async verifyPasswordToken(
+    email: string,
+    passwordToken: string,
+  ): Promise<boolean> {
+    const user = await this.userModel.findOne({
+      email,
+    });
+    if (!user) throw new UnauthorizedException('User not found');
+    const tokenMatches = await isHashMatched(
+      passwordToken,
+      user.resetPasswordToken,
+    );
+    if (!tokenMatches) throw new UnauthorizedException('token was not macthed');
+
+    return true;
+  }
+  async resetPassword(email: string, password: string): Promise<boolean> {
+    const user = await this.userModel.findOne({
+      email,
+    });
+    if (!user) throw new UnauthorizedException('User not found');
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await this.usersService.update(user._id, {
+      password: hashedPassword,
+      resetPasswordToken: null,
+    });
+
+    return true;
+  }
 }
-
-
 
 export const isHashMatched = async (
   data: string,

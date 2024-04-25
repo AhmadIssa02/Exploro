@@ -16,9 +16,9 @@ export class User extends Document {
   @Prop({ required: false })
   profilePicture?: string;
   @Prop()
-  verifyEmailToken: string
+  verifyEmailToken: string;
   @Prop()
-  isVerfied: boolean
+  resetPasswordToken: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
