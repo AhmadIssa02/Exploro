@@ -57,7 +57,6 @@ const VerifyPasswordCodePage: React.FC = () => {
                             className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md sm:text-sm"
                             placeholder="Password Verification Code"
                         />
-                        <button className="text-sm text-primary-500 hover:text-primary-700 self-start ml-2">Resend Code</button>
                     </div>
 
                     <div>

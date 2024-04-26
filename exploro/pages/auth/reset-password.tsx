@@ -38,7 +38,7 @@ const ForgetPassword: React.FC = () => {
                 setTimeout(() => {
                     successAlert.remove();
                     Router.push('/auth/login');
-                }, 3000);
+                }, 2000);
                 console.log(response);
             }
         } catch (error: any) {

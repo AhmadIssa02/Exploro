@@ -7,7 +7,11 @@ export class MailController {
   constructor(private readonly mailService: MailService) {}
 
   @Post()
-  async sendEmail(@Body('user') user: User, @Body('content') content: string) {
-    return await this.mailService.sendEmail(user, content);
+  async sendEmail(
+    @Body('user') user: User,
+    @Body('content') content: string,
+    type: string,
+  ) {
+    return await this.mailService.sendEmail(user, content, type);
   }
 }

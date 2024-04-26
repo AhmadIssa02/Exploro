@@ -35,7 +35,7 @@ const VerifyEmailPage: React.FC = () => {
                 setTimeout(() => {
                     successAlert.remove();
                     Router.push('/auth/login');
-                }, 4000);
+                }, 2000);
             }
         } catch (error: any) {
             if (error) {

@@ -31,4 +31,9 @@ export class UsersController {
   ): Promise<User> {
     return this.usersService.update(id, updateUserDto);
   }
+
+  @Post('email')
+  findByEmail(@Body('email') email: string): Promise<User> {
+    return this.usersService.findByEmail(email);
+  }
 }

@@ -62,7 +62,7 @@ export class AuthService {
     });
 
     //send verification email
-    await this.maileService.sendEmail(user, verificationToken);
+    await this.maileService.sendEmail(user, verificationToken, 'verify');
     return { token };
   }
 
@@ -126,7 +126,7 @@ export class AuthService {
     const user = await this.usersService.findOne(userId);
 
     //send verification email
-    await this.maileService.sendEmail(user, verificationToken);
+    await this.maileService.sendEmail(user, verificationToken, 'verify');
     return true;
   }
 
@@ -153,7 +153,7 @@ export class AuthService {
     });
 
     //send verification email
-    await this.maileService.sendEmail(user, passwordToken);
+    await this.maileService.sendEmail(user, passwordToken, 'reset');
     return true;
   }
 
