@@ -1,12 +1,27 @@
-import { IsString } from 'class-validator';
+import { IsBoolean, IsString } from 'class-validator';
 
 export class UpdateUserDto {
   @IsString()
-  name: string;
+  name?: string;
 
   @IsString()
-  email: string;
+  email?: string;
 
   @IsString()
-  password: string;
+  password?: string;
+
+  @IsString()
+  bio?: string;
+
+  @IsString()
+  profilePicture?: string;
+
+  @IsBoolean()
+  isVerified?: boolean;
+
+  @IsString()
+  verifyEmailToken?: string;
+
+  @IsString()
+  resetPasswordToken?: string;
 }

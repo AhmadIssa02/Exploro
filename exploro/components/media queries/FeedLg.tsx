@@ -7,29 +7,46 @@ import Sidebar from '@/components/SideBar';
 import Header from '@/components/Header'
 import PostInput from '@/components/PostInput';
 import ProfileSideBar from '@/components/ProfileSideBar';
-
-
-const samplePost = {
-  username: 'Traveler123',
-  bio: 'Traveling the world!',
-  location: 'Mount Everest, Nepal',
-  timeAgo: '3 days ago',
-  content: 'Just reached the base camp, what a view!',
-  profileImageUrl: '/images/man.png',
-  mainImageUrl: '/images/postImage.png',
-  onLike: () => console.log('Liked!'),
-  onComment: () => console.log('Commented!'),
-  onShare: () => console.log('Shared!'),
-};
-
+import { useAuthGuard } from '@/hooks/useAuthGuard';
+import { FeedPostApi } from '@/utils/api/feedPost/feedPost.api';
+import { feedPost } from '@/models/crud';
+import { calculateTimeAgo } from '@/utils/timeUtils';
 
 
 const FeedLg: React.FC = () => {
+  useAuthGuard();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  const [posts, setPosts] = useState<feedPost[]>([]);
+  const fetchPosts = async () => {
+    try {
+
+      const postApi = new FeedPostApi()
+      const posts = await postApi.find();
+      setPosts(posts);
+    }
+    catch (e) {
+      console.log(e);
+    }
+  }
+
+  useEffect(() => {
+    fetchPosts();
+  }, [])
+  const sortedPosts = [...posts].sort((a, b) => {
+    if (a.createdAt && b.createdAt) {
+      const timeA = new Date(a.createdAt);
+      const timeB = new Date(b.createdAt);
+
+      // Compare the Date objects
+      return timeB.getTime() - timeA.getTime();
+    } else {
+      return 0;
+    }
+  });
 
 
   return (
@@ -60,11 +77,7 @@ const FeedLg: React.FC = () => {
 
           {/* Profile Sidebar */}
           <div className={`fixed top-0 right-0 w-1/4 text-lg poppins-semibold h-full space-y-4 bg-primary-700 flex flex-col justify-start items-center z-50  text-white transition-transform transform ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-            <ProfileSideBar
-              username={samplePost.username}
-              bio={samplePost.bio}
-              profileImageUrl={samplePost.profileImageUrl}
-            />
+            <ProfileSideBar />
           </div>
           {isSidebarOpen && (
             <div className="fixed w-4/5 inset-0 bg-black opacity-40 z-40" onClick={toggleSidebar}></div>
@@ -78,28 +91,22 @@ const FeedLg: React.FC = () => {
             {/* Post Input */}
             <div className="flex flex-col justify-center space-y-6 w-full mr-8">
               <PostInput />
-              <Post
-                username={samplePost.username}
-                location={samplePost.location}
-                timeAgo={samplePost.timeAgo}
-                content={samplePost.content}
-                profileImageUrl={samplePost.profileImageUrl}
-                mainImageUrl={samplePost.mainImageUrl}
-                onLike={samplePost.onLike}
-                onComment={samplePost.onComment}
-                onShare={samplePost.onShare}
-              />
-              <Post
-                username={samplePost.username}
-                location={samplePost.location}
-                timeAgo={samplePost.timeAgo}
-                content={samplePost.content}
-                profileImageUrl={samplePost.profileImageUrl}
-                mainImageUrl={samplePost.mainImageUrl}
-                onLike={samplePost.onLike}
-                onComment={samplePost.onComment}
-                onShare={samplePost.onShare}
-              />
+
+              {sortedPosts.map((post, index) => {
+                return <Post
+                  key={index}
+                  userId={post.user}
+                  username={post.username}
+                  location={post.location}
+                  timeAgo={calculateTimeAgo(post.createdAt)}
+                  content={post.content}
+                  profileImageUrl={post.profileImageUrl}
+                  mainImageUrl={post.mainImageUrl}
+                  onLike={() => console.log('Liked!')}
+                  onComment={() => console.log('Comment!')}
+                  onShare={() => console.log('Shared!')}
+                />;
+              })}
             </div>
 
             {/* Chats */}

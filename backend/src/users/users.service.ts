@@ -16,7 +16,7 @@ export class UsersService {
   }
 
   async findAll(query: Query): Promise<User[]> {
-    const resultsPerPage = 6;
+    const resultsPerPage = 20;
     const currentPage = Number(query.page) || 1;
     const skip = (currentPage - 1) * resultsPerPage;
     const keyword = query.name
@@ -41,5 +41,9 @@ export class UsersService {
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     return this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true });
+  }
+
+  async findByEmail(email: string): Promise<User> {
+    return this.userModel.findOne({ email });
   }
 }

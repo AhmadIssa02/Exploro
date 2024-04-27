@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { FeedPost } from './schema/post.schema';
 import { CreatePostDto } from './dto/createPost.dto';
 import { User } from 'src/users/schemas/user.schema';
+import { UpdatePostDto } from './dto/updatePost.dto';
 
 @Injectable()
 export class PostService {
@@ -34,9 +35,9 @@ export class PostService {
 
   async updateById(
     id: string,
-    createPostDto: CreatePostDto,
+    updatePostDto: UpdatePostDto,
   ): Promise<FeedPost> {
-    return await this.postModel.findByIdAndUpdate(id, createPostDto, {
+    return await this.postModel.findByIdAndUpdate(id, updatePostDto, {
       new: true,
       runValidators: true,
     });

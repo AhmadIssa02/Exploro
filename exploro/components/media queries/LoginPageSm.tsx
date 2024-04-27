@@ -3,6 +3,8 @@ import Image from "next/image";
 import axios from 'axios';
 import Link from "next/link";
 import Router from "next/router";
+import { setTokenCookie } from "@/utils/cookieUtils";
+import jwt from 'jsonwebtoken';
 
 const LoginPageSm = () => {
     const [email, setEmail] = useState('');
@@ -14,13 +16,33 @@ const LoginPageSm = () => {
         event.preventDefault();
         try {
             const response = await axios.post('http://localhost:3000/auth/login', { email, password });
-            Router.push('/feed');
-            console.log(response.data);
-            // You can store the received token in local storage or context for further requests
+            const token = response.data.token;
+            setTokenCookie(token);
+            const decoded = jwt.decode(token) as { id: string; }; // Ensure this matches the actual token structure
+            const userId = decoded.id;
+            const user = await axios.get(`http://localhost:3000/users/${userId}`);
+            if (user.data.verifyEmailToken === null) {
+                Router.push('/feed');
+            }
+            else {
+                const errorAlert = document.createElement('div');
+                errorAlert.classList.add('bg-red-500', 'w-1/2', 'text-white', 'px-4', 'py-2', 'rounded-md', 'font-semibold', 'absolute', 'top-20', 'left-1/2', 'transform', '-translate-x-1/2', 'z-50');
+                errorAlert.textContent = 'Unauthorized access! Please check your verification code.';
+                document.body.appendChild(errorAlert);
+                setTimeout(() => {
+                    errorAlert.remove();
+                }, 3000);
+            }
         } catch (error: any) {
             console.error('Login failed:', error);
             if (error.response && error.response.status === 401) {
-                alert('Invalid email or password. Please try again.');
+                const errorAlert = document.createElement('div');
+                errorAlert.classList.add('bg-red-500', 'w-1/2', 'text-white', 'px-4', 'py-2', 'rounded-md', 'font-semibold', 'absolute', 'top-20', 'left-1/2', 'transform', '-translate-x-1/2', 'z-50');
+                errorAlert.textContent = 'Invalid email or password.Please try again..';
+                document.body.appendChild(errorAlert);
+                setTimeout(() => {
+                    errorAlert.remove();
+                }, 3000);
             } else {
                 alert('An error occurred. Please try again later.');
             }

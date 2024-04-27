@@ -2,6 +2,7 @@ import { useState } from "react";
 import Image from "next/image";
 import axios from 'axios';
 import Router from "next/router";
+import { setTokenCookie } from "@/utils/cookieUtils";
 
 const SignUpPageSm = () => {
   const [email, setEmail] = useState('');
@@ -9,6 +10,9 @@ const SignUpPageSm = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const profilePicture = process.env.NEXT_PUBLIC_DEFAULT_PROFILE_IMAGE_URL;
+
+
 
 
   const [showPassword, setShowPassword] = useState(true);
@@ -16,14 +20,26 @@ const SignUpPageSm = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*.])[A-Za-z\d!@#$%^&*.]{8,}$/;
+
+    // Check if password meets complexity requirements
+    if (!passwordRegex.test(password)) {
+      alert('Password must be at least 8 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 special character.');
+      return;
+    }
     if (password !== confirmPassword) {
       alert('Password and Confirm Password do not match');
       return;
     }
     try {
-      const response = await axios.post('http://localhost:3000/auth/signup', { email, password });
-      Router.push('/auth/login');
-      console.log(response.data);
+      const name = `${firstName} ${lastName}`;
+      const user = { name, email, password, profilePicture };
+      const response = await axios.post('http://localhost:3000/auth/signup', user);
+      const token = response.data.token;
+      setTokenCookie(token);
+      if (response) {
+        Router.push('/auth/verify');
+      }
     } catch (error: any) {
       if (axios.isAxiosError(error) && error.response) {
         if (error.response.status === 409) {

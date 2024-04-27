@@ -8,38 +8,27 @@ import Sidebar from '@/components/SideBar';
 import Header from '@/components/Header'
 import PostInput from '@/components/PostInput';
 import ProfileSideBar from '@/components/ProfileSideBar';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 
 
+const InboxPage = () => {
+  useAuthGuard();
 
-const samplePost = {
-    username: 'Traveler123',
-    bio: 'Traveling the world!',
-    location: 'Mount Everest, Nepal',
-    timeAgo: '3 days ago',
-    content: 'Just reached the base camp, what a view!',
-    profileImageUrl: '/images/man.png', 
-    mainImageUrl: '/images/postImage.png', 
-    onLike: () => console.log('Liked!'),
-    onComment: () => console.log('Commented!'),
-    onShare: () => console.log('Shared!'),
-  };    
-  
-const InboxPage = () =>{
-    
-    const [isProfileSidebarOpen, setIsProfileSidebarOpen] = useState(false);
-    const [isSiderbarOpen, setIsSidebarOpen] = useState(false);
 
-    const toggleSidebar = () => {
-        setIsSidebarOpen(!isSiderbarOpen);
-    };
+  const [isProfileSidebarOpen, setIsProfileSidebarOpen] = useState(false);
+  const [isSiderbarOpen, setIsSidebarOpen] = useState(false);
 
-    const toggleProfileSidebar = () => {
-      setIsProfileSidebarOpen(!isProfileSidebarOpen);
-    }   
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSiderbarOpen);
+  };
 
-    return (
+  const toggleProfileSidebar = () => {
+    setIsProfileSidebarOpen(!isProfileSidebarOpen);
+  }
+
+  return (
     <div className="lg:hidden bg-white">
-        <div className="flex w-full h-100% min-h-screen bg-quarternary-500 text-white font-poppins">
+      <div className="flex w-full h-100% min-h-screen bg-quarternary-500 text-white font-poppins">
         {/* Sidebar */}
         {/* <Sidebar></Sidebar> */}
 
@@ -48,19 +37,19 @@ const InboxPage = () =>{
           {/* Header */}
           <header className="flex fixed w-full p-4 bg-primary-500  justify-center items-center justify-content-center">
             <button className='absolute left-4' onClick={toggleSidebar}>
-                <Image
-                    src="/images/burgermenu.svg"
-                    alt="menu"
-                    width={25}
-                    height={25}
-                    className=' '
-                    style={{
-                    maxWidth: "100%",
-                    height: "auto"
+              <Image
+                src="/images/burgermenu.svg"
+                alt="menu"
+                width={25}
+                height={25}
+                className=' '
+                style={{
+                  maxWidth: "100%",
+                  height: "auto"
                 }}></Image>
             </button>
             <Header></Header>
-            
+
             <button className='absolute right-2' onClick={toggleProfileSidebar}>
               <Image
                 src="/images/settings.png"
@@ -76,29 +65,25 @@ const InboxPage = () =>{
           </header>
 
           {/* Sidebar */}
-            <div className={`fixed top-0 left-0 w-3/4 text-lg poppins-semibold h-full space-y-4 bg-primary-500 flex flex-col justify-start items-center z-50  text-white transition-transform transform ${isSiderbarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-                <Sidebar />
-            </div>
-            {isSiderbarOpen && (
-                <div className="fixed w-full inset-0 bg-black opacity-40 z-40" onClick={toggleSidebar}></div>
-            )}
-          
+          <div className={`fixed top-0 left-0 w-3/4 text-lg poppins-semibold h-full space-y-4 bg-primary-500 flex flex-col justify-start items-center z-50  text-white transition-transform transform ${isSiderbarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+            <Sidebar />
+          </div>
+          {isSiderbarOpen && (
+            <div className="fixed w-full inset-0 bg-black opacity-40 z-40" onClick={toggleSidebar}></div>
+          )}
+
           {/* Profile Sidebar */}
           <div className={`fixed top-0 right-0 w-3/4 text-lg poppins-semibold h-full space-y-4 bg-primary-700 flex flex-col justify-start items-center z-50  text-white transition-transform transform ${isProfileSidebarOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-            <ProfileSideBar 
-              username = {samplePost.username}
-              bio = {samplePost.bio}
-              profileImageUrl ={samplePost.profileImageUrl}
-            />
+            <ProfileSideBar />
           </div>
           {isProfileSidebarOpen && (
-              <div className="fixed w-4/5 inset-0 bg-black opacity-40 z-40" onClick={toggleProfileSidebar}></div>
-              
+            <div className="fixed w-4/5 inset-0 bg-black opacity-40 z-40" onClick={toggleProfileSidebar}></div>
+
           )}
 
           {/* Post Input & Feed */}
           <div className="flex justify-center space-y-6 w-full mt-20 mb-6">
-        
+
             {/* Chats */}
             <div className="w-full h-full p-5 right-0 top-10 fixed min-h-screen my-6 pb-20">
               <Chats />
@@ -109,8 +94,8 @@ const InboxPage = () =>{
         </div>
 
       </div>
-  
+
     </div>
-    );
+  );
 }
 export default InboxPage;

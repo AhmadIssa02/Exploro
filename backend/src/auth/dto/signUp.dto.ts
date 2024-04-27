@@ -16,6 +16,11 @@ export class SignUpDto {
     @IsNotEmpty()
     @MinLength(6)
     readonly password: string;
+
+    @IsString()
+    @IsNotEmpty()
+    readonly profilePicture: string;
+
 }
 
 

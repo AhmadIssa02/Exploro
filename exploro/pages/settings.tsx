@@ -4,9 +4,11 @@ import ProfileSideBar from "@/components/ProfileSideBar";
 import Sidebar from "@/components/SideBar";
 import { useState } from "react";
 import Image from "next/image";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 
 
 const SettingsPage = () => {
+    useAuthGuard();
     const [email, setEmail] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -49,20 +51,6 @@ const SettingsPage = () => {
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
-    };
-
-
-    const samplePost = {
-        username: 'Traveler123',
-        bio: 'Traveling the world!',
-        location: 'Mount Everest, Nepal',
-        timeAgo: '3 days ago',
-        content: 'Just reached the base camp, what a view!',
-        profileImageUrl: '/images/man.png',
-        mainImageUrl: '/images/postImage.png',
-        onLike: () => console.log('Liked!'),
-        onComment: () => console.log('Commented!'),
-        onShare: () => console.log('Shared!'),
     };
 
 
@@ -116,11 +104,7 @@ const SettingsPage = () => {
                     <div className="fixed w-full inset-0 bg-black opacity-40 z-40" onClick={toggleSidebar}></div>
                 )}
                 <div className={`fixed overflow-hidden top-0 right-0 lg:w-1/4 w-3/4 text-lg poppins-semibold h-full space-y-4 bg-primary-700 flex flex-col justify-start items-center z-50  text-white transition-transform transform ${isProfileSidebarOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-                    <ProfileSideBar
-                        username={samplePost.username}
-                        bio={samplePost.bio}
-                        profileImageUrl={samplePost.profileImageUrl}
-                    />
+                    <ProfileSideBar />
                 </div>
                 {isProfileSidebarOpen && (
                     <div className="fixed w-4/5 inset-0 bg-black opacity-40 z-40" onClick={toggleProfileSidebar}></div>

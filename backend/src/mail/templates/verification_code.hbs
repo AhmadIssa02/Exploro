@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #26387C;
+            overflow: auto;
+        }
+
+        .container {
+            height: fit-content;
+            max-width: 670px;
+            margin: 0 auto;
+            background-color: #26387C;
+            border-radius: 3px;
+            text-align: center;
+            box-shadow: 0 6px 18px 0 rgba(0, 0, 0, 0.06);
+            overflow: auto;
+        }
+
+        .header {
+            padding: 40px 35px;
+            background: #26387C;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+        }
+
+        .content {
+            padding: 0 35px;
+        }
+
+        h1 {
+            color: #ffffff;
+            font-weight: 500;
+            font-size: 32px;
+            margin-top: 12px;
+        }
+
+        p {
+            color: #ffffff;
+            font-size: 15px;
+            line-height: 24px;
+            margin-bottom: 35px;
+        }
+
+        .note {
+            background: #f89c09;
+            color: #ffffff;
+            font-size: 12px;
+            line-height: 24px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            padding: 8px;
+            overflow: hidden;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+
+        .footer {
+            padding: 6px;
+            margin: 6px;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            background: #26387C;
+        }
+
+        .verify-link {
+            color: #f9ab2f;
+            text-decoration: none;
+        }
+
+        .verify-link:hover {
+            text-decoration: underline;
+            color: #f89c09;
+        }
+    </style>
+</head>
+
+<body>
+    <table cellspacing="0" border="0" cellpadding="0" width="100%" bgcolor="#f2f3f8">
+        <tr>
+            <td>
+                <div class="container">
+                    <div class="content">
+                        <h1>Verify Your Email</h1>
+                        <p>Hello {{ userName }},</p>
+                        <p>
+                            You have received this message because your email address has been registered with our site.
+                            Please use the verification code below to verify your email address and confirm that you
+                            are the owner of this account. You have 24 hours until the code expires.
+                        </p>
+                        <p class="note">{{ verificationCode }}</p>
+                        <p>
+                            To verify your email, click <a href="http://localhost:3001/auth/verify"
+                                class="verify-link">here</a>.
+                        </p>
+                    </div>
+                    <div class="footer">
+                        <p>&copy; <strong>Exploro | 2023</strong></p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
