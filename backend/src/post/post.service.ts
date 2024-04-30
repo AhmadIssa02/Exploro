@@ -46,4 +46,18 @@ export class PostService {
   async deleteById(id: string): Promise<FeedPost> {
     return await this.postModel.findByIdAndDelete(id);
   }
+
+  async likePost(userId: string, postId: string): Promise<FeedPost> {
+    return this.postModel.findByIdAndUpdate(postId, {
+      $addToSet: { likes: userId },
+      $inc: { likeCount: 1 },
+    }, { new: true }).exec();
+  }
+
+  async unlikePost(userId: string, postId: string): Promise<FeedPost> {
+    return this.postModel.findByIdAndUpdate(postId, {
+      $pull: { likes: userId },
+      $inc: { likeCount: -1 },
+    }, { new: true }).exec();
+  }
 }

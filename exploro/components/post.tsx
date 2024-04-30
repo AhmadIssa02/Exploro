@@ -1,8 +1,13 @@
+import { getTokenCookie } from "@/utils/cookieUtils";
+import axios from "axios";
 import Image from "next/image";
 import Router from "next/router";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import jwt from 'jsonwebtoken';
+
 
 type PostProps = {
+  postId: string;
   userId: string;
   username: string;
   location: string;
@@ -10,12 +15,42 @@ type PostProps = {
   content: string;
   profileImageUrl: string;
   mainImageUrl: string;
-  onLike: () => void;
-  onComment: () => void;
-  onShare: () => void;
+  likes: string[];
+  likeCount: number;
 };
 
-const Post: React.FC<PostProps> = ({ userId, username, location, timeAgo, content, profileImageUrl, mainImageUrl, onLike, onComment, onShare }) => {
+const Post: React.FC<PostProps> = ({ postId, userId, username, location, timeAgo, content, profileImageUrl, mainImageUrl, likes, likeCount }) => {
+
+  const post = {
+    postId,
+    userId,
+    username,
+    location,
+    timeAgo,
+    content,
+    profileImageUrl,
+    mainImageUrl,
+    likes,
+    likeCount
+  };
+  const [liked, setLiked] = useState(false);
+  useEffect(() => {
+    const token = getTokenCookie();
+    if (!token) {
+      console.error('No token found');
+      return;
+    }
+    const decoded = jwt.decode(token) as { id: string; }; // Ensure this matches the actual token structure
+    const currentUserId = decoded.id;
+    // Check if the user has liked the post
+    if (likes && likes.includes(currentUserId)) {
+      setLiked(true);
+    } else {
+      setLiked(false);
+    }
+  }, [likes, userId]);
+
+
   const handleProfile = () => {
     const id = userId;
     if (id) {
@@ -24,6 +59,29 @@ const Post: React.FC<PostProps> = ({ userId, username, location, timeAgo, conten
       console.error('UserId is undefined');
     }
   };
+
+  const toggleLike = async () => {
+    try {
+      const url = liked ? `http://localhost:3000/feedpost/post/${postId}/unlike` : `http://localhost:3000/feedpost/post/${postId}/like`;
+      const token = getTokenCookie();
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+      const decoded = jwt.decode(token) as { id: string; }; // Ensure this matches the actual token structure
+      const currentUserId = decoded.id;
+      await axios.put(url, { postId, currentUserId });
+      setLiked(!liked);
+    } catch (error) {
+      console.error('Error toggling like status:', error);
+    }
+  };
+
+  const toggleComment = () => {
+    console.log('Commenting not implemented yet');
+  };
+
+
   return (
     <div className="bg-white p-2 rounded-xl lg:rounded-2xl shadow-xl w-11/12 lg:w-7/12 flex flex-col items-center text-black lg:ml-16">
       <div className="self-start mt-1">
@@ -70,19 +128,22 @@ const Post: React.FC<PostProps> = ({ userId, username, location, timeAgo, conten
         </div>}
       </div>
       <div className="flex items-center my-2 w-full justify-evenly">
-        <button onClick={onLike}>
-          <Image
-            src="/images/like2.svg"
-            alt="Like"
-            width={25}
-            height={25}
-            className='mt-1'
-            style={{
-              maxWidth: "100%",
-              height: "auto"
-            }} />
-        </button>
-        <button onClick={onComment}>
+        <div className="flex">
+          <button onClick={toggleLike}>
+            <Image
+              src={liked ? "/images/liked.svg" : "/images/like2.svg"}  // Update image based on liked state
+              alt="Like"
+              width={25}
+              height={25}
+              className='mt-1'
+              style={{
+                maxWidth: "100%",
+                height: "auto"
+              }} />
+          </button>
+          <span className="ml-2 mt-1 text-black/50">Liked by {likeCount} people</span> {/* Display total number of likes */}
+        </div>
+        <button onClick={toggleComment}>
           <Image
             src="/images/comment.svg"
             alt="Comment"
@@ -94,7 +155,7 @@ const Post: React.FC<PostProps> = ({ userId, username, location, timeAgo, conten
               height: "auto"
             }} />
         </button>
-        <button onClick={onShare}>
+        {/* <button onClick={onShare}>
           <Image
             src="/images/share.svg"
             alt="Share"
@@ -105,7 +166,7 @@ const Post: React.FC<PostProps> = ({ userId, username, location, timeAgo, conten
               maxWidth: "100%",
               height: "auto"
             }} />
-        </button>
+        </button> */}
       </div>
     </div>
   );

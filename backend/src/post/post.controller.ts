@@ -46,4 +46,21 @@ export class PostController {
       id:string): Promise<FeedPost> {
       return this.postService.deleteById(id);
     }
+
+    @Put('post/:id/like')
+    async likePost(
+      @Body() likeData: { postId: string; userId: string }
+    ): Promise<FeedPost> {
+      console.log("likeData: ");
+      console.log(likeData);
+      console.log("userId: " + likeData.userId + "postId: " + likeData.postId);
+      console.log("type of: " + typeof(likeData.userId));
+      return this.postService.likePost(likeData.userId, likeData.postId);
+    }
+    @Put('post/:id/unlike')
+    async unlikePost(
+      @Body() likeData: { postId: string; userId: string }
+    ): Promise<FeedPost> {
+      return this.postService.unlikePost(likeData.userId, likeData.postId);
+    }
 }
