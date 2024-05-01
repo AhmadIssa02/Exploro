@@ -141,7 +141,7 @@ const Post: React.FC<PostProps> = ({ postId, userId, username, location, timeAgo
                 height: "auto"
               }} />
           </button>
-          <span className="ml-2 mt-1 text-black/50">Liked by {likeCount} people</span> {/* Display total number of likes */}
+          <span className="ml-2 mt-1 text-black/50">Liked by {likeCount} </span> {/* Display total number of likes */}
         </div>
         <button onClick={toggleComment}>
           <Image

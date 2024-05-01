@@ -59,8 +59,8 @@ const ProfileSideBar: React.FC = () => {
         style={{ maxWidth: "100%", height: "auto" }} />
       <div className="flex flex-col items-center space-y-2">
         <span className='text-xl poppins-bold mt-4'>{user.username}</span>
-        <div className="px-4 py-2 w-3/4 text-center rounded-lg ">
-          <span className='py-2 w-3/4 text-left rounded-lg'>
+        <div className="px-4 py-2  text-center rounded-lg ">
+          <span className='py-2  text-left text-xs rounded-lg'>
             {user.bio?.length > 110 ? `${user.bio.substring(0, 110)}...` : user.bio} {/* Truncate long bios */}
           </span>
           {user.bio?.length > 110 && (

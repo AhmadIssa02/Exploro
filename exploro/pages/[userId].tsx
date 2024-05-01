@@ -251,7 +251,7 @@ const UserProfile = () => {
                       <div className='font-semibold text-sm lg:text-lg poppins-semibold '>{user.username} </div>
                     </div>
                     {user.bio && <div className="ml-4 flex p-3 text-center justify-center bg-tertiary-800 w-5/6 md:w-11/12 rounded-xl">
-                      <div className='font-semibold text-sm text-center lg:text-lg poppins-semibold '>{user.bio} </div>
+                      <div className='font-semibold text-sm text-left lg:text-lg poppins-semibold '>{user.bio} </div>
                     </div>}
                   </div>
                 </div>
