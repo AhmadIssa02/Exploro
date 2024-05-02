@@ -24,4 +24,7 @@ export class UpdateUserDto {
 
   @IsString()
   resetPasswordToken?: string;
+  
+  @IsString()
+  savedPosts?: string[];
 }

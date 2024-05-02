@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 @Schema({
   timestamps: true,
@@ -19,6 +19,8 @@ export class User extends Document {
   verifyEmailToken: string;
   @Prop()
   resetPasswordToken: string;
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'SavedPost' }], default: [] })
+  savedPosts: Types.ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

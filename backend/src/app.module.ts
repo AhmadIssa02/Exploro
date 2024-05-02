@@ -14,6 +14,7 @@ import { UsersModule } from './users/users.module';
 import { validateConfig } from './config';
 import { MinioClientModule } from './minio/minio-client.module';
 import { FileUploadModule } from './files/file-upload.module';
+import { SavedPostModule } from './savedPost/savedPost.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { FileUploadModule } from './files/file-upload.module';
     UsersModule,
     MinioClientModule,
     FileUploadModule,
+    SavedPostModule,
   ],
   controllers: [AppController],
   providers: [
