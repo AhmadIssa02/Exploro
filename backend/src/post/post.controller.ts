@@ -17,13 +17,18 @@ export class PostController {
     }
 
 
+    // @Post()
+    // // @UseGuards(AuthGuard())
+    // async addPost(
+    //   @Body() createPostDto: CreatePostDto,
+    //   @Req() req
+    //   ): Promise<FeedPost> {
+    //     console.log({"controller" :createPostDto})
+    //     return this.postService.create(createPostDto);
+    // }
     @Post()
-    @UseGuards(AuthGuard())
-    async addPost(
-      @Body() createPostDto: CreatePostDto,
-      @Req() req
-      ): Promise<FeedPost> {
-        return this.postService.create(createPostDto, req.user);
+    async create(@Body() createFeedPostDto: CreatePostDto) {
+    return this.postService.create(createFeedPostDto);
     }
 
     @Get(':id')
@@ -51,10 +56,6 @@ export class PostController {
     async likePost(
       @Body() likeData: { postId: string; userId: string }
     ): Promise<FeedPost> {
-      console.log("likeData: ");
-      console.log(likeData);
-      console.log("userId: " + likeData.userId + "postId: " + likeData.postId);
-      console.log("type of: " + typeof(likeData.userId));
       return this.postService.likePost(likeData.userId, likeData.postId);
     }
     @Put('post/:id/unlike')
