@@ -53,13 +53,13 @@ const ProfileSideBar: React.FC = () => {
       <Image
         src={user.profileImageUrl}
         alt='profilepic'
-        width={120}
+        width={100}
         height={120}
         className='mt-6 rounded-full shadow-sm shadow-white'
         style={{ maxWidth: "100%", height: "auto" }} />
       <div className="flex flex-col items-center space-y-2">
         <span className='text-xl poppins-bold mt-4'>{user.username}</span>
-        <div className="px-4 py-2  text-center rounded-lg ">
+        <div className="px-4 py-1  text-center rounded-lg ">
           <span className='py-2  text-left text-xs rounded-lg'>
             {user.bio?.length > 110 ? `${user.bio.substring(0, 110)}...` : user.bio} {/* Truncate long bios */}
           </span>
@@ -99,7 +99,7 @@ const ProfileSideBar: React.FC = () => {
         </button>
       </Link>
       <Link href="/settings">
-        <button className="flex items-center space-x-2 p-2 mb-8 border-b-[1.5px] hover:scale-105 my-2 lg:text-base">
+        <button className="flex items-center space-x-2 p-2 mb-6 border-b-[1.5px] hover:scale-105 my-2 lg:text-base">
           <Image
             src="/images/settings4.png"
             alt="home"
