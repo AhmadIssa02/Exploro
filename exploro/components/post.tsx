@@ -21,19 +21,11 @@ type PostProps = {
 
 const Post: React.FC<PostProps> = ({ postId, userId, username, location, timeAgo, content, profileImageUrl, mainImageUrl, likes, likeCount }) => {
 
-  const post = {
-    postId,
-    userId,
-    username,
-    location,
-    timeAgo,
-    content,
-    profileImageUrl,
-    mainImageUrl,
-    likes,
-    likeCount
-  };
   const [liked, setLiked] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+
+
   useEffect(() => {
     const token = getTokenCookie();
     if (!token) {
@@ -48,6 +40,27 @@ const Post: React.FC<PostProps> = ({ postId, userId, username, location, timeAgo
     } else {
       setLiked(false);
     }
+    //check if the user has saved the post before 
+    const checkSavedStatus = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/saved-posts/${currentUserId}`);
+        console.log('Saved posts:', response.data);
+
+        // Check if any of the saved posts has the same postId
+        const isSaved = response.data.some((savedPost: { postId: string; }) => savedPost.postId === postId);
+
+        if (isSaved) {
+          setSaved(true);
+        } else {
+          setSaved(false);
+        }
+      } catch (error) {
+        console.error('Error checking saved status:', error);
+      }
+    };
+
+    checkSavedStatus();
+
   }, [likes, userId]);
 
 
@@ -79,6 +92,49 @@ const Post: React.FC<PostProps> = ({ postId, userId, username, location, timeAgo
 
   const toggleComment = () => {
     console.log('Commenting not implemented yet');
+  };
+
+  const handleSave = async () => {
+    try {
+      const token = getTokenCookie();
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+      const decoded = jwt.decode(token) as { id: string; };
+      const currentUserId = decoded.id;
+
+
+      // Send POST request to save the post
+      if (!saved) {
+        await axios.post('http://localhost:3000/saved-posts/', {
+          userId: currentUserId,
+          postId: postId
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setSaved(true);
+        console.log('Post saved');
+      }
+      else {
+        // Send DELETE request to unsave the post
+        await axios.delete(`http://localhost:3000/saved-posts`, {
+          data: {
+            userId: currentUserId,
+            postId: postId
+          },
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setSaved(false);
+        console.log('Post unsaved');
+      }
+    } catch (error) {
+      console.error('Error saving post:', error);
+    }
   };
 
 
@@ -127,7 +183,7 @@ const Post: React.FC<PostProps> = ({ postId, userId, username, location, timeAgo
             }} />
         </div>}
       </div>
-      <div className="flex items-center my-2 w-full justify-evenly">
+      <div className="flex items-center my-2 w-full justify-around">
         <div className="flex">
           <button onClick={toggleLike}>
             <Image
@@ -155,18 +211,31 @@ const Post: React.FC<PostProps> = ({ postId, userId, username, location, timeAgo
               height: "auto"
             }} />
         </button>
-        {/* <button onClick={onShare}>
-          <Image
-            src="/images/share.svg"
-            alt="Share"
-            width={25}
-            height={25}
-            className='mt-1'
-            style={{
-              maxWidth: "100%",
-              height: "auto"
-            }} />
-        </button> */}
+        <button onClick={handleSave} >
+          {saved ? (
+            <Image
+              src="/images/unsave.png"
+              alt="Saved"
+              width={25}
+              height={25}
+              className='mt-1 '
+              style={{
+                maxWidth: "100%",
+                height: "auto"
+              }} />
+          ) : (
+            <Image
+              src="/images/save.png"
+              alt="Save"
+              width={25}
+              height={25}
+              className='mt-1'
+              style={{
+                maxWidth: "100%",
+                height: "auto"
+              }} />
+          )}
+        </button>
       </div>
     </div>
   );
