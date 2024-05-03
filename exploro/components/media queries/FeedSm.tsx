@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import Post from '@/components/post';
@@ -26,33 +26,34 @@ const FeedSm: React.FC = () => {
   };
 
   const [posts, setPosts] = useState<feedPost[]>([]);
-  const fetchPosts = async () => {
-    try {
-
-      const postApi = new FeedPostApi()
-      const posts = await postApi.find();
-      setPosts(posts);
-    }
-    catch (e) {
-      console.log(e);
-    }
-  }
-
   useEffect(() => {
+    let isMounted = true; // Track whether the component is still mounted
+
+    const fetchPosts = async () => {
+      try {
+        const postApi = new FeedPostApi();
+        const fetchedPosts = await postApi.find();
+        if (isMounted) {
+          setPosts(fetchedPosts);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
     fetchPosts();
-  }, [])
+    return () => {
+      isMounted = false; // Set to false when the component unmounts
+    };
+  }, []);
 
-  const sortedPosts = [...posts].sort((a, b) => {
-    if (a.createdAt && b.createdAt) {
-      const timeA = new Date(a.createdAt);
-      const timeB = new Date(b.createdAt);
-
-      // Compare the Date objects
-      return timeB.getTime() - timeA.getTime();
-    } else {
-      return 0;
-    }
-  });
+  const sortedPosts = useMemo(() => {
+    return posts.sort((a, b) => {
+      const timeA = new Date(a.createdAt).getTime();
+      const timeB = new Date(b.createdAt).getTime();
+      return timeB - timeA;
+    });
+  }, [posts]); // Dependency array to ensure sort only runs when posts change
 
 
   return (
@@ -116,9 +117,10 @@ const FeedSm: React.FC = () => {
 
             <div className="flex flex-col justify-center items-center align-middle space-y-6 w-full">
               <PostInput />
-              {sortedPosts.map((post, index) => {
+              {posts.length > 0 && sortedPosts.map((post, index) => {
                 return <Post
-                  key={index}
+                  key={post._id}
+                  postId={post._id}
                   userId={post.user}
                   username={post.username}
                   location={post.location}
@@ -126,9 +128,8 @@ const FeedSm: React.FC = () => {
                   content={post.content}
                   profileImageUrl={post.profileImageUrl}
                   mainImageUrl={post.mainImageUrl}
-                  onLike={() => console.log('Liked!')}
-                  onComment={() => console.log('Comment!')}
-                  onShare={() => console.log('Shared!')}
+                  likes={post.likes}
+                  likeCount={post.likeCount}
                 />;
               })}
             </div>

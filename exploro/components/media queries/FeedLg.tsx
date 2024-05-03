@@ -11,6 +11,8 @@ import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { FeedPostApi } from '@/utils/api/feedPost/feedPost.api';
 import { feedPost } from '@/models/crud';
 import { calculateTimeAgo } from '@/utils/timeUtils';
+import { useMemo } from 'react';
+
 
 
 const FeedLg: React.FC = () => {
@@ -21,32 +23,38 @@ const FeedLg: React.FC = () => {
   };
 
   const [posts, setPosts] = useState<feedPost[]>([]);
-  const fetchPosts = async () => {
-    try {
 
-      const postApi = new FeedPostApi()
-      const posts = await postApi.find();
-      setPosts(posts);
-    }
-    catch (e) {
-      console.log(e);
-    }
-  }
+  const sortedPosts = useMemo(() => {
+    return posts.sort((a, b) => {
+      const timeA = new Date(a.createdAt).getTime();
+      const timeB = new Date(b.createdAt).getTime();
+      return timeB - timeA;
+    });
+  }, [posts]); // Dependency array to ensure sort only runs when posts change
+
 
   useEffect(() => {
-    fetchPosts();
-  }, [])
-  const sortedPosts = [...posts].sort((a, b) => {
-    if (a.createdAt && b.createdAt) {
-      const timeA = new Date(a.createdAt);
-      const timeB = new Date(b.createdAt);
+    let isMounted = true; // Track whether the component is still mounted
 
-      // Compare the Date objects
-      return timeB.getTime() - timeA.getTime();
-    } else {
-      return 0;
-    }
-  });
+    const fetchPosts = async () => {
+      try {
+        const postApi = new FeedPostApi();
+        const fetchedPosts = await postApi.find();
+        if (isMounted) {
+          setPosts(fetchedPosts);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    fetchPosts();
+
+    return () => {
+      isMounted = false; // Set to false when the component unmounts
+    };
+  }, []);
+
 
 
   return (
@@ -92,9 +100,10 @@ const FeedLg: React.FC = () => {
             <div className="flex flex-col justify-center space-y-6 w-full mr-8">
               <PostInput />
 
-              {sortedPosts.map((post, index) => {
+              {posts.length > 0 && sortedPosts.map((post, index) => {
                 return <Post
-                  key={index}
+                  key={post._id}
+                  postId={post._id}
                   userId={post.user}
                   username={post.username}
                   location={post.location}
@@ -102,9 +111,8 @@ const FeedLg: React.FC = () => {
                   content={post.content}
                   profileImageUrl={post.profileImageUrl}
                   mainImageUrl={post.mainImageUrl}
-                  onLike={() => console.log('Liked!')}
-                  onComment={() => console.log('Comment!')}
-                  onShare={() => console.log('Shared!')}
+                  likes={post.likes}
+                  likeCount={post.likeCount}
                 />;
               })}
             </div>

@@ -2,7 +2,7 @@ import Chats from "@/components/Chats";
 import Header from "@/components/Header";
 import ProfileSideBar from "@/components/ProfileSideBar";
 import Sidebar from "@/components/SideBar";
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Post from "@/components/post";
 import { feedPost } from "@/models/crud";
@@ -29,6 +29,8 @@ const UserProfile = () => {
   const [bio, setBio] = useState("");
   const [user, setUser] = useState<User | null>(null);
   const [personalProfile, isPersonalProfile] = useState(false);
+  const [isUserExists, setIsUserExists] = useState<boolean>(true);
+
 
   const router = useRouter();
   const { userId } = router.query;
@@ -43,35 +45,39 @@ const UserProfile = () => {
 
 
   const [posts, setPosts] = useState<feedPost[]>([]);
-  const fetchPosts = async () => {
-    try {
-      const postApi = new FeedPostApi()
-      const posts = await postApi.find();
-      const userPosts = posts.filter((post) => post.user === userId);
-      setPosts(userPosts);
-    }
-    catch (e) {
-      console.log(e);
-    }
-  }
+  const sortedPosts = useMemo(() => {
+    return posts.sort((a, b) => {
+      const timeA = new Date(a.createdAt).getTime();
+      const timeB = new Date(b.createdAt).getTime();
+      return timeB - timeA;
+    });
+  }, [posts]); // Dependency array to ensure sort only runs when posts change
+
 
   useEffect(() => {
-    if (userId) {
-      fetchPosts();
-    }
-  }, [])
+    let isMounted = true;
 
-  const sortedPosts = [...posts].sort((a, b) => {
-    if (a.createdAt && b.createdAt) {
-      const timeA = new Date(a.createdAt);
-      const timeB = new Date(b.createdAt);
+    const fetchPosts = async () => {
+      try {
+        const postApi = new FeedPostApi();
+        const fetchedPosts = await postApi.find();
+        const userPosts = fetchedPosts.filter((post) => post.user === userId);
 
-      // Compare the Date objects
-      return timeB.getTime() - timeA.getTime();
-    } else {
-      return 0;
-    }
-  });
+        if (isMounted) {
+          setPosts(userPosts);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    fetchPosts();
+
+    return () => {
+      isMounted = false; // Set to false when the component unmounts
+    };
+  }, [userId]);
+
 
 
   useEffect(() => {
@@ -82,6 +88,7 @@ const UserProfile = () => {
         setBio(userBio);
       } catch (error) {
         console.error('Error fetching user data:', error);
+        setIsUserExists(false); // Set user existence to false if there's an error
       }
     };
 
@@ -104,7 +111,7 @@ const UserProfile = () => {
         );
         if (response.status === 200) {
           // Handle success
-          console.log('Bio updated:', response.data);
+          console.log('Bio updated:', response.data.bio);
           // setUser({ ...user, bio: bio }); // Update the user state with the new bio
           setEditBio(false); // Exit edit mode
         } else {
@@ -126,15 +133,15 @@ const UserProfile = () => {
           const decoded = jwt.decode(token) as { id: string; };
           const userIdFromToken = decoded.id;
           if (userIdFromToken === userId) {
-            console.log('Personal profile');
+            // console.log('Personal profile');
             const response = await axios.get(`http://localhost:3000/users/${userId}`);
             const userBio = response.data.bio;
             setBio(userBio);
             isPersonalProfile(true);
           } else {
-            console.log('Other user profile');
+            // console.log('Other user profile');
             const response = await axios.get(`http://localhost:3000/users/${userId}`);
-            console.log('User data:', response.data);
+            // console.log('User data:', response.data);
             setUser({
               username: response.data.name,
               bio: response.data.bio,
@@ -152,6 +159,14 @@ const UserProfile = () => {
       fetchUserData();
     }
   }, [userId]);
+
+  if (!isUserExists) {
+    return (
+      <div className="bg-primary-500 min-h-screen text-center">
+        <p className="pt-48 text-3xl text-white  ">This page doesn't exist.</p>
+      </div>
+    );
+  }
 
 
 
@@ -235,8 +250,8 @@ const UserProfile = () => {
                     <div className="flex p-2 my-1 justify-between w-full rounded-xl">
                       <div className='font-semibold text-sm lg:text-lg poppins-semibold '>{user.username} </div>
                     </div>
-                    {user.bio && <div className="flex p-3 justify-between bg-tertiary-800 w-5/6 md:w-11/12 rounded-xl">
-                      <div className='font-semibold text-sm lg:text-lg poppins-semibold '>{user.bio} </div>
+                    {user.bio && <div className="ml-4 flex p-3 text-center justify-center bg-tertiary-800 w-5/6 md:w-11/12 rounded-xl">
+                      <div className='font-semibold text-sm text-left lg:text-lg poppins-semibold '>{user.bio} </div>
                     </div>}
                   </div>
                 </div>
@@ -245,6 +260,7 @@ const UserProfile = () => {
               {sortedPosts.map((post, index) => {
                 return <Post
                   key={index}
+                  postId={post._id}
                   userId={post.user}
                   username={post.username}
                   location={post.location}
@@ -252,9 +268,8 @@ const UserProfile = () => {
                   content={post.content}
                   profileImageUrl={post.profileImageUrl}
                   mainImageUrl={post.mainImageUrl}
-                  onLike={() => console.log('Liked!')}
-                  onComment={() => console.log('Commnet!')}
-                  onShare={() => console.log('Shared!')}
+                  likes={post.likes}
+                  likeCount={post.likeCount}
                 />
               })}
 
