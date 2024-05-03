@@ -25,10 +25,6 @@ type Post = {
     likeCount: number;
 };
 
-type returnedPost = {
-    postId: string;
-    userId: string;
-};
 
 const SavedPage = () => {
     useAuthGuard();
@@ -128,7 +124,7 @@ const SavedPage = () => {
                                     username={post.username}
                                     profileImageUrl={post.profileImageUrl}
                                     content={post.content}
-
+                                    postId={post.postId}
                                 />
                             ))}
                         </div>
