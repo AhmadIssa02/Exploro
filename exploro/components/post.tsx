@@ -4,6 +4,7 @@ import Image from "next/image";
 import Router from "next/router";
 import React, { useEffect, useState } from 'react';
 import jwt from 'jsonwebtoken';
+import CommentsList from "./commentsList";
 
 
 type PostProps = {
@@ -23,8 +24,11 @@ const Post: React.FC<PostProps> = ({ postId, userId, username, location, timeAgo
 
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [showComments, setShowComments] = useState(false);
 
-
+  const toggleComments = () => {
+    setShowComments(!showComments);
+  };
 
   useEffect(() => {
     const token = getTokenCookie();
@@ -44,7 +48,7 @@ const Post: React.FC<PostProps> = ({ postId, userId, username, location, timeAgo
     const checkSavedStatus = async () => {
       try {
         const response = await axios.get(`http://localhost:3000/saved-posts/${currentUserId}`);
-        console.log('Saved posts:', response.data);
+        // console.log('Saved posts:', response.data);
 
         // Check if any of the saved posts has the same postId
         const isSaved = response.data.some((savedPost: { postId: string; }) => savedPost.postId === postId);
@@ -88,10 +92,6 @@ const Post: React.FC<PostProps> = ({ postId, userId, username, location, timeAgo
     } catch (error) {
       console.error('Error toggling like status:', error);
     }
-  };
-
-  const toggleComment = () => {
-    console.log('Commenting not implemented yet');
   };
 
   const handleSave = async () => {
@@ -139,7 +139,7 @@ const Post: React.FC<PostProps> = ({ postId, userId, username, location, timeAgo
 
 
   return (
-    <div className="bg-white p-2 rounded-xl lg:rounded-2xl shadow-xl w-11/12 lg:w-7/12 flex flex-col items-center text-black lg:ml-16">
+    <div className="bg-white p-2 rounded-xl lg:rounded-2xl shadow-xl w-11/12 lg:w-7/12 flex flex-col items-start text-black lg:ml-16">
       <div className="self-start mt-1">
         <div className="flex items-center">
           <div className="rounded-full ml-2">
@@ -199,7 +199,7 @@ const Post: React.FC<PostProps> = ({ postId, userId, username, location, timeAgo
           </button>
           <span className="ml-2 mt-1 text-black/50">Liked by {likeCount} </span> {/* Display total number of likes */}
         </div>
-        <button onClick={toggleComment}>
+        <button onClick={toggleComments}>
           <Image
             src="/images/comment.svg"
             alt="Comment"
@@ -237,6 +237,7 @@ const Post: React.FC<PostProps> = ({ postId, userId, username, location, timeAgo
           )}
         </button>
       </div>
+      {showComments && (<CommentsList postId={postId} />)}
     </div>
   );
 };
