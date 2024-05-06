@@ -25,6 +25,8 @@ const Post: React.FC<PostProps> = ({ postId, userId, username, location, timeAgo
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
   const [showComments, setShowComments] = useState(false);
+  const [totalLikes, setTotalLikes] = useState(likeCount);
+
 
   const toggleComments = () => {
     setShowComments(!showComments);
@@ -40,8 +42,10 @@ const Post: React.FC<PostProps> = ({ postId, userId, username, location, timeAgo
     const currentUserId = decoded.id;
     // Check if the user has liked the post
     if (likes && likes.includes(currentUserId)) {
+      // console.log('User has liked the post' + postId + ' ' + currentUserId);
       setLiked(true);
     } else {
+      // console.log('User has not liked the post');
       setLiked(false);
     }
     //check if the user has saved the post before 
@@ -79,7 +83,6 @@ const Post: React.FC<PostProps> = ({ postId, userId, username, location, timeAgo
 
   const toggleLike = async () => {
     try {
-      const url = liked ? `http://localhost:3000/feedpost/post/${postId}/unlike` : `http://localhost:3000/feedpost/post/${postId}/like`;
       const token = getTokenCookie();
       if (!token) {
         console.error('No token found');
@@ -87,7 +90,22 @@ const Post: React.FC<PostProps> = ({ postId, userId, username, location, timeAgo
       }
       const decoded = jwt.decode(token) as { id: string; }; // Ensure this matches the actual token structure
       const currentUserId = decoded.id;
-      await axios.put(url, { postId, currentUserId });
+      if (liked) {
+        await axios.delete("http://localhost:3000/userLikesPost/", {
+          data: { userId: currentUserId, postId },
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setTotalLikes(prevCount => prevCount - 1);
+      }
+      else {
+        await axios.post("http://localhost:3000/userLikesPost/", {
+          userId: currentUserId,
+          postId
+        }, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setTotalLikes(prevCount => prevCount + 1);
+      }
       setLiked(!liked);
     } catch (error) {
       console.error('Error toggling like status:', error);
@@ -197,7 +215,7 @@ const Post: React.FC<PostProps> = ({ postId, userId, username, location, timeAgo
                 height: "auto"
               }} />
           </button>
-          <span className="ml-2 mt-1 text-black/50">Liked by {likeCount} </span> {/* Display total number of likes */}
+          <span className="ml-2 mt-1 text-black/50">Liked by {totalLikes} </span>
         </div>
         <button onClick={toggleComments}>
           <Image

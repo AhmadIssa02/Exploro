@@ -16,6 +16,7 @@ import { MinioClientModule } from './minio/minio-client.module';
 import { FileUploadModule } from './files/file-upload.module';
 import { SavedPostModule } from './savedPost/savedPost.module';
 import { UserCommentsPostModule } from './userCommentsPost/userCommentsPost.module';
+import { UserLikesPostModule } from './userLikesPost/userLikesPost.module';
 
 @Module({
   imports: [
@@ -48,7 +49,8 @@ import { UserCommentsPostModule } from './userCommentsPost/userCommentsPost.modu
     MinioClientModule,
     FileUploadModule,
     SavedPostModule,
-    UserCommentsPostModule
+    UserCommentsPostModule,
+    UserLikesPostModule,
   ],
   controllers: [AppController],
   providers: [
