@@ -33,13 +33,10 @@ const CommentsList: React.FC<Props> = ({ postId }) => {
         const fetchComments = async () => {
             try {
                 const response = await axios.get<Comment[]>(`http://localhost:3000/userCommentsPost/${postId}/comments`);
-                console.log('Comments:', response.data);
                 const updatedComments = await Promise.all(response.data.map(async (comment) => {
                     // Fetch user info using userId
                     const userResponse = await axios.get(`http://localhost:3000/users/${comment.userId}`);
                     const userData = userResponse.data;
-                    // Return updated comment object with user info
-                    console.log('User data:', userData);
                     return {
                         ...comment,
                         username: userData.name,

@@ -22,7 +22,7 @@ export class FeedPost {
   likes: Types.ObjectId[]; 
   @Prop({ default: 0 })
   likeCount: number; 
-  @Prop()
-  commentsArray: Array<string>;
+  // @Prop()
+  // commentsArray: Array<string>;
 }
 export const FeedPostSchema = SchemaFactory.createForClass(FeedPost);

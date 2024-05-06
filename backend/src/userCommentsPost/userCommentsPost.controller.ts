@@ -18,7 +18,6 @@ export class UserCommentsPostController {
     }
     @Post()
     create(@Body() body:{userId:string, postId:string, comment:string}): Promise<UserCommentsPost> {
-        console.log(body)
         return this.userCommentsPostService.create(body);
     }
     @Delete(':id')
