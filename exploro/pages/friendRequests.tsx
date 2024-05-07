@@ -8,7 +8,6 @@ import { useAuthGuard } from "@/hooks/useAuthGuard";
 import jwt from 'jsonwebtoken';
 import { getTokenCookie } from "@/utils/cookieUtils";
 import axios from "axios";
-import { userInfo } from "os";
 
 interface UserFriendRequest {
     _id: string;
@@ -24,7 +23,6 @@ interface FriendRequest {
     createdAt: string;
     updatedAt: string;
     __v: number;
-    // Add other fields if necessary
 }
 
 const FriendRequestsPage = () => {
@@ -44,7 +42,6 @@ const FriendRequestsPage = () => {
                     const response = await axios.get(`http://localhost:3000/friend-request`);
                     if (response && response.status === 200) {
                         const friendRequests = await response.data;
-                        // console.log("friendRequests", friendRequests)
                         setFriendRequests(friendRequests.filter((request: FriendRequest) => request.receiver === currentUserId));
                     } else {
                         console.error("Failed to fetch friend requests");
@@ -58,13 +55,8 @@ const FriendRequestsPage = () => {
         const fetchRequestInfromation = async () => {
             try {
                 const response = await axios.get(`http://localhost:3000/users`);
-                // console.log("friend requests 3" + friendRequests)
-                // console.log("response", response)
                 if (response && response.status === 200) {
-                    // console.log("response", response)
-                    // console.log("friendRequests", friendRequests)
                     const users = await response.data;
-                    // console.log("users", users)
                     const userRequests = friendRequests.map((request: FriendRequest) => {
                         const senderUser = users.find((user: any) => user._id === request.sender);
                         return {
@@ -149,7 +141,7 @@ const FriendRequestsPage = () => {
                     <div className="flex justify-start items-start  pace-y-6 w-full mb-6 h-full mt-16">
                         <div className="w-1/5 bg-primary-500 hidden lg:block" />
                         <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-4 lg:ml-6 rounded-md text-black text-lg gap-y-4">
-                            {userFriendRequests.map((request) => (
+                            {friendRequests.length > 0 ? (userFriendRequests.map((request) => (
                                 <div key={request._id} className="flex w-full items-center gap-x-4 bg-white p-3 md:p-4 rounded-xl shadow-md">
                                     <Image src={request.profilePicture} alt="profilepicture" width={90} height={30} className=" w-1/6 md:w-[10%]" />
                                     <div className="poppins-semibold">
@@ -164,7 +156,13 @@ const FriendRequestsPage = () => {
                                         </button>
                                     </div>
                                 </div>
-                            ))}
+                            ))) : (
+                                <div className=" w-full h-16 items-center gap-x-4 bg-white p-3 md:p-4 rounded-xl shadow-md text-center flex justify-center">
+                                    <div className="poppins-bold text-base md:text-xl">
+                                        You have no new friend requests
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         <div className="w-[28%] p-5 right-0 top-10 fixed h-5/6 min-h-screen z-0 mt-6 hidden lg:block">

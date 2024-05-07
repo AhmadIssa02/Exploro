@@ -306,7 +306,8 @@ const UserProfile = () => {
                   {!editBio ? (
                     <>
                       <div className="flex p-3 justify-between align-middle items-center bg-quarternary-500 w-5/6 md:w-11/12 rounded-xl">
-                        <div className='font-semibold text-sm lg:text-lg poppins-semibold '>{bio} </div>
+                        {bio && <div className='font-semibold text-sm lg:text-lg poppins-semibold '>{bio} </div>}
+                        {!bio && <div className='font-semibold text-black/60 text-sm lg:text-lg poppins-semibold '> Add your bio </div>}
                         <button className=" text-center text-xs bg-primary-500 p-2 h-max rounded-md text-white" onClick={() => setEditBio(true)}>Change </button>
                       </div>
 
@@ -396,22 +397,27 @@ const UserProfile = () => {
               )}
 
 
-              {sortedPosts.map((post, index) => {
-                return <Post
-                  key={index}
-                  postId={post._id}
-                  userId={post.user}
-                  username={post.username}
-                  location={post.location}
-                  timeAgo={calculateTimeAgo(post.createdAt)}
-                  content={post.content}
-                  profileImageUrl={post.profileImageUrl}
-                  mainImageUrl={post.mainImageUrl}
-                  likes={post.likes}
-                  likeCount={post.likeCount}
-                />
-              })}
-
+              {sortedPosts.length > 0 ? (
+                sortedPosts.map((post, index) => (
+                  <Post
+                    key={index}
+                    postId={post._id}
+                    userId={post.user}
+                    username={post.username}
+                    location={post.location}
+                    timeAgo={calculateTimeAgo(post.createdAt)}
+                    content={post.content}
+                    profileImageUrl={post.profileImageUrl}
+                    mainImageUrl={post.mainImageUrl}
+                    likes={post.likes}
+                    likeCount={post.likeCount}
+                  />
+                ))
+              ) : (
+                <div className="bg-white p-2 rounded-xl h-32 lg:rounded-2xl shadow-xl w-11/12 lg:w-7/12 flex items-center justify-center text-black lg:ml-16">
+                  <p className="text-2xl font-bold text-center">No uploaded posts yet.</p>
+                </div>
+              )}
             </div>
 
             <div className="w-[28%] p-5 right-0 top-10 fixed h-5/6 min-h-screen z-0 mt-6 hidden lg:block">
