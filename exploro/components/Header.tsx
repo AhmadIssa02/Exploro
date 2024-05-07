@@ -11,7 +11,7 @@ const Header: React.FC = () => {
   const dropdownRef = useRef<HTMLUListElement>(null);
 
   const handleSearch = () => {
-    axios.get(`http://localhost:3000/users/?name=${name}`)
+    axios.get(`http://localhost:3000/users/paginate/?name=${name}`)
       .then((response) => {
         const userData = response.data;
         const extractedUsernames = userData.map((user: any) => user.name || user.username);
@@ -90,7 +90,7 @@ const Header: React.FC = () => {
             alt="inbox"
             width={25}
             height={20}
-            className="ml-4 lg:hidden"
+            className="ml-2 lg:hidden"
           />
         </div>
       </Link>

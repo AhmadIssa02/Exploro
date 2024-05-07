@@ -4,6 +4,7 @@ import { User } from './schemas/user.schema';
 import { UpdateUserDto } from './dto/updateUser.dto';
 import { CreateUserDto } from './dto/createUser.dto';
 import { Query as ExpressQuery } from 'express-serve-static-core';
+import { Throttle } from '@nestjs/throttler';
 
 @Controller('users')
 export class UsersController {
@@ -15,9 +16,19 @@ export class UsersController {
   }
   
   @Get()
-  findAll(@Query() query: ExpressQuery): Promise<User[]> {
-    return this.usersService.findAll(query);
+@Throttle({ default: { limit: 1000000, ttl: 60000 } })
+  findAll(): Promise<User[]> {
+    return this.usersService.findAll();
   }
+
+  @Get('paginate')
+  findWithPagination(@Query() query: ExpressQuery): Promise<User[]> {
+    return this.usersService.findUsersWithPagination(query);
+  }
+
+  // findAll(@Query() query: ExpressQuery): Promise<User[]> {
+  //   return this.usersService.findAll(query);
+  // }
 
   @Get(':id')
   findOne(@Param('id') id: string): Promise<User> {

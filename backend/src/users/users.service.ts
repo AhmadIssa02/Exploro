@@ -15,24 +15,42 @@ export class UsersService {
     return createdUser.save();
   }
 
-  async findAll(query: Query): Promise<User[]> {
-    const resultsPerPage = 20;
-    const currentPage = Number(query.page) || 1;
-    const skip = (currentPage - 1) * resultsPerPage;
-    const keyword = query.name
-      ? {
-          name: {
-            $regex: query.name,
-            $options: 'i',
-          },
-        }
-      : {};
+  // async findAll(query: Query): Promise<User[]> {
+  //   const resultsPerPage = 20;
+  //   const currentPage = Number(query.page) || 1;
+  //   const skip = (currentPage - 1) * resultsPerPage;
+  //   const keyword = query.name
+  //     ? {
+  //         name: {
+  //           $regex: query.name,
+  //           $options: 'i',
+  //         },
+  //       }
+  //     : {};
 
-    const users = await this.userModel
-      .find({ ...keyword })
-      .limit(resultsPerPage)
-      .skip(skip);
-    return users;
+  //   const users = await this.userModel
+  //     .find({ ...keyword })
+  //     .limit(resultsPerPage)
+  //     .skip(skip);
+  //   return users;
+  // }
+
+  async findAll(): Promise<User[]> {
+    return this.userModel.find();
+  }
+
+  async findUsersWithPagination(query: Query): Promise<User[]> {
+      const resultsPerPage = 20;
+      const currentPage = Number(query.page) || 1;
+      const skip = (currentPage - 1) * resultsPerPage;
+      const keyword = query.name ? {
+          name: { $regex: query.name, $options: 'i' }
+      } : {};
+
+      return this.userModel
+          .find({ ...keyword })
+          .limit(resultsPerPage)
+          .skip(skip);
   }
 
   async findOne(id: string): Promise<User> {
