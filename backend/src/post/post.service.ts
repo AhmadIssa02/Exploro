@@ -20,7 +20,6 @@ export class PostService {
   }
 
   async create(createPostDto: CreatePostDto): Promise<FeedPost> {
-    console.log({'service' : createPostDto}); 
 
     const user = await this.userService.findOne(createPostDto.userId);
     if (!user) {

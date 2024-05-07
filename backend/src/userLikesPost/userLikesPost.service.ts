@@ -18,9 +18,6 @@ export class UserLikesPostService {
     ) {}
 
     async create(body): Promise<UserLikesPost> {
-        console.log("hello from userLikesPostService")
-        console.log("post"+ body.postId)
-        console.log("user"+ body.userId)
         const post = await this.postService.findById(body.postId);
         if(!post){
             console.log('Post not found');
