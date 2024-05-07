@@ -14,7 +14,6 @@ import { calculateTimeAgo } from "@/utils/timeUtils";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useRouter } from "next/router";
 
-
 type User = {
   username: string;
   bio: string;
@@ -30,6 +29,10 @@ const UserProfile = () => {
   const [user, setUser] = useState<User | null>(null);
   const [personalProfile, isPersonalProfile] = useState(false);
   const [isUserExists, setIsUserExists] = useState<boolean>(true);
+  const [isFriend, setIsFriend] = useState<boolean>(false);
+  const [isFriendRequestPending, setIsFriendRequestPending] = useState<boolean>(false);
+  const [confirmUnfriend, setConfirmUnfriend] = useState<boolean>(false);
+  const [profileImageUrl, setProfileImageUrl] = useState<string>("");
 
 
   const router = useRouter();
@@ -101,23 +104,16 @@ const UserProfile = () => {
   const handleBioSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
-      const token = getTokenCookie();
-      if (token) {
-        const decoded = jwt.decode(token) as { id: string; }; // Ensure this matches the actual token structure
-        const userId = decoded.id;
-        const response = await axios.put(
-          `http://localhost:3000/users/${userId}`,
-          { bio: bio },
-        );
-        if (response.status === 200) {
-          // Handle success
-          console.log('Bio updated:', response.data.bio);
-          // setUser({ ...user, bio: bio }); // Update the user state with the new bio
-          setEditBio(false); // Exit edit mode
-        } else {
-          // Handle failure
-          console.error('Failed to update bio:', response);
-        }
+      const currentUserId = currentUserInfo();
+      const response = await axios.put(
+        `http://localhost:3000/users/${currentUserId}`,
+        { bio: bio },
+      );
+      if (response.status === 200) {
+        setEditBio(false); // Exit edit mode
+      } else {
+        // Handle failure
+        console.error('Failed to update bio:', response);
       }
 
     } catch (error) {
@@ -133,15 +129,12 @@ const UserProfile = () => {
           const decoded = jwt.decode(token) as { id: string; };
           const userIdFromToken = decoded.id;
           if (userIdFromToken === userId) {
-            // console.log('Personal profile');
             const response = await axios.get(`http://localhost:3000/users/${userId}`);
             const userBio = response.data.bio;
             setBio(userBio);
             isPersonalProfile(true);
           } else {
-            // console.log('Other user profile');
             const response = await axios.get(`http://localhost:3000/users/${userId}`);
-            // console.log('User data:', response.data);
             setUser({
               username: response.data.name,
               bio: response.data.bio,
@@ -168,6 +161,101 @@ const UserProfile = () => {
     );
   }
 
+  const handleAddFriend = async () => {
+    const token = getTokenCookie();
+    if (token) {
+      const decoded = jwt.decode(token) as { id: string; };
+      const currentUserId = decoded.id;
+      const { userId } = router.query;
+
+      const response = await axios.post(
+        `http://localhost:3000/friend-request/send-friend-request`,
+        { senderId: currentUserId, receiverId: userId },
+      );
+      console.log('Friend request sent');
+      if (response.status === 201) {
+        console.log('Friend request successfully sent:');
+        setIsFriendRequestPending(true);
+      } else {
+        console.error('Failed to send friend request:', response);
+      }
+    }
+    else {
+      console.log('No token found');
+    }
+  };
+
+  const checkFriend = async () => {
+    const currentUserId = currentUserInfo();
+    const { userId } = router.query;
+
+    const response = await axios.get(
+      `http://localhost:3000/users/${currentUserId}`,
+    );
+    const friends = response.data.friends;
+    if (friends.includes(userId)) {
+      setIsFriend(true);
+    }
+  }
+
+  const checkFriendRequest = async () => {
+    const currentUserId = currentUserInfo();
+
+    try {
+
+      const response = await axios.post(`http://localhost:3000/friend-request/exists`, { senderId: currentUserId, receiverId: userId });
+      setIsFriendRequestPending(response.data.exists);
+    } catch (error) {
+      console.error('Error checking friend request:', error);
+    }
+  }
+
+  useEffect(() => {
+    if (userId) {
+      checkFriend();
+      checkFriendRequest();
+      getUserImageUrl();
+    }
+  }, [userId]);
+
+  const handleUnfriend = async () => {
+
+    const currentUserId = currentUserInfo();
+    const { userId } = router.query;
+
+    try {
+      const response = await axios.delete(`http://localhost:3000/friendship`,
+        { data: { user1Id: currentUserId, user2Id: userId } }
+      );
+      if (response.status === 200) {
+        console.log('Unfriended successfully');
+        setIsFriend(false);
+        setConfirmUnfriend(false);
+      }
+    } catch (error) {
+      console.error('Error unfriending:', error);
+    }
+  }
+
+  const toggleUnfriend = () => {
+    setConfirmUnfriend(!confirmUnfriend);
+  }
+
+  const getUserImageUrl = async () => {
+    const currentUserId = currentUserInfo();
+    const response = await axios.get(`http://localhost:3000/users/${currentUserId}`);
+    const imageUrl = response.data.profilePicture;
+    setProfileImageUrl(imageUrl);
+  }
+
+  const currentUserInfo = () => {
+    const token = getTokenCookie();
+    if (token) {
+      const decoded = jwt.decode(token) as { id: string; };
+      const currentUserId = decoded.id;
+      return currentUserId;
+    }
+  };
 
 
   return (
@@ -212,12 +300,12 @@ const UserProfile = () => {
 
               {personalProfile && <div className="bg-white w-11/12 lg:w-7/12 shadow-xl text-black p-4 rounded-3xl lg:ml-16  ">
                 <div className="flex items-center space-x-2">
-                  <div className="rounded-full min-w-max self-start ">
-                    <Image src="/images/profilePhoto.png" alt="profile" width={50} height={40} style={{ maxWidth: "100%", height: "auto" }} />
+                  <div className="rounded-full min-w-max self-start mt-1 ">
+                    <Image src={profileImageUrl} alt="profile" width={50} height={40} style={{ maxWidth: "100%", height: "auto" }} />
                   </div>
                   {!editBio ? (
                     <>
-                      <div className="flex p-3 justify-between bg-quarternary-500 w-5/6 md:w-11/12 rounded-xl">
+                      <div className="flex p-3 justify-between align-middle items-center bg-quarternary-500 w-5/6 md:w-11/12 rounded-xl">
                         <div className='font-semibold text-sm lg:text-lg poppins-semibold '>{bio} </div>
                         <button className=" text-center text-xs bg-primary-500 p-2 h-max rounded-md text-white" onClick={() => setEditBio(true)}>Change </button>
                       </div>
@@ -233,7 +321,7 @@ const UserProfile = () => {
                           className="w-full outline-none bg-transparent"
                         />
                       </div>
-                      <div className="flex items-center justify-center relative text-xs p-2 rounded-xl text-white">
+                      <div className="flex items-center justify-center  text-xs p-2 rounded-xl text-white">
                         <button type="submit" className="p-2 bg-primary-600 hover:bg-primary-700 text-white rounded-md mr-2">Save</button>
                         <button onClick={() => setEditBio(false)} className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-md">Cancel</button>
                       </div>
@@ -241,21 +329,72 @@ const UserProfile = () => {
                   )}
                 </div>
               </div>}
-              {!personalProfile && user && <div className="bg-white w-11/12 lg:w-7/12 shadow-xl text-black p-4 rounded-3xl lg:ml-16  ">
-                <div className="flex items-center space-x-2">
-                  <div className="rounded-full min-w-max self-start ">
-                    <Image src={user.profileImageUrl} alt="profile" width={50} height={40} style={{ maxWidth: "100%", height: "auto" }} />
-                  </div>
-                  <div>
-                    <div className="flex p-2 my-1 justify-between w-full rounded-xl">
-                      <div className='font-semibold text-sm lg:text-lg poppins-semibold '>{user.username} </div>
+              {confirmUnfriend && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 ">
+                  <div className="bg-white text-black rounded-lg shadow-lg w-4/5 lg:w-1/3 h-1/4  text-center flex flex-col justify-center">
+                    <p className="text-lg font-semibold mb-4">Are you sure you want to unfriend?</p>
+                    <div className="flex justify-center">
+                      <button
+                        onClick={handleUnfriend}
+                        className="bg-rose-700 text-white text-xs md:text-lg p-2  rounded-md mr-2"
+                      >
+                        Unfriend
+                      </button>
+                      <button
+                        onClick={toggleUnfriend}
+                        className="bg-gray-400 text-gray-800 text-xs md:text-lg p-2 rounded-md"
+                      >
+                        Cancel
+                      </button>
                     </div>
-                    {user.bio && <div className="ml-4 flex p-3 text-center justify-center bg-tertiary-800 w-5/6 md:w-11/12 rounded-xl">
-                      <div className='font-semibold text-sm text-left lg:text-lg poppins-semibold '>{user.bio} </div>
-                    </div>}
                   </div>
                 </div>
-              </div>}
+              )}
+
+              {!personalProfile && user && (
+                <div className="bg-white w-11/12 lg:w-7/12 shadow-xl text-black px-2 py-3 rounded-2xl lg:ml-16">
+                  <div className="flex w-full space-x-2 ">
+                    <div className="rounded-full min-w-max self-start mt-1">
+                      <Image src={user.profileImageUrl} alt="profile" width={50} height={40} style={{ maxWidth: "100%", height: "auto" }} />
+                    </div>
+                    <div className="flex flex-col justify-center w-full">
+                      <div className="flex items-center p-2 my-1 justify-normal w-full rounded-xl">
+                        <div className="flex w-full items-center">
+                          <div className=' text-base lg:text-xl poppins-semibold '>{user.username}</div>
+                          {isFriend ? (
+                            <>
+                              <button
+                                onClick={toggleUnfriend}
+                                className="bg-rose-700 p-2 text-white text-xs rounded-md shadow-md ml-auto">
+                                Unfriend
+                              </button>
+                              <button className="bg-green-700 p-2 text-white text-xs rounded-md shadow-md ml-2">
+                                Message
+                              </button>
+                            </>
+                          ) : (
+                            isFriendRequestPending ? (
+                              <button className="bg-gray-500/95 p-2 text-white text-xs rounded-md shadow-md ml-auto">
+                                Request Pending
+                              </button>
+                            ) : (
+                              <button onClick={handleAddFriend} className="bg-primary-500 p-2 text-white text-xs rounded-md shadow-md ml-auto">
+                                Add Friend
+                              </button>
+                            )
+                          )}
+                        </div>
+                      </div>
+                      {user.bio && (
+                        <div className="flex p-3 justify-start bg-quarternary-300 rounded-xl">
+                          <div className='font-semibold text-sm text-left lg:text-lg poppins-semibold '>{user.bio}</div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
 
               {sortedPosts.map((post, index) => {
                 return <Post

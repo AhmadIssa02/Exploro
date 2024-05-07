@@ -49,7 +49,7 @@ const ProfileSideBar: React.FC = () => {
   }
 
   return (
-    <div className='flex flex-col items-center overflow-y-auto h-full '>
+    <div className='flex flex-col items-center overflow-y-auto h-full text-xs md:text-xl'>
       <Image
         src={user.profileImageUrl}
         alt='profilepic'
@@ -60,7 +60,7 @@ const ProfileSideBar: React.FC = () => {
       <div className="flex flex-col items-center space-y-2">
         <span className='text-xl poppins-bold mt-4'>{user.username}</span>
         <div className="px-4 py-1  text-center rounded-lg ">
-          <span className='py-2  text-left text-xs rounded-lg'>
+          <span className='py-2  text-left text-xs md:text-sm rounded-lg'>
             {user.bio?.length > 110 ? `${user.bio.substring(0, 110)}...` : user.bio} {/* Truncate long bios */}
           </span>
           {user.bio?.length > 110 && (
@@ -72,30 +72,30 @@ const ProfileSideBar: React.FC = () => {
       </div>
 
       <Link href={`/${userId}`}>
-        <button className="flex items-center space-x-2 p-2 border-b-[1.5px] hover:scale-105 my-2 lg:text-base">
+        <button className="flex items-center  space-x-2 p-2 border-b-[1.5px] hover:scale-105 my-2 lg:text-base">
           <Image
             src="/images/feed.svg"
             alt="home"
             width={19}
             height={15}
-            className='mt-1'
+            className='mt-1 w-1/6 '
             style={{ maxWidth: "100%", height: "auto" }} />
           <span>Your Profile</span>
         </button>
       </Link >
-      <Link href="/activity">
+      <Link href="/friendRequests">
         <button className="flex items-center space-x-2 p-2 border-b-[1.5px] hover:scale-105 my-2 lg:text-base">
           <Image
-            src="/images/activity2.svg"
+            src="/images/friend.svg"
             alt="home"
             width={22}
             height={15}
-            className='mt-1 '
+            className='mt-1 w-1/6'
             style={{
               maxWidth: "100%",
               height: "auto"
             }} />
-          <span>Activity</span>
+          <span>Friend Requests</span>
         </button>
       </Link>
       <Link href="/settings">
@@ -105,7 +105,7 @@ const ProfileSideBar: React.FC = () => {
             alt="home"
             width={30}
             height={35}
-            className='mt-1'
+            className='mt-1 w-[30%]'
             style={{
               maxWidth: "100%",
               height: "auto"
