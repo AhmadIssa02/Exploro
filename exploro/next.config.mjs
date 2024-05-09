@@ -8,7 +8,7 @@ const cspHeader = `
     base-uri 'self';
     form-action 'self';
     frame-ancestors 'none';
-    connect-src 'self' http://localhost:3000; 
+    connect-src 'self' http://localhost:3000 https://test.api.amadeus.com; 
     upgrade-insecure-requests;
 `;
 
