@@ -9,9 +9,61 @@ const PostInput: React.FC = () => {
   const [content, setContent] = useState("");
   const [location, setLocation] = useState("");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [imageUrl, setImageUrl] = useState("http://localhost:9000/exploro/027b9c2845d8562424b9f9f73f660086.png");
+  const [imageUrl, setImageUrl] = useState("");
   const [user, setUser] = useState<User | null>(null);
+  const [postSuccess, setPostSuccess] = useState<boolean>(false);
 
+
+  const [accessToken, setAccessToken] = useState('');
+  const [cities, setCities] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      const apiKey = process.env.NEXT_PUBLIC_API_KEY as string;
+      const apiSecret = process.env.NEXT_PUBLIC_API_SECRET as string;
+      const params = new URLSearchParams();
+      params.append('client_id', apiKey);
+      params.append('client_secret', apiSecret);
+      params.append('grant_type', 'client_credentials');
+
+      try {
+        const response = await axios.post('https://test.api.amadeus.com/v1/security/oauth2/token', params);
+        setAccessToken(response.data.access_token);
+      } catch (error) {
+        console.error('Error obtaining token:', error);
+      }
+    };
+
+    fetchToken();
+  }, []);
+
+  useEffect(() => {
+    console.log('Search term:', searchTerm);
+    const fetchCities = async () => {
+      if (searchTerm.length > 2) {
+        try {
+          const response = await axios.get(`https://test.api.amadeus.com/v1/reference-data/locations/cities?keyword=${searchTerm}&max=10`, {
+            headers: { Authorization: `Bearer ${accessToken}` }
+          });
+          setCities(response.data.data);
+          console.log('Cities:', response.data.data);
+        } catch (error) {
+          console.error('Error fetching cities:', error);
+        }
+      }
+      else {
+        setCities([]);
+      }
+    };
+
+    fetchCities();
+  }, [searchTerm]);
+
+  const handleCitySelection = (selectedCity: string) => {
+    setLocation(selectedCity);
+    setCities([]);
+  };
 
   type Post = {
     userId: string;
@@ -118,6 +170,10 @@ const PostInput: React.FC = () => {
       setSelectedImage(null);
       setLocation("");
       console.log('Post submitted successfully!');
+      setPostSuccess(true);
+      setTimeout(() => {
+        setPostSuccess(false);
+      }, 3000);
     } catch (error) {
       console.error('Error posting:', error);
     }
@@ -139,6 +195,7 @@ const PostInput: React.FC = () => {
               />
             </div>)}
         </div>
+
         <div className=' flex flex-col w-full'>
           <input
             type="text"
@@ -147,14 +204,20 @@ const PostInput: React.FC = () => {
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />
-          <div className=' flex mt-3 justify-between'>
-            <input
-              type="text"
-              placeholder="Location"
-              className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-1 py-2 rounded text-xs w-1/3 placeholder:text-white  text-center "
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-            />
+          <div className=' flex mt-3 justify-between gap-x-2 '>
+            <div className='flex flex-col '>
+              <input
+                type="text"
+                placeholder="Location"
+                className="bg-primary-500 hover:bg-primary-600 text-white font-medium md:font-semibold px-1 py-2 rounded text-[10px] md:text-xs  placeholder:text-white w-full text-center "
+                value={location}
+                onChange={(e) => {
+                  setLocation(e.target.value);
+                  setSearchTerm(e.target.value); // Update the searchTerm with the location input value
+                }}
+              />
+            </div>
+
             <input
               type="file"
               accept="image/*"
@@ -164,21 +227,40 @@ const PostInput: React.FC = () => {
               id="fileInput"
             />
             <button
-              className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-1 rounded text-xs w-1/6"
+              className="bg-primary-500 hover:bg-primary-600 text-white font-medium text-[10px] md:font-semibold px-1 rounded md:text-xs w-1/5"
               onClick={() => document.getElementById("fileInput")?.click()}
             >
               Image
             </button>
             <button
-              className="bg-green-700 hover:bg-green-800 text-white font-semibold text-xs w-1/6 px-1 rounded "
+              className="bg-green-700 hover:bg-green-800 text-white font-medium md:font-semibold text-[10px] md:text-xs w-1/6 px-1 rounded "
               onClick={handlePostSubmit}
             >
               Post
             </button>
           </div>
+          {postSuccess && (
+            <div className="mt-2 text-green-600 text-xs">Post submitted successfully!</div>
+          )}
         </div>
       </div>
+      {cities.length > 0 && (
+        <div className="max-h-32 overflow-y-auto p-1 text-center mb-2 ml-11 w-[45%] md:w-1/4 lg:w-1/3">
+          <ul>
+            {cities.map((city: any) => (
+              <li
+                className="border-[1px] p-2 font-semibold text-xs md:text-sm hover:bg-gray-200 cursor-pointer"
+                key={city.name}
+                onClick={() => handleCitySelection(city.name)}
+              >
+                {city.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
+
   );
 };
 

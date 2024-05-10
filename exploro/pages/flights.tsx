@@ -100,7 +100,6 @@ const FlightsPage = () => {
             .then(response => response.json())
             .then(data => {
                 setAccessToken(data.access_token);
-                console.log('Access Token:', data.access_token);
             })
             .catch(error => {
                 console.error('Error obtaining token:', error);
