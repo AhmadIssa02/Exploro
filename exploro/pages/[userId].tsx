@@ -91,7 +91,7 @@ const UserProfile = () => {
         setBio(userBio);
       } catch (error) {
         console.error('Error fetching user data:', error);
-        setIsUserExists(false); // Set user existence to false if there's an error
+        setIsUserExists(false);
       }
     };
 

@@ -71,8 +71,6 @@ const FlightsPage = () => {
     const [originOptions, setOriginOptions] = useState<LocationData[]>([]);
     const [destinationOptions, setDestinationOptions] = useState<LocationData[]>([]);
 
-
-
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
@@ -347,6 +345,7 @@ const FlightsPage = () => {
                                     <div className='flex flex-col justify-center items-center align-middle gap-y-1 md:gap-y-2'>
                                         <p className='text-xl md:text-3xl font-bold'>{flight.itineraries[0].segments[0].departure.iataCode}</p>
                                         <p className='text-[8px] md:text-base'>Departure At:</p>
+                                        <p className='font-semibold text-[9px] md:text-sm'>{flight.itineraries[0].segments[0].departure.at.substring(0, 10)}</p>
                                         <p className='font-bold text-xl'>{flight.itineraries[0].segments[0].departure.at.substring(11, 16)}</p>
                                     </div>
                                     <Image className="w-1/12 md:w-fit" src="/images/plane2.svg" alt="plane" width={30} height={10} />
@@ -358,24 +357,29 @@ const FlightsPage = () => {
                                     <div className='flex flex-col justify-center items-center  align-middle gap-y-1 md:gap-y-2'>
                                         <p className='text-xl md:text-3xl font-bold'>{flight.itineraries[0].segments[0].arrival.iataCode}</p>
                                         <p className='text-[8px] md:text-base'>Arrival At:</p>
+                                        <p className='font-semibold text-[9px] md:text-sm'>{flight.itineraries[0].segments[0].arrival.at.substring(0, 10)}</p>
                                         <p className='font-bold text-xl'>{flight.itineraries[0].segments[0].arrival.at.substring(11, 16)}</p>
                                     </div>
                                 </div>
                                 {flight.itineraries[1] &&
-                                    (<div className='flex justify-evenly gap-x-2 mt-6'>
+                                    (<div className='flex justify-evenly items-center gap-x-2 mt-4'>
                                         <div className='flex flex-col justify-center items-center align-middle gap-y-1 md:gap-y-2'>
-                                            <p className='text-xl md:text-3xl font-bold '> {flight.itineraries[1].segments[0].departure.iataCode}</p>
-                                            <p className='text-[8px] md:text-base mx-3'> Arrival At:</p>
+                                            <p className='text-xl md:text-3xl font-bold'>{flight.itineraries[1].segments[0].departure.iataCode}</p>
+                                            <p className='text-[8px] md:text-base'>Departure At:</p>
+                                            <p className='font-semibold text-[9px] md:text-sm'>{flight.itineraries[1].segments[0].departure.at.substring(0, 10)}</p>
                                             <p className='font-bold text-xl'>{flight.itineraries[1].segments[0].departure.at.substring(11, 16)}</p>
                                         </div>
-                                        <Image className="w-1/12 md:w-fit" src="/images/plane3.svg" alt="plane" width={30} height={10} />
-                                        <Image className="w-1/5 md:w-fit transform rotate-180 " src="/images/arrow2.svg" alt="plane" width={80} height={20} />
-                                        <Image className="w-1/12 md:w-fit" src="/images/plane2.svg" alt="plane" width={30} height={10} />
-                                        {/* <span className='mx-2'>→</span> */}
+                                        <Image className="w-1/12 md:w-fit " src="/images/plane4.svg" alt="plane" width={30} height={10} />
+                                        <div className='flex flex-col justify-center items-center'>
+                                            <Image className="w-3/4 md:w-max " src="/images/arrow3.svg" alt="arrow" width={90} height={20} />
+                                            <p className='text-sm '> {flight.itineraries[1]?.segments[0]?.duration.substring(2)}</p>
+                                        </div>
+                                        <Image className="w-1/12 md:w-fit " src="/images/plane5.svg" alt="plane" width={30} height={10} />
                                         <div className='flex flex-col justify-center items-center  align-middle gap-y-1 md:gap-y-2'>
                                             <p className='text-xl md:text-3xl font-bold'>{flight.itineraries[1].segments[0].arrival.iataCode}</p>
-                                            <p className='text-[8px] md:text-base'> Departure At:</p>
-                                            <p className='font-bold text-xl'> {flight.itineraries[1].segments[0].arrival.at.substring(11, 16)}</p>
+                                            <p className='text-[8px] md:text-base'>Arrival At:</p>
+                                            <p className='font-semibold text-[9px] md:text-sm'>{flight.itineraries[1].segments[0].arrival.at.substring(0, 10)}</p>
+                                            <p className='font-bold text-xl'>{flight.itineraries[1].segments[0].arrival.at.substring(11, 16)}</p>
                                         </div>
                                     </div>)}
                                 <div className='p-2 bg-primary-300 text-sm text-white font-bold shadow-sm rounded-md w-24 ml-auto mt-5 '> {flight.price.total} {flight.price.currency}</div>
@@ -404,32 +408,3 @@ const FlightsPage = () => {
 };
 
 export default FlightsPage;
-
-
-// const [adults, setAdults] = useState(1);
-// const [children, setChildren] = useState(0);
-// const [infants, setInfants] = useState(0);
-// const [travelClass, setTravelClass] = useState('');
-// const [includedAirlineCodes, setIncludedAirlineCodes] = useState('');
-// const [excludedAirlineCodes, setExcludedAirlineCodes] = useState('');
-// const [nonStop, setNonStop] = useState(false);
-// const [currencyCode, setCurrencyCode] = useState('');
-// const [maxPrice, setMaxPrice] = useState('');
-
-{/* <input type="number" value={adults} onChange={e => setAdults(e.target.value)} placeholder="Number of Adults" />
-                    <input type="number" value={children} onChange={e => setChildren(e.target.value)} placeholder="Number of Children" />
-                    <input type="number" value={infants} onChange={e => setInfants(e.target.value)} placeholder="Number of Infants" /> */}
-{/* <input type="text" value={travelClass} onChange={e => setTravelClass(e.target.value)} placeholder="Travel Class" />
-                    <input type="text" value={includedAirlineCodes} onChange={e => setIncludedAirlineCodes(e.target.value)} placeholder="Included Airline Codes" />
-                    <input type="text" value={excludedAirlineCodes} onChange={e => setExcludedAirlineCodes(e.target.value)} placeholder="Excluded Airline Codes" />
-                    <input type="checkbox" checked={nonStop} onChange={e => setNonStop(e.target.checked)} />
-                    <input type="text" value={currencyCode} onChange={e => setCurrencyCode(e.target.value)} placeholder="Currency Code" />
-                    <input type="number" value={maxPrice} onChange={e => setMaxPrice(e.target.value)} placeholder="Max Price" />
-                    <input type="number" value={max} onChange={e => setMax(e.target.value)} placeholder="Max Results" /> */}
-{/* <div className="flex flex-wrap justify-center items-center h-full">
-                    {flightData.map(flight => (
-                        <div key={flight.id} className="m-4 p-4 bg-primary-700 rounded-lg">
-                            <h2 className="text-lg font-bold">Flight {flight.id}</h2>
-                        </div>
-                    ))}
-                </div> */}

@@ -52,33 +52,37 @@ const Sidebar: React.FC = ({ }) => {
       </div>
 
       <div className="flex flex-col font-semibold text-lg items-center space-x-2 space-y-2 hover:text-gray-200 justify-center align-middle">
-        <button className="flex items-center space-x-2 hover:scale-105">
-          <Image
-            src="/images/flight.svg"
-            alt="home"
-            width={17}
-            height={17}
-            style={{
-              maxWidth: "100%",
-              height: "auto"
-            }} />
-          <span>Flights</span>
-        </button>
+        <Link href="/flights">
+          <button className="flex items-center space-x-2 hover:scale-105">
+            <Image
+              src="/images/flight.svg"
+              alt="home"
+              width={17}
+              height={17}
+              style={{
+                maxWidth: "100%",
+                height: "auto"
+              }} />
+            <span>Flights</span>
+          </button>
+        </Link>
         <span className='bg-white p-[1px] w-5/6 shadow-2xl rounded-3xl'></span>
       </div>
       <div className="flex flex-col font-semibold text-lg items-center space-x-2 space-y-2 hover:text-gray-200 justify-center align-middle">
-        <button className="flex items-center space-x-2 hover:scale-105">
-          <Image
-            src="/images/hotel.svg"
-            alt="home"
-            width={17}
-            height={17}
-            style={{
-              maxWidth: "100%",
-              height: "auto"
-            }} />
-          <span>Hotels</span>
-        </button>
+        <Link href="/hotels">
+          <button className="flex items-center space-x-2 hover:scale-105">
+            <Image
+              src="/images/hotel.svg"
+              alt="home"
+              width={17}
+              height={17}
+              style={{
+                maxWidth: "100%",
+                height: "auto"
+              }} />
+            <span>Hotels</span>
+          </button>
+        </Link>
         <span className='bg-white p-[1px] w-5/6 shadow-2xl rounded-3xl'></span>
       </div>
       <div className="flex flex-col font-semibold text-lg items-center space-x-2 space-y-2 hover:text-gray-200 justify-center align-middle">
