@@ -56,6 +56,12 @@ const FlightsPage = () => {
     useAuthGuard();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isProfileSidebarOpen, setIsProfileSidebarOpen] = useState(false);
+    const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+
+    const toggleChatbot = () => {
+        setIsChatbotOpen(!isChatbotOpen);
+    };
+
     const [accessToken, setAccessToken] = useState('');
     const [flightData, setFlightData] = useState<Flight[]>([]);
     const [isSearching, setIsSearching] = useState(false);
@@ -136,11 +142,9 @@ const FlightsPage = () => {
         if (isRoundTrip) {
             params.returnDate = returnDate;
         }
-        console.log('Params:', params);
 
         const queryString = new URLSearchParams(params).toString();
         const apiUrl = `${url}?${queryString}`;
-        console.log('API URL:', apiUrl);
 
         fetch(apiUrl, {
             method: 'GET',
@@ -395,9 +399,29 @@ const FlightsPage = () => {
                 <div className="flex-1 flex flex-col bg-quarternary-500">
                     <div className="flex justify-start items-start  pace-y-6 w-full mb-6 h-full mt-16">
                         <div className="w-1/5 bg-primary-500 hidden lg:block" />
-                        <div className="w-[28%] p-5 right-0 top-10 fixed h-5/6 min-h-screen z-0 mt-6 hidden lg:block">
+                        {/* <div className="w-[28%] p-5 right-0 top-10 fixed h-5/6 min-h-screen z-0 mt-6 hidden lg:block">
                             <Chats />
+                        </div> */}
+                        <div className="hidden lg:flex">
+                            {isChatbotOpen && (
+                                <div className='flex flex-col fixed right-1 bottom-2 h-[87%] w-[27%] '>
+                                    <button className='h-fit w-fit ml-auto   rounded-full z-10' onClick={toggleChatbot}>
+                                        <Image src="/images/close.svg" alt="chatbot" width={16} height={30} />
+                                    </button>
+                                    <iframe
+                                        src="https://www.chatbase.co/chatbot-iframe/ams3mDILy9PFAiRbKrGKB"
+                                        title="ExploroAI"
+                                        className='relative z-0 w-full h-full mt-auto bg-white border-[1px] shadow-md border-primary-500 rounded-tl-3xl mr-4 '
+                                        style={{ fontSize: '0.7rem' }}
+                                    ></iframe>
+                                </div>
+                            )}
                         </div>
+
+                        {!isChatbotOpen && (
+                            <button className='fixed right-14 bottom-16  rounded-full' onClick={toggleChatbot}>
+                                <Image src="/images/chatbot1.jpg" alt="chatbot" className='rounded-full ' width={75} height={30} />
+                            </button>)}
                     </div>
                 </div>
 
