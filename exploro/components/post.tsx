@@ -174,9 +174,11 @@ const Post: React.FC<PostProps> = ({ postId, userId, username, location, timeAgo
           </div>
           <div className="ml-2 mt-1 text-black/50 text-[10px]">
             <div className=" flex ">
-              <button onClick={() => handleProfile()}>
-                <div className='text-base lg:text-xl text-black poppins-semibold'>{username}</div>
-              </button>
+              {userId === "1" && <div className='text-base lg:text-xl text-black poppins-semibold'>Exploro</div>}
+              {userId !== "1" && (
+                <button onClick={() => handleProfile()}>
+                  <div className='text-base lg:text-xl text-black poppins-semibold'>{username}</div>
+                </button>)}
             </div>
             <div className='ml-1'>{location}</div>
             <div className='ml-1'>{timeAgo}</div>
@@ -201,12 +203,27 @@ const Post: React.FC<PostProps> = ({ postId, userId, username, location, timeAgo
             }} />
         </div>}
       </div>
-      <div className="flex items-center my-2 w-full justify-around">
-        <div className="flex">
-          <button onClick={toggleLike}>
+      {userId !== "1" && (
+        <div className="flex items-center my-2 w-full justify-around">
+          <div className="flex">
+            <button onClick={toggleLike}>
+              <Image
+                src={liked ? "/images/liked.svg" : "/images/like2.svg"}  // Update image based on liked state
+                alt="Like"
+                width={25}
+                height={25}
+                className='mt-1'
+                style={{
+                  maxWidth: "100%",
+                  height: "auto"
+                }} />
+            </button>
+            <span className="ml-2 mt-1 text-black/50">Liked by {totalLikes} </span>
+          </div>
+          <button onClick={toggleComments}>
             <Image
-              src={liked ? "/images/liked.svg" : "/images/like2.svg"}  // Update image based on liked state
-              alt="Like"
+              src="/images/comment.svg"
+              alt="Comment"
               width={25}
               height={25}
               className='mt-1'
@@ -215,46 +232,32 @@ const Post: React.FC<PostProps> = ({ postId, userId, username, location, timeAgo
                 height: "auto"
               }} />
           </button>
-          <span className="ml-2 mt-1 text-black/50">Liked by {totalLikes} </span>
-        </div>
-        <button onClick={toggleComments}>
-          <Image
-            src="/images/comment.svg"
-            alt="Comment"
-            width={25}
-            height={25}
-            className='mt-1'
-            style={{
-              maxWidth: "100%",
-              height: "auto"
-            }} />
-        </button>
-        <button onClick={handleSave} >
-          {saved ? (
-            <Image
-              src="/images/unsave.png"
-              alt="Saved"
-              width={25}
-              height={25}
-              className='mt-1 '
-              style={{
-                maxWidth: "100%",
-                height: "auto"
-              }} />
-          ) : (
-            <Image
-              src="/images/save.png"
-              alt="Save"
-              width={25}
-              height={25}
-              className='mt-1'
-              style={{
-                maxWidth: "100%",
-                height: "auto"
-              }} />
-          )}
-        </button>
-      </div>
+          <button onClick={handleSave} >
+            {saved ? (
+              <Image
+                src="/images/unsave.png"
+                alt="Saved"
+                width={25}
+                height={25}
+                className='mt-1 '
+                style={{
+                  maxWidth: "100%",
+                  height: "auto"
+                }} />
+            ) : (
+              <Image
+                src="/images/save.png"
+                alt="Save"
+                width={25}
+                height={25}
+                className='mt-1'
+                style={{
+                  maxWidth: "100%",
+                  height: "auto"
+                }} />
+            )}
+          </button>
+        </div>)}
       {showComments && (<CommentsList postId={postId} />)}
     </div>
   );

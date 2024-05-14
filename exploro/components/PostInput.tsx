@@ -39,7 +39,6 @@ const PostInput: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    console.log('Search term:', searchTerm);
     const fetchCities = async () => {
       if (searchTerm.length > 2) {
         try {

@@ -11,6 +11,57 @@ import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { feedPost } from '@/models/crud';
 import { FeedPostApi } from '@/utils/api/feedPost/feedPost.api';
 import { calculateTimeAgo } from '@/utils/timeUtils';
+import { getTokenCookie } from '@/utils/cookieUtils';
+import axios from 'axios';
+import jwt from 'jsonwebtoken';
+
+const logoImage = "http://localhost:9000/exploro/a2afc287bc5f5c421ece69f634670274.png"
+const newFeature = "http://localhost:9000/exploro/82c00f0700659e8835f7a82c218be6c3.jpg"
+const addFriends = "http://localhost:9000/exploro/8eaf663d40a26c998b982af0fb2380db.png"
+const pastDate = new Date('2024-01-01');
+const futureDate = new Date('2024-01-02');
+
+const staticPosts: feedPost[] = [
+  {
+    _id: '1',
+    user: '1',
+    username: 'Exploro',
+    location: 'Everywhere',
+    createdAt: pastDate,
+    content: 'Welcome to Exploro! 🌍',
+    profileImageUrl: logoImage,
+    mainImageUrl: logoImage,
+    likeCount: 0,
+    likes: [],
+    updateAt: futureDate,
+  },
+  {
+    _id: '2',
+    user: '1',
+    username: 'Exploro',
+    location: 'Everywhere',
+    createdAt: pastDate,
+    content: 'Introducing our new chatbot feature! 🤖 Now, you can interact with our chatbot to get instant answers to your questions and discover exciting new content. Try it out today and let us know what you think! 🚀',
+    profileImageUrl: logoImage,
+    mainImageUrl: newFeature,
+    likeCount: 0,
+    likes: [],
+    updateAt: futureDate,
+  },
+  {
+    _id: '3',
+    user: '1',
+    username: 'Exploro',
+    location: 'Everywhere',
+    createdAt: pastDate,
+    content: 'Add friends to see more posts! 🌟',
+    profileImageUrl: logoImage,
+    mainImageUrl: addFriends,
+    likeCount: 0,
+    likes: [],
+    updateAt: futureDate,
+  },
+];
 
 const FeedSm: React.FC = () => {
   useAuthGuard();
@@ -26,26 +77,40 @@ const FeedSm: React.FC = () => {
   };
 
   const [posts, setPosts] = useState<feedPost[]>([]);
-  useEffect(() => {
-    let isMounted = true; // Track whether the component is still mounted
 
-    const fetchPosts = async () => {
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = getTokenCookie();
+      if (!token) {
+        console.error('Token not found.');
+        return;
+      }
+      const decoded = jwt.decode(token) as { id: string; };
+      const userId = decoded.id;
+
       try {
+        const user = await axios.get(`http://localhost:3000/users/${userId}`);
+        const { friends } = user.data;
+
         const postApi = new FeedPostApi();
         const fetchedPosts = await postApi.find();
-        if (isMounted) {
-          setPosts(fetchedPosts);
+        const relevantPosts = fetchedPosts.filter(post => post.user === userId || friends.includes(post.user));
+        // If user has friends, fetch posts from friends
+        if (relevantPosts.length > 5) {
+          // const friendsPosts = fetchedPosts.filter((post) => friends.includes(post.user));
+          setPosts(relevantPosts);
+        } else {
+          const combinedPosts = [...relevantPosts, ...staticPosts];
+          setPosts(combinedPosts);
         }
       } catch (e) {
         console.error(e);
       }
     };
 
-    fetchPosts();
-    return () => {
-      isMounted = false; // Set to false when the component unmounts
-    };
+    fetchData();
   }, []);
+
 
   const sortedPosts = useMemo(() => {
     return posts.sort((a, b) => {

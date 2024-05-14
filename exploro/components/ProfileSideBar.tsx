@@ -60,7 +60,7 @@ const ProfileSideBar: React.FC = () => {
       <div className="flex flex-col items-center space-y-2">
         <span className='text-xl poppins-bold mt-4'>{user.username}</span>
         <div className="px-4 py-1  text-center rounded-lg ">
-          <span className='py-2  text-left text-xs md:text-sm rounded-lg'>
+          <span className='py-2  text-left text-xs rounded-lg'>
             {user.bio?.length > 110 ? `${user.bio.substring(0, 110)}...` : user.bio} {/* Truncate long bios */}
           </span>
           {user.bio?.length > 110 && (
@@ -72,7 +72,7 @@ const ProfileSideBar: React.FC = () => {
       </div>
 
       <Link href={`/${userId}`}>
-        <button className="flex items-center  space-x-2 p-2 border-b-[1.5px] hover:scale-105 my-2 lg:text-base">
+        <button className="flex items-center space-x-2 p-2 border-b-[1.5px] hover:scale-105 my-[6px] lg:text-sm">
           <Image
             src="/images/feed.svg"
             alt="home"
@@ -84,7 +84,7 @@ const ProfileSideBar: React.FC = () => {
         </button>
       </Link >
       <Link href="/friendRequests">
-        <button className="flex items-center space-x-2 p-2 border-b-[1.5px] hover:scale-105 my-2 lg:text-base">
+        <button className="flex items-center space-x-2 p-2 border-b-[1.5px] hover:scale-105 my-[6px] lg:text-sm">
           <Image
             src="/images/friend.svg"
             alt="home"
@@ -99,7 +99,7 @@ const ProfileSideBar: React.FC = () => {
         </button>
       </Link>
       <Link href="/settings">
-        <button className="flex items-center space-x-2 p-2 mb-6 border-b-[1.5px] hover:scale-105 my-2 lg:text-base">
+        <button className="flex items-center space-x-2 p-2 mb-6 border-b-[1.5px] hover:scale-105 my-[6px] lg:text-sm">
           <Image
             src="/images/settings4.png"
             alt="home"
@@ -114,7 +114,7 @@ const ProfileSideBar: React.FC = () => {
         </button>
       </Link>
       <div className='pt-'>
-        <button className="mb-4 text-lg font-semibold p-2 text-center text-black bg-red-500 hover:bg-red-600 rounded-md shadow-sm shadow-red-600 " onClick={handleSignOut}>
+        <button className="mb-4 text-[15px] font-semibold p-2 text-center text-black bg-red-500 hover:bg-red-600 rounded-md shadow-sm shadow-red-600 " onClick={handleSignOut}>
           <Link href="/auth/login"> Sign Out </Link>
         </button>
       </div>

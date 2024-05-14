@@ -9,6 +9,7 @@ const Header: React.FC = () => {
   const [usernames, setUsernames] = useState<string[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLUListElement>(null);
+  
 
   const handleSearch = () => {
     axios.get(`http://localhost:3000/users/paginate/?name=${name}`)

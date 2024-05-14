@@ -14,7 +14,6 @@ export class UserLikesPostController {
     
     @Post()
     create(@Body() body:{userId:string, postId:string}): Promise<UserLikesPost> {
-        console.log(body)
         return this.userLikesPostService.create(body);
     }
 
