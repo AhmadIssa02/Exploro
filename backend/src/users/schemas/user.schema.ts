@@ -21,6 +21,11 @@ export class User extends Document {
   resetPasswordToken: string;
   @Prop({ type: [{ type: Types.ObjectId, ref: 'SavedPost' }], default: [] })
   savedPosts: Types.ObjectId[];
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
+  friends: Types.ObjectId[]; 
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
+  receivedFriendRequests: Types.ObjectId[]; 
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

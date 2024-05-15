@@ -20,7 +20,6 @@ export class PostService {
   }
 
   async create(createPostDto: CreatePostDto): Promise<FeedPost> {
-    console.log({'service' : createPostDto}); 
 
     const user = await this.userService.findOne(createPostDto.userId);
     if (!user) {
@@ -50,10 +49,11 @@ export class PostService {
     id: string,
     updatePostDto: UpdatePostDto,
   ): Promise<FeedPost> {
-    return await this.postModel.findByIdAndUpdate(id, updatePostDto, {
+    const response = await this.postModel.findByIdAndUpdate(id, updatePostDto, {
       new: true,
       runValidators: true,
     });
+    return response;
   }
 
   async deleteById(id: string): Promise<FeedPost> {
@@ -61,10 +61,12 @@ export class PostService {
   }
 
   async likePost(userId: string, postId: string): Promise<FeedPost> {
-    return this.postModel.findByIdAndUpdate(postId, {
+    const post = await this.findById(postId);
+    const response =  await(this.postModel.findByIdAndUpdate(postId, {
       $addToSet: { likes: userId },
       $inc: { likeCount: 1 },
-    }, { new: true }).exec();
+    }, { new: true }).exec());
+    return response;
   }
 
   async unlikePost(userId: string, postId: string): Promise<FeedPost> {

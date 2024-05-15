@@ -5,40 +5,111 @@ import Sidebar from "@/components/SideBar";
 import { useState } from "react";
 import Image from "next/image";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
+import axios from "axios";
+import { getTokenCookie } from "@/utils/cookieUtils";
+import jwt from 'jsonwebtoken';
 
 
 const SettingsPage = () => {
     useAuthGuard();
-    const [email, setEmail] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
     const [showPassword, setShowPassword] = useState(true);
     const [showConfirmPassword, setShowConfirmPassword] = useState(true);
 
+    const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
-    const handleSubmit = (e: { preventDefault: () => void; }) => {
+    const toggleChatbot = () => {
+        setIsChatbotOpen(!isChatbotOpen);
+    };
+
+
+    const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
-        if (!email && (!newPassword || newPassword !== confirmPassword)) {
-            alert('Please provide an email or a matching password and confirmation.');
-            //  set an error state and display a message to the user here.
+        if ((!newPassword || newPassword !== confirmPassword)) {
+            const errorAlert = document.createElement('div');
+            errorAlert.classList.add('bg-red-500', 'w-1/2', 'text-white', 'px-4', 'py-2', 'rounded-md', 'font-semibold', 'absolute', 'top-20', 'left-1/2', 'transform', '-translate-x-1/2', 'z-50');
+            errorAlert.textContent = 'Please provide a matching password and confirmation...';
+            document.body.appendChild(errorAlert);
+            setTimeout(() => {
+                errorAlert.remove();
+            }, 3000);
             return;
         }
 
         // If email is provided, we handle email change
-        if (email) {
-            alert('Email will be changed to:' + email);
-            // API call to change email
+        // if (email) {
+        //     alert('Email will be changed to:' + email);
+        //     // API call to change email
+        // }
+
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*.])[A-Za-z\d!@#$%^&*.]{8,}$/;
+
+        // Check if password meets complexity requirements
+        if (!passwordRegex.test(newPassword)) {
+            const errorAlert = document.createElement('div');
+            errorAlert.classList.add('bg-red-500', 'w-1/2', 'text-white', 'px-4', 'py-2', 'rounded-md', 'font-semibold', 'absolute', 'top-20', 'left-1/2', 'transform', '-translate-x-1/2', 'z-50');
+            errorAlert.textContent = 'Password must be at least 8 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 special character.';
+            document.body.appendChild(errorAlert);
+            setTimeout(() => {
+                errorAlert.remove();
+            }, 4000);
+            // alert('Password must be at least 8 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 special character.');
+            return;
         }
 
-        // If passwords are provided and match, we handle password change
-        if (newPassword && newPassword === confirmPassword) {
-            alert('Password will be changed.');
-            // API call to change password
+        const token = getTokenCookie();
+        if (!token) {
+            console.error('Token not found.');
+            return;
+        }
+        const decoded = jwt.decode(token) as { id: string; };
+        const userId = decoded.id;
+
+        try {
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+            const user = await axios.get(`http://localhost:3000/users/${userId}`);
+            const { email } = user.data;
+
+            // Send API request to reset password
+            const response = await axios.post('http://localhost:3000/auth/reset-password', {
+                email: email,
+                password: newPassword
+            }, config);
+
+            // Handle response from the API
+            if (response.status === 201) {
+                const successAlert = document.createElement('div');
+                successAlert.classList.add('bg-green-500', 'w-1/2', 'text-white', 'px-4', 'py-2', 'rounded-md', 'font-semibold', 'absolute', 'top-20', 'left-1/2', 'transform', '-translate-x-1/2', 'z-50');
+                successAlert.textContent = 'Password reset was changed successfully! ';
+                document.body.appendChild(successAlert);
+
+                setTimeout(() => {
+                    successAlert.remove();
+                }, 3000);
+                // alert('Password reset successful.');
+                // Optionally, you can redirect the user to another page
+            } else {
+                const errorAlert = document.createElement('div');
+                errorAlert.classList.add('bg-red-500', 'w-1/2', 'text-white', 'px-4', 'py-2', 'rounded-md', 'font-semibold', 'absolute', 'top-20', 'left-1/2', 'transform', '-translate-x-1/2', 'z-50');
+                errorAlert.textContent = 'Something wrong happened.';
+                document.body.appendChild(errorAlert);
+                setTimeout(() => {
+                    errorAlert.remove();
+                }, 3000);
+            }
+        } catch (error) {
+            console.error('Password reset error:', error);
+            alert('Password reset failed. Please try again later.');
         }
 
         // Reset form
-        setEmail('');
+        // setEmail('');
         setNewPassword('');
         setConfirmPassword('');
     };
@@ -119,7 +190,7 @@ const SettingsPage = () => {
                             <div className="w-full space-y-8 bg-white p-6 rounded-xl shadow-md">
                                 <div className="text-center text-2xl font-semibold text-black">Settings</div>
                                 <form className="space-y-6" onSubmit={handleSubmit}>
-                                    <div>
+                                    {/* <div>
                                         <label htmlFor="email" className="text-sm font-medium text-gray-700">
                                             Change Email
                                         </label>
@@ -127,7 +198,7 @@ const SettingsPage = () => {
                                             className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
                                             placeholder="Enter your new email" value={email} onChange={(e) => setEmail(e.target.value)}
                                         />
-                                    </div>
+                                    </div> */}
                                     {/* Password Field */}
                                     <div>
                                         <label htmlFor="password" className="text-sm font-medium text-gray-700">
@@ -177,9 +248,29 @@ const SettingsPage = () => {
                                 </form>
                             </div>
                         </div>
-                        <div className="w-[28%] p-5 right-0 top-10 fixed h-5/6 min-h-screen z-0 mt-6 hidden lg:block">
+                        {/* <div className="w-[28%] p-5 right-0 top-10 fixed h-5/6 min-h-screen z-0 mt-6 hidden lg:block">
                             <Chats />
+                        </div> */}
+                        <div className="hidden lg:flex">
+                            {isChatbotOpen && (
+                                <div className='flex flex-col fixed right-1 bottom-2 h-[87%] w-[27%] '>
+                                    <button className='h-fit w-fit ml-auto   rounded-full z-10' onClick={toggleChatbot}>
+                                        <Image src="/images/close.svg" alt="chatbot" width={16} height={30} />
+                                    </button>
+                                    <iframe
+                                        src="https://www.chatbase.co/chatbot-iframe/ams3mDILy9PFAiRbKrGKB"
+                                        title="ExploroAI"
+                                        className='relative z-0 w-full h-full mt-auto bg-white border-[1px] shadow-md border-primary-500 rounded-tl-3xl mr-4 '
+                                        style={{ fontSize: '0.7rem' }}
+                                    ></iframe>
+                                </div>
+                            )}
                         </div>
+
+                        {!isChatbotOpen && (
+                            <button className='hidden lg:block fixed right-14 bottom-16  rounded-full' onClick={toggleChatbot}>
+                                <Image src="/images/chatbot1.jpg" alt="chatbot" className='rounded-full ' width={75} height={30} />
+                            </button>)}
                     </div>
                 </div>
 

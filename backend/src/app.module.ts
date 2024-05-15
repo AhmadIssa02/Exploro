@@ -15,6 +15,10 @@ import { validateConfig } from './config';
 import { MinioClientModule } from './minio/minio-client.module';
 import { FileUploadModule } from './files/file-upload.module';
 import { SavedPostModule } from './savedPost/savedPost.module';
+import { UserCommentsPostModule } from './userCommentsPost/userCommentsPost.module';
+import { UserLikesPostModule } from './userLikesPost/userLikesPost.module';
+import { FriendshipModule } from './friendship/friendship.module';
+import { FriendRequestModule } from './friendRequest/friendRequest.module';
 
 @Module({
   imports: [
@@ -47,6 +51,10 @@ import { SavedPostModule } from './savedPost/savedPost.module';
     MinioClientModule,
     FileUploadModule,
     SavedPostModule,
+    UserCommentsPostModule,
+    UserLikesPostModule,
+    FriendRequestModule,
+    FriendshipModule,
   ],
   controllers: [AppController],
   providers: [

@@ -49,7 +49,7 @@ const ProfileSideBar: React.FC = () => {
   }
 
   return (
-    <div className='flex flex-col items-center overflow-y-auto h-full '>
+    <div className='flex flex-col items-center overflow-y-auto h-full text-xs md:text-xl'>
       <Image
         src={user.profileImageUrl}
         alt='profilepic'
@@ -72,40 +72,40 @@ const ProfileSideBar: React.FC = () => {
       </div>
 
       <Link href={`/${userId}`}>
-        <button className="flex items-center space-x-2 p-2 border-b-[1.5px] hover:scale-105 my-2 lg:text-base">
+        <button className="flex items-center space-x-2 p-2 border-b-[1.5px] hover:scale-105 my-[6px] lg:text-sm">
           <Image
             src="/images/feed.svg"
             alt="home"
             width={19}
             height={15}
-            className='mt-1'
+            className='mt-1 w-1/6 '
             style={{ maxWidth: "100%", height: "auto" }} />
           <span>Your Profile</span>
         </button>
       </Link >
-      <Link href="/activity">
-        <button className="flex items-center space-x-2 p-2 border-b-[1.5px] hover:scale-105 my-2 lg:text-base">
+      <Link href="/friendRequests">
+        <button className="flex items-center space-x-2 p-2 border-b-[1.5px] hover:scale-105 my-[6px] lg:text-sm">
           <Image
-            src="/images/activity2.svg"
+            src="/images/friend.svg"
             alt="home"
             width={22}
             height={15}
-            className='mt-1 '
+            className='mt-1 w-1/6'
             style={{
               maxWidth: "100%",
               height: "auto"
             }} />
-          <span>Activity</span>
+          <span>Friend Requests</span>
         </button>
       </Link>
       <Link href="/settings">
-        <button className="flex items-center space-x-2 p-2 mb-6 border-b-[1.5px] hover:scale-105 my-2 lg:text-base">
+        <button className="flex items-center space-x-2 p-2 mb-6 border-b-[1.5px] hover:scale-105 my-[6px] lg:text-sm">
           <Image
             src="/images/settings4.png"
             alt="home"
             width={30}
             height={35}
-            className='mt-1'
+            className='mt-1 w-[30%]'
             style={{
               maxWidth: "100%",
               height: "auto"
@@ -114,7 +114,7 @@ const ProfileSideBar: React.FC = () => {
         </button>
       </Link>
       <div className='pt-'>
-        <button className="mb-4 text-lg font-semibold p-2 text-center text-black bg-red-500 hover:bg-red-600 rounded-md shadow-sm shadow-red-600 " onClick={handleSignOut}>
+        <button className="mb-4 text-[15px] font-semibold p-2 text-center text-black bg-red-500 hover:bg-red-600 rounded-md shadow-sm shadow-red-600 " onClick={handleSignOut}>
           <Link href="/auth/login"> Sign Out </Link>
         </button>
       </div>
