@@ -11,17 +11,8 @@ import axios from "axios";
 interface hotel {
     id: string,
     title: string,
-    // primaryInfo: string,
     secondaryInfo: string,
-    // badge: string,
-    // bubbleRating: string,
-    // isSponsored: string,
-    // accentedLabel: string,
-    // provider: string,
     priceForDisplay: string,
-    // strikethroughPrice: string,
-    // priceDetails: string,
-    // priceSummary: string
 }
 
 const HotelsPage = () => {
@@ -46,37 +37,25 @@ const HotelsPage = () => {
     const [hotels, setHotels] = useState<hotel[]>([]);
     const [cityCode, setCityCode] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [checkIn, setCheckIn] = useState('');
+    const [checkOut, setCheckOut] = useState('');
 
-    useEffect(() => {
-        const fetchToken = async () => {
-            const apiKey = process.env.NEXT_PUBLIC_API_KEY;
-            const apiSecret = process.env.NEXT_PUBLIC_API_SECRET;
-            const response = await fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `grant_type=client_credentials&client_id=${apiKey}&client_secret=${apiSecret}`
-            });
-            const data = await response.json();
-            setAccessToken(data.access_token);
-        };
+    // useEffect(() => {
+    //     const fetchToken = async () => {
+    //         const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+    //         const apiSecret = process.env.NEXT_PUBLIC_API_SECRET;
+    //         const response = await fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    //             body: `grant_type=client_credentials&client_id=${apiKey}&client_secret=${apiSecret}`
+    //         });
+    //         const data = await response.json();
+    //         setAccessToken(data.access_token);
+    //     };
 
-        fetchToken();
-    }, []);
+    //     fetchToken();
+    // }, []);
 
-
-    // const url = 'https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city';
-    // const params: {
-    //     cityCode: string;
-    //     radius: string;
-    //     radiusUnit: string;
-    // } = {
-    //     cityCode: cityCode,
-    //     radius: '10',
-    //     radiusUnit: 'KM',
-    // };
-
-    // const queryString = new URLSearchParams(params).toString();
-    // const apiUrl = `${url}?${queryString}`;
 
     const apiKey = process.env.NEXT_PUBLIC_RAPID_API_KEY;
     const apiHost = process.env.NEXT_PUBLIC_RAPID_API_HOST;
@@ -104,14 +83,14 @@ const HotelsPage = () => {
                 url: 'https://tripadvisor16.p.rapidapi.com/api/v1/hotels/searchHotels',
                 params: {
                     geoId: geoId,
-                    checkIn: '2024-05-13',
-                    checkOut: '2024-05-16',
+                    checkIn: checkIn,
+                    checkOut: checkOut,
                     pageNumber: '1',
                     currencyCode: 'USD'
                 },
                 headers: {
-                    'X-RapidAPI-Key': 'b82a55adbamshfe905425dd09594p12459cjsnf32475eab1b3',
-                    'X-RapidAPI-Host': 'tripadvisor16.p.rapidapi.com'
+                    'X-RapidAPI-Key': apiKey,
+                    'X-RapidAPI-Host': apiHost
                 }
             });
             console.log({ "hotel data": hotelResponse.data.data.data });
@@ -160,7 +139,7 @@ const HotelsPage = () => {
                 <div className="w-1/5 bg-primary-500 hidden lg:block" />
 
                 <main className="flex-grow flex flex-col items-center pt-20 px-4">
-                    <div className="w-full max-w-md">
+                    <div className="max-w-sm md:max-w-full ">
                         <div className="flex items-center bg-white text-gray-800 rounded-lg shadow p-4 space-x-4">
                             <input
                                 type="text"
@@ -169,6 +148,19 @@ const HotelsPage = () => {
                                 onChange={(e) => setCityCode(e.target.value)}
                                 className="flex-grow p-2 border border-gray-300 rounded focus:outline-none"
                             />
+                            <input
+                                type="date"
+                                value={checkIn}
+                                onChange={(e) => setCheckIn(e.target.value)}
+                                className="p-2 border border-gray-300 rounded focus:outline-none text-black"
+                            />
+                            <input
+                                type="date"
+                                value={checkOut}
+                                onChange={(e) => setCheckOut(e.target.value)}
+                                className="p-2 border border-gray-300 rounded focus:outline-none text-black"
+                            />
+
                             <button
                                 onClick={searchHotels}
                                 disabled={isLoading}
@@ -177,6 +169,7 @@ const HotelsPage = () => {
                                 {isLoading ? 'Searching...' : 'Search'}
                             </button>
                         </div>
+
                         {hotels && Array.isArray(hotels) && (
                             <div className="mt-4">
                                 <ul className="space-y-2">
@@ -216,7 +209,7 @@ const HotelsPage = () => {
                         </div>
 
                         {!isChatbotOpen && (
-                            <button className='fixed right-14 bottom-16  rounded-full' onClick={toggleChatbot}>
+                            <button className='hidden lg:block fixed right-14 bottom-16  rounded-full' onClick={toggleChatbot}>
                                 <Image src="/images/chatbot1.jpg" alt="chatbot" className='rounded-full ' width={75} height={30} />
                             </button>)}
                     </div>

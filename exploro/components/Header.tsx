@@ -9,7 +9,7 @@ const Header: React.FC = () => {
   const [usernames, setUsernames] = useState<string[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLUListElement>(null);
-  
+
 
   const handleSearch = () => {
     axios.get(`http://localhost:3000/users/paginate/?name=${name}`)
@@ -84,7 +84,8 @@ const Header: React.FC = () => {
           )}
         </ul>
       )}
-      <Link href="/Inbox">
+      {/* <Link href="/Inbox"> */}
+      <Link href="/exploroAI">
         <div className="lg:hidden">
           <Image
             src="/images/chats.svg"
@@ -95,6 +96,7 @@ const Header: React.FC = () => {
           />
         </div>
       </Link>
+      {/* </Link> */}
     </div>
   );
 };

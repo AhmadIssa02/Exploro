@@ -1,6 +1,6 @@
 const cspHeader = `
     default-src 'self';
-    script-src 'self' 'unsafe-eval' 'unsafe-inline';
+    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.chatbase.co;
     style-src 'self' 'unsafe-inline';
     img-src 'self' blob: data:;
     font-src 'self';
@@ -8,7 +8,7 @@ const cspHeader = `
     base-uri 'self';
     form-action 'self';
     frame-ancestors 'none';
-    connect-src 'self' http://localhost:3000 https://test.api.amadeus.com https://www.chatbase.co/chatbot-iframe/DUkPw1pbB0iG6JypQo2ol https://tripadvisor16.p.rapidapi.com https://travel-advisor.p.rapidapi.com/locations/v2/auto-complete; 
+    connect-src 'self' http://localhost:3000 https://test.api.amadeus.com https://www.chatbase.co https://tripadvisor16.p.rapidapi.com https://travel-advisor.p.rapidapi.com;
     frame-src 'self' https://www.chatbase.co;
     upgrade-insecure-requests;
 `;

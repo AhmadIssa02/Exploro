@@ -374,9 +374,9 @@ const UserProfile = () => {
                                 className="bg-rose-700 p-2 text-white text-xs rounded-md shadow-md ml-auto">
                                 Unfriend
                               </button>
-                              <button className="bg-green-700 p-2 text-white text-xs rounded-md shadow-md ml-2">
+                              {/* <button className="bg-green-700 p-2 text-white text-xs rounded-md shadow-md ml-2">
                                 Message
-                              </button>
+                              </button> */}
                             </>
                           ) : (
                             isFriendRequestPending ? (
@@ -445,7 +445,7 @@ const UserProfile = () => {
             </div>
 
             {!isChatbotOpen && (
-              <button className='fixed right-14 bottom-16  rounded-full' onClick={toggleChatbot}>
+              <button className='hidden lg:block fixed right-14 bottom-16  rounded-full' onClick={toggleChatbot}>
                 <Image src="/images/chatbot1.jpg" alt="chatbot" className='rounded-full ' width={75} height={30} />
               </button>)}
           </div>

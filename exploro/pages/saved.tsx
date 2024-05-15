@@ -153,7 +153,7 @@ const SavedPage = () => {
                         </div>
 
                         {!isChatbotOpen && (
-                            <button className='fixed right-14 bottom-16  rounded-full' onClick={toggleChatbot}>
+                            <button className='hidden lg:block fixed right-14 bottom-16  rounded-full' onClick={toggleChatbot}>
                                 <Image src="/images/chatbot1.jpg" alt="chatbot" className='rounded-full ' width={75} height={30} />
                             </button>)}
                     </div>
